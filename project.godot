@@ -14,6 +14,16 @@ _global_script_classes=[ {
 "language": "NativeScript",
 "path": "res://git_api.gdns"
 }, {
+"base": "RigidBody",
+"class": "GrabbableBody",
+"language": "GDScript",
+"path": "res://entities/classes/GrabbableBody.gd"
+}, {
+"base": "GrabbableBody",
+"class": "InteractableBody",
+"language": "GDScript",
+"path": "res://entities/classes/InteractableBody.gd"
+}, {
 "base": "LiquidLayer",
 "class": "LavaLayer",
 "language": "GDScript",
@@ -176,6 +186,8 @@ _global_script_classes=[ {
 } ]
 _global_script_class_icons={
 "GitAPI": "",
+"GrabbableBody": "",
+"InteractableBody": "",
 "LavaLayer": "",
 "LiquidLayer": "",
 "OrbitArm": "",
@@ -213,11 +225,16 @@ _global_script_class_icons={
 [application]
 
 config/name="Senti"
+run/main_scene="res://entities/Root.tscn"
 config/icon="res://icon.png"
+
+[autoload]
+
+PlayerInfo="*res://entities/classes/PlayerInfo.gd"
 
 [gdnative]
 
-singletons=[ "res://git_api.gdnlib" ]
+singletons=[ "res://addons/godot-openvr/godot_openvr.gdnlib", "res://git_api.gdnlib" ]
 
 [physics]
 

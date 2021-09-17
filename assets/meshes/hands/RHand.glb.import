@@ -2,12 +2,12 @@
 
 importer="scene"
 type="PackedScene"
-path="res://.import/vr_glove_right_model_slim.glb-c6782795f1fc3235de97a5f6c8ba1231.scn"
+path="res://.import/RHand.glb-f85edf4b39262b1ede06cc42b3f0122a.scn"
 
 [deps]
 
-source_file="res://addons/godot-openvr/meshes/vr_glove_right_model_slim.glb"
-dest_files=[ "res://.import/vr_glove_right_model_slim.glb-c6782795f1fc3235de97a5f6c8ba1231.scn" ]
+source_file="res://assets/meshes/hands/RHand.glb"
+dest_files=[ "res://.import/RHand.glb-f85edf4b39262b1ede06cc42b3f0122a.scn" ]
 
 [params]
 
@@ -16,7 +16,7 @@ nodes/root_name="Scene Root"
 nodes/root_scale=1.0
 nodes/custom_script=""
 nodes/storage=0
-nodes/use_legacy_names=true
+nodes/use_legacy_names=false
 materials/location=1
 materials/storage=1
 materials/keep_on_reimport=true

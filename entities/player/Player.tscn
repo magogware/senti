@@ -1,0 +1,96 @@
+[gd_scene load_steps=7 format=2]
+
+[ext_resource path="res://entities/controller/Controller.tscn" type="PackedScene" id=1]
+[ext_resource path="res://assets/meshes/hands/HandRopen.mesh" type="ArrayMesh" id=2]
+[ext_resource path="res://assets/meshes/hands/HandLfist.mesh" type="ArrayMesh" id=3]
+[ext_resource path="res://assets/meshes/hands/HandRfist.mesh" type="ArrayMesh" id=4]
+[ext_resource path="res://assets/meshes/hands/HandLopen.mesh" type="ArrayMesh" id=5]
+
+[sub_resource type="GDScript" id=1]
+script/source = "extends ARVROrigin
+
+export var dominant_hand = 1
+var smooth_turn = false
+var smoother = true
+var armswinger = false
+var teleporter = false
+
+func _ready():
+	if dominant_hand == 1:
+		make_mover(1)
+		make_rotator(2)
+	else:
+		make_mover(2)
+		make_rotator(1)
+		
+func changed_dominant(id):
+	if id == 1:
+		make_mover(1)
+		make_rotator(2)
+	else:
+		make_mover(2)
+		make_rotator(1)
+	dominant_hand = id
+
+func make_rotator(id):
+	if id == 1:
+		$LeftHand/Rotator.enabled = true
+		$LeftHand/Rotator.smooth_turn = smooth_turn
+		$LeftHand/Smoother.set_enabled(false)
+		$LeftHand/Armswinger.set_enabled(false)
+		$LeftHand/Teleporter.set_enabled(false)
+	else:
+		$RightHand/Rotator.enabled = true
+		$RightHand/Rotator.smooth_turn = smooth_turn
+		$RightHand/Smoother.set_enabled(false)
+		$RightHand/Armswinger.set_enabled(false)
+		$RightHand/Teleporter.set_enabled(false)
+
+func make_mover(id):
+	if id == 1:
+		$LeftHand/Rotator.set_enabled(false)
+		$LeftHand/Smoother.set_enabled (smoother)
+		$LeftHand/Armswinger.set_enabled (armswinger)
+		$LeftHand/Teleporter.set_enabled (teleporter)
+	else:
+		$RightHand/Rotator.set_enabled(false)
+		$RightHand/Smoother.set_enabled(smoother)
+		$RightHand/Armswinger.set_enabled(armswinger)
+		$RightHand/Teleporter.set_enabled(teleporter)
+		
+func cycle_movement(id):
+	if smoother:
+		smoother = false
+		armswinger = true
+		teleporter = false
+	elif armswinger:
+		smoother = false
+		armswinger = false
+		teleporter = true
+	elif teleporter:
+		smoother = true
+		armswinger = false
+		teleporter = false
+	make_mover(id)
+	
+func cycle_rotation(id):
+	smooth_turn = !smooth_turn
+	make_rotator(id)
+
+func _physics_process(_delta):
+	PlayerInfo.global_transform = global_transform
+"
+
+[node name="Player" type="ARVROrigin"]
+script = SubResource( 1 )
+
+[node name="LeftHand" parent="." instance=ExtResource( 1 )]
+hand_open_mesh = ExtResource( 5 )
+hand_fist_mesh = ExtResource( 3 )
+
+[node name="RightHand" parent="." instance=ExtResource( 1 )]
+controller_id = 2
+hand_open_mesh = ExtResource( 2 )
+hand_fist_mesh = ExtResource( 4 )
+
+[node name="Camera" type="ARVRCamera" parent="."]
