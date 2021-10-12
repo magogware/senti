@@ -65,8 +65,8 @@ func grab_body(bodies_in_zone):
 		held_object_data["layer"] = held_object.collision_layer
 		held_object_data["mask"] = held_object.collision_mask
 		held_object.mode = RigidBody.MODE_STATIC
-#		if grabbed_body is Handle:
-#			grabbed_body.grabbed(self)
+		if grabbed_body is Handle:
+			grabbed_body.grabbed(self)
 		hand_state = Hand.HOLDING
 		$MeshInstance.visible = false
 		$RigidBody/MeshInstance.visible = false
@@ -87,10 +87,10 @@ func drop_body():
 	held_object.mode = held_object_data["mode"]
 	held_object.collision_layer = held_object_data["layer"]
 	held_object.collision_mask = held_object_data["mask"]
-#	if held_object is Handle:
-#		held_object.released(global_controller_velocity)
-#	else:
-	held_object.apply_impulse(Vector3(0,0,0), global_controller_velocity)
+	if held_object is Handle:
+		held_object.released(global_controller_velocity)
+	else:
+		held_object.apply_impulse(Vector3(0,0,0), global_controller_velocity)
 	
 	held_object = null
 	$MeshInstance.visible = true
@@ -201,7 +201,7 @@ func _physics_process(delta):
 		
 	$RigidBody.velocity = global_controller_velocity
 
-	if held_object != null: # and !(held_object is Handle):
+	if held_object != null and !(held_object is Handle):
 		var held_scale = held_object.scale
 		held_object.global_transform = $GrabPos.global_transform
 		held_object.scale = held_scale
