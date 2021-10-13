@@ -39,7 +39,7 @@ material/0 = null
 shape = SubResource( 2 )
 
 [node name="Rod" type="RigidBody" parent="."]
-transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.1, 0 )
+transform = Transform( 1, 0, 0, 0, 0.846128, -0.53298, 0, 0.53298, 0.846128, 0, 0.1, 0 )
 collision_layer = 8
 collision_mask = 6
 mode = 3
