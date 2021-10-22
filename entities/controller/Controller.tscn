@@ -44,8 +44,7 @@ mesh = SubResource( 1 )
 material/0 = ExtResource( 4 )
 
 [node name="GrabZone" type="Area" parent="."]
-collision_layer = 2
-collision_mask = 20
+collision_mask = 2
 
 [node name="CollisionShape" type="CollisionShape" parent="GrabZone"]
 shape = SubResource( 2 )
@@ -53,8 +52,7 @@ shape = SubResource( 2 )
 [node name="GrabPos" type="Position3D" parent="."]
 
 [node name="RigidBody" type="RigidBody" parent="."]
-collision_layer = 2
-collision_mask = 28
+collision_mask = 2
 mode = 1
 mass = 0.1
 contacts_reported = 1
@@ -79,8 +77,7 @@ script = ExtResource( 6 )
 script = ExtResource( 5 )
 
 [node name="Teleporter" type="KinematicBody" parent="."]
-collision_layer = 2
-collision_mask = 61
+collision_mask = 2
 script = ExtResource( 8 )
 
 [node name="Teleport" type="MeshInstance" parent="Teleporter"]
