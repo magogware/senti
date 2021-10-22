@@ -1,9 +1,12 @@
 extends Handle
 
+const TWIST_THRESHOLD = PI/4
+
 var y_destination: Vector3 = Vector3(0,0,0)
 var fully_open: Transform
 var fully_closed: Transform
 var start: Transform
+var prev_v_z: Vector3
 
 var holder: ARVRController
 
@@ -23,6 +26,7 @@ func _ready():
 		print("These are the fucking same")
 	
 	global_transform = fully_closed
+	prev_v_z = -global_transform.basis.z
 	
 func _integrate_forces(state):
 	pass
@@ -35,21 +39,18 @@ func _physics_process(delta):
 		v_z.y = 0
 		v_z = v_z.normalized()
 		
-#		if v_y.angle_to(global_transform.basis.y) > delta*deg2rad(5):
-#			if v_y.dot(-global_transform.basis.z) > 0:
-#				v_y = global_transform.basis.y.rotated(start.basis.x, -delta*(deg2rad(5)))
-#			else:
-#				v_y = global_transform.basis.y.rotated(start.basis.x, delta*(deg2rad(5)))
+		if v_z.angle_to(prev_v_z) >= TWIST_THRESHOLD:
+			prev_v_z = v_z
+		else:
+			v_z = prev_v_z
 
 		var v_y: Vector3 = start.basis.y
 		var v_x: Vector3 = v_y.cross(-v_z)
 		
 		if v_z.dot(fully_open.basis.x) > 0 and v_x.dot(fully_open.basis.x) > 0:
-			print("Too far open")
 			v_z = -fully_open.basis.z
 
 		if v_z.dot(-fully_closed.basis.x) > 0 and v_x.dot(-fully_closed.basis.x) < 0:
-			print("Too far closed")
 			v_z = -fully_closed.basis.z
 		
 		v_x = v_y.cross(-v_z)
