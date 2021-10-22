@@ -16,16 +16,13 @@ var prior_focal_bases = []
 func _ready():
 	# Calculate 90 degrees front and back (or whatever max opening angle is decided to be)
 	
-	start = global_transform
-	fully_open = start.rotated(start.basis.y.normalized(), (-PI/2))
-	fully_open.origin = start.origin
-	fully_closed = start.rotated(start.basis.y.normalized(), (PI/2))
-	fully_closed.origin = start.origin
-	
-	if (start.basis.z == fully_closed.basis.z):
-		print("These are the fucking same")
+	fully_open = global_transform.rotated(start.basis.y.normalized(), (-PI/2))
+	fully_open.origin = global_transform.origin
+	fully_closed = global_transform.rotated(start.basis.y.normalized(), (PI/2))
+	fully_closed.origin = global_transform.origin
 	
 	global_transform = fully_closed
+	start = fully_closed
 	prev_v_z = -global_transform.basis.z
 	
 func _integrate_forces(state):
@@ -39,8 +36,13 @@ func _physics_process(delta):
 		v_z.y = 0
 		v_z = v_z.normalized()
 		
-		if v_z.angle_to(prev_v_z) >= TWIST_THRESHOLD:
+		if v_z.angle_to(prev_v_z) > TWIST_THRESHOLD:
+			var angle = v_z.angle_to(-start.basis.z)
+			var ticks = floor(angle / TWIST_THRESHOLD)
+			v_z = -(start.basis.z.rotated(start.basis.y.normalized(), -ticks*TWIST_THRESHOLD))
 			prev_v_z = v_z
+			print("Ticks is at "+str(ticks))
+			# switch based on ticks, also audio volume should be continuous and this code should be for video quality
 		else:
 			v_z = prev_v_z
 
