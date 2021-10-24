@@ -1,6 +1,6 @@
 extends Handle
 
-const TWIST_THRESHOLD = PI/4
+const TWIST_THRESHOLD = PI/16
 
 var y_destination: Vector3 = Vector3(0,0,0)
 var fully_open: Transform
@@ -42,8 +42,11 @@ func _physics_process(delta):
 			v_z = -(start.basis.z.rotated(start.basis.y.normalized(), -ticks*TWIST_THRESHOLD))
 			prev_v_z = v_z
 			print("Ticks is at "+str(ticks))
+			holder.rumble = 0.01
+			
 			# switch based on ticks, also audio volume should be continuous and this code should be for video quality
 		else:
+			holder.rumble = 0
 			v_z = prev_v_z
 
 		var v_y: Vector3 = start.basis.y
@@ -62,6 +65,8 @@ func _physics_process(delta):
 		global_transform.basis.y = v_y
 		global_transform.basis.z = -v_z
 		_physics_process_update_velocity_local(delta)
+		
+		
 		
 func grabbed(controller):
 	avg_rotation = 0
