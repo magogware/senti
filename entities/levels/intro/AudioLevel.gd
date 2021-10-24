@@ -38,7 +38,7 @@ func _physics_process(delta):
 		
 		if v_z.angle_to(prev_v_z) > TWIST_THRESHOLD:
 			var angle = v_z.angle_to(-start.basis.z)
-			var ticks = floor(angle / TWIST_THRESHOLD)
+			var ticks = round(angle / TWIST_THRESHOLD)
 			v_z = -(start.basis.z.rotated(start.basis.y.normalized(), -ticks*TWIST_THRESHOLD))
 			prev_v_z = v_z
 			print("Ticks is at "+str(ticks))
@@ -62,21 +62,6 @@ func _physics_process(delta):
 		global_transform.basis.y = v_y
 		global_transform.basis.z = -v_z
 		_physics_process_update_velocity_local(delta)
-
-#	if prior_y_bases.size()>0:
-#		var prev_basis: Vector3 = prior_y_bases.back()
-#		var prev_angle: float = prev_basis.angle_to(start.basis.y)
-#		var current_angle: float = global_transform.basis.y.angle_to(start.basis.y)
-#
-#		if prev_angle < current_angle:
-#			var multiple: float = ceil(prev_angle/deg2rad(30)) * deg2rad(30)
-#			if (prev_angle <= multiple and multiple <= current_angle):
-#				print("passed an interval of pi/12")
-#				# if so, play sound
-#		elif current_angle < prev_angle:
-#			var multiple: float = ceil(current_angle/deg2rad(30)) * deg2rad(30)
-#			if (current_angle <= multiple and multiple <= prev_angle) and multiple!=0:
-#				print("passed an interval of pi/12: "+str(multiple)+", "+str(current_angle))
 		
 func grabbed(controller):
 	avg_rotation = 0
