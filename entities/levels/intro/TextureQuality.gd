@@ -1,12 +1,12 @@
 extends Handle
 
-const TWIST_THRESHOLD = PI/4
+const DISPLACEMENT_THRESHOLD: float = 0.01
 
 var y_destination: Vector3 = Vector3(0,0,0)
 var fully_open: Transform
 var fully_closed: Transform
 var start: Transform
-var prev_v_z: Vector3
+var prev_origin: Vector3
 
 var holder: ARVRController
 
@@ -30,12 +30,21 @@ func _physics_process(delta):
 		displacement.y = 0
 		
 		var translated: Transform = global_transform.translated(displacement)
-		
+
 		if fully_open.origin.direction_to(translated.origin).dot(-fully_open.basis.z) > 0:
 			global_transform = fully_open
 		elif fully_closed.origin.direction_to(translated.origin).dot(fully_closed.basis.z) > 0:
 			global_transform = fully_closed
 		else:
+			if translated.origin.distance_to(prev_origin) > DISPLACEMENT_THRESHOLD:
+				var total_displacement: float = start.origin.distance_to(translated.origin)
+				var ticks: float = round(total_displacement / DISPLACEMENT_THRESHOLD)
+				translated = fully_closed.translated(ticks * DISPLACEMENT_THRESHOLD * Vector3(0,0,-1))
+				prev_origin = translated.origin
+				print("Ticks is at "+str(ticks))
+				# switch based on ticks, also audio volume should be continuous and this code should be for video quality
+			else:
+				translated.origin = prev_origin
 			global_transform = translated
 			
 		# TODO: Check for passing increments
