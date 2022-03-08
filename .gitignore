@@ -5,3 +5,6 @@
 bin/
 build/
 lib/
+
+# OS
+.DS_STORE
