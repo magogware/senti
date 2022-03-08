@@ -1,0 +1,25 @@
+[gd_scene load_steps=5 format=2]
+
+[ext_resource path="res://entities/controller/Hand.gd" type="Script" id=1]
+[ext_resource path="res://assets/textures/shaders/bubble.tres" type="Material" id=2]
+[ext_resource path="res://assets/meshes/hands/HandLfist.mesh" type="ArrayMesh" id=3]
+
+[sub_resource type="ConvexPolygonShape" id=3]
+points = PoolVector3Array( -0.05, -0.05, -0.05, -0.05, -0.05, 0.05, -0.05, 0.05, -0.05, -0.05, 0.05, 0.05, 0.0499977, -0.05, -0.05, 0.0499977, -0.05, 0.05, 0.0499977, 0.05, -0.05, 0.0499977, 0.05, 0.05 )
+
+[node name="Hand" type="RigidBody"]
+collision_layer = 2
+collision_mask = 5
+mode = 1
+mass = 0.1
+contacts_reported = 1
+contact_monitor = true
+can_sleep = false
+script = ExtResource( 1 )
+
+[node name="MeshInstance" type="MeshInstance" parent="."]
+mesh = ExtResource( 3 )
+material/0 = ExtResource( 2 )
+
+[node name="CollisionShape" type="CollisionShape" parent="."]
+shape = SubResource( 3 )

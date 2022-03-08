@@ -12,7 +12,8 @@ func _ready():
 		get_viewport().arvr = true
 		player = VRPlayer.instance()
 		add_child(player)
-		$Player.rotate_y(PI/2) # account for weird rotation effect on headset
+		print("Going VR")
+		player.rotate_y(PI/2) # account for weird rotation effect on headset
 	else:
 		player = FPSPlayer.instance()
 		add_child(player)
