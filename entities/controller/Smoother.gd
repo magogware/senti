@@ -3,11 +3,6 @@ extends Node
 # Is this active?
 export var enabled = true setget set_enabled, get_enabled
 
-# and movement
-export var max_speed = 5.0
-export var drag_factor = 0.1
-export var headset_direction = true;
-
 var player_controller = null
 var camera_node = null
 var velocity = Vector3(0.0, 0.0, 0.0)
@@ -25,8 +20,8 @@ func get_enabled():
 	return enabled
 
 func _ready():
-	player_controller = get_node("../..")
-	camera_node = get_node("../../Camera")
+	player_controller = get_node("../../..")
+	camera_node = get_node("../../../Camera")
 
 func _physics_process(delta):
 	if !enabled:
@@ -44,17 +39,17 @@ func _physics_process(delta):
 		var camera_transform = camera_node.global_transform
 		
 		# Apply our drag
-		velocity *= (1.0 - drag_factor)
+		velocity *= (1.0 - Constants.DRAG_FACTOR)
 		
 		if ((abs(forwards_backwards) > 0.1 ||  abs(left_right) > 0.1)):
 			#Direction based on headset orientation
-#			if headset_direction:
+#			if Constants.HEADSET_DIRECTION:
 			var dir_forward = camera_transform.basis.z
 			dir_forward.y = 0.0				
 			# VR Capsule will strafe left and right
 			var dir_right = camera_transform.basis.x;
 			dir_right.y = 0.0				
-			velocity = (dir_forward * forwards_backwards + dir_right * left_right).normalized() * delta * max_speed * ARVRServer.world_scale
+			velocity = (dir_forward * forwards_backwards + dir_right * left_right).normalized() * delta * Constants.MAX_SPEED_VR * ARVRServer.world_scale
 			
 			#Direction based on controller orientation
 			#else:
@@ -63,7 +58,7 @@ func _physics_process(delta):
 			#	# VR Capsule will strafe left and right
 			#	var dir_right = controller.global_transform.basis.x;
 			#	dir_right.y = 0.0				
-			#	velocity = (dir_forward * -forwards_backwards + dir_right * left_right).normalized() * delta * max_speed * ARVRServer.world_scale
+			#	velocity = (dir_forward * -forwards_backwards + dir_right * left_right).normalized() * delta * Constants.MAX_SPEED * ARVRServer.world_scale
 				
 		# apply move and slide to our kinematic body
 		#velocity = player_controller.kinematicbody.move_and_slide(velocity, Vector3(0.0, 1.0, 0.0))
