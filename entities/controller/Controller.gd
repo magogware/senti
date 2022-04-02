@@ -18,14 +18,12 @@ func _grab_body(bodies_in_zone):
 	for body in bodies_in_zone:
 		if body is GrabbableBody:
 			grabbed_body = body
-			if grabbed_body is InteractableBody:
-				grabbed_body.grabbed(self)
+			grabbed_body.grabbed(self)
 			held_object = grabbed_body
 			break
 			
 func _drop_body():
-	if held_object is InteractableBody:
-		held_object.released()
+	held_object.released()
 #	elif held_object is Handle:
 #		held_object.released(global_controller_velocity)
 #	else:
