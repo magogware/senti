@@ -6,8 +6,6 @@ export var enabled = true setget set_enabled, get_enabled
 export (Color) var can_teleport_color = Color(0.0, 1.0, 0.0, 1.0)
 export (Color) var cant_teleport_color = Color(1.0, 0.0, 0.0, 1.0)
 export (Color) var no_collision_color = Color(45.0 / 255.0, 80.0 / 255.0, 220.0 / 255.0, 1.0)
-export var player_height = 1.8 setget set_player_height, get_player_height
-export var player_radius = 0.4 setget set_player_radius, get_player_radius
 export var strength = 5.0
 # once this is no longer a kinematic body, we'll need this..
 # export var collision_mask = 1
@@ -42,37 +40,27 @@ func set_enabled(new_value):
 func get_enabled():
 	return enabled
 
-func get_player_height():
-	return player_height
-
-func set_player_height(p_height):
-	player_height = p_height
-	
+func set_player_height():
 	if collision_shape:
-		collision_shape.height = player_height - (2.0 * player_radius)
+		collision_shape.height = Constants.PLAYER_HEIGHT - (2.0 * Constants.PLAYER_RADIUS)
 		
 	if capsule:
-		capsule.mesh.mid_height = player_height - (2.0 * player_radius)
-		capsule.translation = Vector3(0.0, player_height/2.0, 0.0)
+		capsule.mesh.mid_height = Constants.PLAYER_HEIGHT - (2.0 * Constants.PLAYER_RADIUS)
+		capsule.translation = Vector3(0.0, Constants.PLAYER_HEIGHT/2.0, 0.0)
 
-func get_player_radius():
-	return player_radius
-
-func set_player_radius(p_radius):
-	player_radius = p_radius
-	
+func set_player_radius():
 	if collision_shape:
-		collision_shape.height = player_height - (2.0 * player_radius)
-		collision_shape.radius = player_radius
+		collision_shape.height = Constants.PLAYER_HEIGHT - (2.0 * Constants.PLAYER_RADIUS)
+		collision_shape.radius = Constants.PLAYER_RADIUS
 	
 	if capsule:
-		capsule.mesh.mid_height = player_height - (2.0 * player_radius)
-		capsule.mesh.radius = player_radius
+		capsule.mesh.mid_height = Constants.PLAYER_HEIGHT - (2.0 * Constants.PLAYER_RADIUS)
+		capsule.mesh.radius = Constants.PLAYER_RADIUS
 
 func _ready():
 	
 	# We should be a child of an ARVRController and it should be a child or our ARVROrigin
-	origin_node = get_node("../..")
+	origin_node = get_node("../../..")
 
 	# It's inactive when we start
 	$Teleport.visible = false
@@ -83,14 +71,14 @@ func _ready():
 	$Target.mesh.size = Vector2(ws, ws)
 	$Target/PlayerPos.scale = Vector3(ws, ws, ws)
 	
-	camera_node = get_node("../../Camera")
+	camera_node = get_node("../../../Camera")
 
 	# create shape object
 	collision_shape = CapsuleShape.new()
 	
 	# call set player to ensure our collision shape is sized
-	set_player_height(player_height)
-	set_player_radius(player_radius)
+	set_player_height()
+	set_player_radius()
 
 func _physics_process(delta):
 	# We should be the child or the controller on which the teleport is implemented
@@ -135,7 +123,7 @@ func _physics_process(delta):
 		query.shape_rid = collision_shape.get_rid()
 		
 		# make a transform for rotating and offseting our shape, it's always lying on its side by default...
-		var shape_transform = Transform(Basis(Vector3(1.0, 0.0, 0.0), deg2rad(90.0)), Vector3(0.0, player_height / 2.0, 0.0))
+		var shape_transform = Transform(Basis(Vector3(1.0, 0.0, 0.0), deg2rad(90.0)), Vector3(0.0, Constants.PLAYER_HEIGHT / 2.0, 0.0))
 		
 		# update location
 		var teleport_global_transform = $Teleport.global_transform
