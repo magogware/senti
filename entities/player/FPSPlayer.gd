@@ -94,7 +94,7 @@ func _grab_body(bodies_in_zone):
 	for body in bodies_in_zone:
 		if body is GrabbableBody:
 			held_object = body
-			held_object.grabbed()
+			held_object.grabbed($RotationHelper/RightHandPos)
 			break
 			
 func _drop_body():

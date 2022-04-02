@@ -24,10 +24,10 @@ _global_script_classes=[ {
 "language": "GDScript",
 "path": "res://entities/classes/GrabbableBody.gd"
 }, {
-"base": "GrabbableBody",
+"base": "InteractableBody",
 "class": "Handle",
 "language": "GDScript",
-"path": "res://entities/levels/interaction/Handle.gd"
+"path": "res://entities/classes/Handle.gd"
 }, {
 "base": "GrabbableBody",
 "class": "InteractableBody",

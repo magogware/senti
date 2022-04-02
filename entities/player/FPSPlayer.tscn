@@ -45,3 +45,6 @@ collision_mask = 4
 
 [node name="CollisionShape" type="CollisionShape" parent="RotationHelper/GrabZone"]
 shape = SubResource( 3 )
+
+[node name="RightHandPos" type="Position3D" parent="RotationHelper"]
+transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, 0.179, 0, -0.412 )

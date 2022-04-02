@@ -19,7 +19,7 @@ func _grab_body(bodies_in_zone):
 		if body is GrabbableBody:
 			grabbed_body = body
 			if grabbed_body is InteractableBody:
-				grabbed_body.grabbed()
+				grabbed_body.grabbed(self)
 			held_object = grabbed_body
 			break
 			
