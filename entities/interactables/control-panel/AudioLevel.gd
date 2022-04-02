@@ -8,12 +8,11 @@ var fully_closed: Transform
 var start: Transform
 var prev_v_z: Vector3
 
-var holder: ARVRController
-
 var avg_rotation: float = 0
 var prior_focal_bases = []
 
 func _ready():
+	._ready()
 	# Calculate 90 degrees front and back (or whatever max opening angle is decided to be)
 	
 	fully_open = global_transform.rotated(start.basis.y.normalized(), (-PI/2))
@@ -66,15 +65,10 @@ func _physics_process(delta):
 		global_transform.basis.z = -v_z
 		_physics_process_update_velocity_local(delta)
 		
-		
-		
-func grabbed(controller):
+func grabbed(grabber: Spatial):
+	.grabbed(grabber)
 	avg_rotation = 0
 	prior_focal_bases = []
-	holder = controller
-
-func released(impulse):
-	holder = null
 
 func _physics_process_update_velocity_local(delta):
 	avg_rotation = 0

@@ -5,7 +5,7 @@ var max_open_back: Vector3 = Vector3(0,0,0)
 var max_open_front: Vector3 = Vector3(0,0,0)
 var start: Vector3 = Vector3(0,0,0)
 
-var holder: ARVRController
+var holder: Spatial
 
 var avg_rotation: float = 0
 var prior_x_bases = []
@@ -95,7 +95,7 @@ func grabbed(controller):
 	prior_x_bases = []
 	holder = controller
 
-func released(impulse):
+func released():
 	holder = null
 	#print("Avg rotation: ", avg_rotation)
 	var size: int = prior_x_bases.size()

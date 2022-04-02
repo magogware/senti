@@ -1,7 +1,7 @@
 [gd_scene load_steps=30 format=2]
 
-[ext_resource path="res://entities/levels/intro/TextureQuality.gd" type="Script" id=1]
-[ext_resource path="res://entities/levels/intro/AudioLevel.gd" type="Script" id=2]
+[ext_resource path="res://entities/interactables/control-panel/TextureQuality.gd" type="Script" id=1]
+[ext_resource path="res://entities/interactables/control-panel/AudioLevel.gd" type="Script" id=2]
 
 [sub_resource type="SpatialMaterial" id=1]
 vertex_color_use_as_albedo = true

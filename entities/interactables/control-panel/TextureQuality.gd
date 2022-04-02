@@ -8,11 +8,9 @@ var fully_closed: Transform
 var start: Transform
 var prev_origin: Vector3
 
-var holder: ARVRController
-
 func _ready():
 	# Calculate 90 degrees front and back (or whatever max opening angle is decided to be)
-	
+	._ready()
 	fully_open = global_transform.translated(Vector3(0,0,-0.05))
 	fully_closed = global_transform.translated(Vector3(0,0,0.05))
 	
@@ -48,9 +46,3 @@ func _physics_process(delta):
 			global_transform = translated
 			
 		# TODO: Check for passing increments
-		
-func grabbed(controller):
-	holder = controller
-
-func released(impulse):
-	holder = null
