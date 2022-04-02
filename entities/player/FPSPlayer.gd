@@ -59,9 +59,10 @@ func _process_movement(delta):
 	vel = move_and_slide(vel, Vector3(0, 1, 0), 0.05, 4, deg2rad(Constants.MAX_SLOPE_ANGLE))
 
 func _process_object():
-	var held_scale = held_object.scale
-	held_object.global_transform = $RotationHelper/RightHand.global_transform
-	held_object.scale = held_scale
+	if !held_object is Handle:
+		var held_scale = held_object.scale
+		held_object.global_transform = $RotationHelper/RightHand.global_transform
+		held_object.scale = held_scale
 	#held_object.velocity = vel
 
 func _input(event):
