@@ -5,7 +5,7 @@ var fully_open: Transform
 var fully_closed: Transform
 var start: Transform
 
-var holder: ARVRController
+var holder: Spatial
 
 var avg_rotation: float = 0
 var prior_y_bases = []
@@ -13,10 +13,10 @@ var prior_y_bases = []
 func _ready():
 	# Calculate 90 degrees front and back (or whatever max opening angle is decided to be)
 	
-	start = global_transform
-	fully_open = start.rotated(start.basis.x, (-PI/2))
-	fully_open.origin = start.origin
-	fully_closed = start
+	fully_closed = global_transform
+	fully_open = fully_closed.rotated(fully_closed.basis.x, (-PI/2))
+	fully_open.origin = fully_closed.origin
+	
 	
 func _integrate_forces(state):
 	pass
@@ -32,9 +32,9 @@ func _physics_process(delta):
 		
 		if v_y.angle_to(global_transform.basis.y) > delta*deg2rad(5):
 			if v_y.dot(-global_transform.basis.z) > 0:
-				v_y = global_transform.basis.y.rotated(start.basis.x, -delta*(deg2rad(5)))
+				v_y = global_transform.basis.y.rotated(fully_closed.basis.x, -delta*(deg2rad(5)))
 			else:
-				v_y = global_transform.basis.y.rotated(start.basis.x, delta*(deg2rad(5)))
+				v_y = global_transform.basis.y.rotated(fully_closed.basis.x, delta*(deg2rad(5)))
 		
 #		var open_to_holder: Vector3 = holder.global_transform.origin - fully_open.origin
 #		open_to_holder.x = 0
@@ -48,7 +48,7 @@ func _physics_process(delta):
 		if v_y.dot(fully_closed.basis.z) > 0:
 			v_y = fully_closed.basis.y
 		
-		var v_x: Vector3 = start.basis.x
+		var v_x: Vector3 = fully_closed.basis.x
 		var v_z: Vector3 = v_x.cross(v_y)
 		v_z.x = 0
 		v_z = v_z.normalized()
@@ -58,10 +58,10 @@ func _physics_process(delta):
 		_physics_process_update_velocity_local(delta)
 	else:
 		var v_y: Vector3
-		if global_transform.basis.y.angle_to(start.basis.y) <= delta*deg2rad(1):
-			v_y = start.basis.y
+		if global_transform.basis.y.angle_to(fully_closed.basis.y) <= delta*deg2rad(1):
+			v_y = fully_closed.basis.y
 		else:
-			v_y = global_transform.basis.y.rotated(start.basis.x, delta*deg2rad(5))
+			v_y = global_transform.basis.y.rotated(fully_closed.basis.x, delta*deg2rad(5))
 			
 		v_y = v_y.normalized()
 		var v_x: Vector3 = start.basis.x
@@ -92,14 +92,8 @@ func grabbed(controller):
 	prior_y_bases = []
 	holder = controller
 
-func released(impulse):
+func released():
 	holder = null
-	
-func calculate_destination(theta) -> Vector3:
-	var v_y: Vector3 = global_transform.basis.y.rotated(global_transform.basis.x, theta)
-	print("Dot: "+str(v_y.dot(global_transform.basis.z)))
-	v_y = v_y.normalized()
-	return v_y
 
 func _physics_process_update_velocity_local(delta):
 	avg_rotation = 0

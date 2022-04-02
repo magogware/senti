@@ -1,9 +1,9 @@
 class_name Handle
-extends InteractableBody
+extends GrabbableBody
 
 signal grabbed(grabber)
-signal released(impulse)
-
+signal released()
+	
 func grabbed(grabber: Spatial):
 	.grabbed(grabber)
 	emit_signal("grabbed", grabber)
