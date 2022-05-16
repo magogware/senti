@@ -2,7 +2,7 @@ extends StaticBody
 
 
 var lever: Spatial = null
-const RANGE_OF_MOTION: float = 3.0
+const RANGE_OF_MOTION: float = 2.0
 var fully_open: Transform
 var fully_closed: Transform
 
