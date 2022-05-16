@@ -9,6 +9,16 @@
 config_version=4
 
 _global_script_classes=[ {
+"base": "Reference",
+"class": "AK",
+"language": "GDScript",
+"path": "res://wwise/GeneratedSoundBanks/wwise_ids.gd"
+}, {
+"base": "Reference",
+"class": "AkUtils",
+"language": "GDScript",
+"path": "res://addons/wwise/runtime/helpers/ak_utils.gd"
+}, {
 "base": "AudioStreamGenerator",
 "class": "AudioStreamPd",
 "language": "GDScript",
@@ -50,6 +60,8 @@ _global_script_classes=[ {
 "path": "res://addons/audiostreampd/pure_data_patch.gd"
 } ]
 _global_script_class_icons={
+"AK": "",
+"AkUtils": "",
 "AudioStreamPd": "",
 "GitAPI": "",
 "GrabbableBody": "",
@@ -70,6 +82,9 @@ config/icon="res://icon.png"
 
 PlayerInfo="*res://entities/classes/PlayerInfo.gd"
 Constants="*res://entities/classes/Constants.gd"
+WwiseSettings="*res://addons/wwise/editor/wwise_settings.gd"
+Wwise="*res://addons/wwise/bin/wwise-gdnative.gdns"
+Waapi="*res://addons/wwise/bin/waapi-gdnative.gdns"
 
 [display]
 
@@ -78,7 +93,7 @@ window/size/height=900
 
 [editor_plugins]
 
-enabled=PoolStringArray( "res://addons/audiostreampd/plugin.cfg", "res://addons/godot-openvr/plugin.cfg" )
+enabled=PoolStringArray( "res://addons/audiostreampd/plugin.cfg", "res://addons/godot-openvr/plugin.cfg", "res://addons/wwise/plugin.cfg" )
 
 [gdnative]
 
