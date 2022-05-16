@@ -5,6 +5,7 @@ const RANGE_OF_MOTION: float = -PI/2
 var y_destination: Vector3 = Vector3(0,0,0)
 var fully_open: Transform
 var fully_closed: Transform
+var current_closed: Transform
 var start: Transform
 
 var holder: Spatial
@@ -18,6 +19,7 @@ func _ready():
 	# Calculate 90 degrees front and back (or whatever max opening angle is decided to be)
 	
 	fully_closed = global_transform
+	current_closed = fully_closed
 	fully_open = fully_closed.rotated(fully_closed.basis.x, RANGE_OF_MOTION)
 	fully_open.origin = fully_closed.origin
 	
@@ -34,6 +36,7 @@ func _physics_process(delta):
 		v_y.x = 0
 		v_y = v_y.normalized()
 		
+		# clamp the rotation to a max of 5 degrees
 		if v_y.angle_to(global_transform.basis.y) > delta*deg2rad(5):
 			if v_y.dot(-global_transform.basis.z) > 0:
 				v_y = global_transform.basis.y.rotated(fully_closed.basis.x, -delta*(deg2rad(5)))
@@ -43,8 +46,8 @@ func _physics_process(delta):
 		if v_y.dot(-fully_open.basis.z) > 0:
 			v_y = fully_open.basis.y
 #
-		if v_y.dot(fully_closed.basis.z) > 0:
-			v_y = fully_closed.basis.y
+		if v_y.dot(current_closed.basis.z) > 0:
+			v_y = current_closed.basis.y
 		
 		var v_x: Vector3 = fully_closed.basis.x
 		var v_z: Vector3 = v_x.cross(v_y)
@@ -56,8 +59,10 @@ func _physics_process(delta):
 		_physics_process_update_velocity_local(delta)
 	else:
 		var v_y: Vector3
-		if global_transform.basis.y.angle_to(fully_closed.basis.y) <= delta*deg2rad(1):
-			v_y = fully_closed.basis.y
+		
+		# snap to sticking points
+		if global_transform.basis.y.angle_to(current_closed.basis.y) <= delta*deg2rad(1):
+			v_y = current_closed.basis.y
 		elif global_transform.basis.y.angle_to(fully_open.basis.y) <= delta*deg2rad(1):
 			v_y = fully_open.basis.y
 		else:
@@ -83,11 +88,14 @@ func _physics_process(delta):
 			var multiple: float = ceil(prev_angle/deg2rad(5)) * deg2rad(5)
 			if (prev_angle <= multiple and multiple <= current_angle):
 				print("passed an interval of pi/12")
+				current_closed = global_transform
 				# if so, play sound
 		elif current_angle < prev_angle:
 			var multiple: float = ceil(current_angle/deg2rad(5)) * deg2rad(5)
 			if (current_angle <= multiple and multiple <= prev_angle) and multiple!=0:
 				print("passed an interval of pi/12: "+str(multiple)+", "+str(current_angle))
+				current_closed = global_transform
+				# XXX: Will we need to also set the closed here?
 		
 func grabbed(controller):
 	avg_rotation = 0
