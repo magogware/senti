@@ -1,0 +1,3 @@
+[submodule "senti-sound"]
+	path = senti-sound
+	url = git@github.com:magogware/senti-sound.git
