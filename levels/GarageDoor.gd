@@ -25,7 +25,7 @@ func _physics_process(delta):
 	
 	if prior_displacements.size() > 30:
 		prior_displacements.pop_back();
-	prior_displacements.append((global_transform.origin - prev_origin)/delta);
+	prior_displacements.push_front((global_transform.origin - prev_origin)/delta);
 	
 	var avg_displacement: Vector3;
 	for displacement in prior_displacements:
