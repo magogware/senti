@@ -33,6 +33,7 @@ func _integrate_forces(state):
 	
 func _physics_process(delta):
 	var prev_basis: Vector3 = global_transform.basis.y;
+	var rotation_excess: float = 0;
 	var v_y: Vector3
 	
 	# record how far the hand was in excess of the allowed max angle per second so that we can adjust just how creaky the sound is
@@ -43,11 +44,13 @@ func _physics_process(delta):
 		v_y = global_transform.basis.xform(v_y)
 		
 		# clamp the rotation to a max of 5 degrees
+		var angle: float = v_y.angle_to(global_transform.basis.y);
+		rotation_excess = (abs(deg2rad(OPENING_DEGS) - angle) / (RANGE_OF_MOTION/1))*100;
 		if v_y.angle_to(global_transform.basis.y) > delta*deg2rad(OPENING_DEGS):
 			if v_y.dot(-global_transform.basis.z) > 0:
 				v_y = global_transform.basis.y.rotated(start.basis.x, -delta*(deg2rad(OPENING_DEGS)))
 #			else:
-#				v_y = global_transform.basis.y.rotated(start.basis.x, delta*(deg2rad(5)))
+#				v_y = global_transform.basis.y.rotated(start.basis.x, delta*(deg2rad(CLOSING_DEGS)))
 		
 	else:
 		v_y = global_transform.basis.y.rotated(fully_closed.basis.x, delta*deg2rad(CLOSING_DEGS))
@@ -74,6 +77,8 @@ func _physics_process(delta):
 	var prev_rotation_percentage = rotation_percentage
 	rotation_percentage = abs((global_transform.basis.y.angle_to(fully_closed.basis.y)) / RANGE_OF_MOTION) * 100
 	Wwise.set_rtpc_id(AK.GAME_PARAMETERS.CONTROLS_LEVER_ROTATION_PERCENTAGE, rotation_percentage, self);
+	
+	Wwise.set_rtpc_id(AK.GAME_PARAMETERS.PHYSICS_LEVER_PULL_STRENGTH, rotation_excess, self);
 	
 	var prev_rotation_adjusted = ceil(prev_rotation_percentage/CLUNKS_INV)
 	var rotation_adjusted = ceil(rotation_percentage/CLUNKS_INV)

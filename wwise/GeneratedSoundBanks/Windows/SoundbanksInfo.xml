@@ -11,12 +11,12 @@
 	<StreamedFiles/>
 	<MediaFilesNotInAnyBank/>
 	<SoundBanks>
-		<SoundBank Id="1355168291" Language="SFX" Hash="342503954">
+		<SoundBank Id="1355168291" Language="SFX" Hash="3794549794">
 			<ObjectPath>Init</ObjectPath>
 			<ShortName>Init</ShortName>
 			<Path>1355168291.bnk</Path>
 		</SoundBank>
-		<SoundBank Id="2793162419" Language="SFX" Hash="492699965">
+		<SoundBank Id="2793162419" Language="SFX" Hash="1325120751">
 			<ObjectPath>\SoundBanks\haptics_you_can_hear\haptics_you_can_hear</ObjectPath>
 			<ShortName>haptics_you_can_hear</ShortName>
 			<Path>2793162419.bnk</Path>
