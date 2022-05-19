@@ -1,9 +1,4 @@
-extends RigidBody
-
-
-# Declare member variables here. Examples:
-# var a = 2
-# var b = "text"
+extends GrabbableBody
 
 const STARTED_COLLIDING: int = 0;
 const IS_COLLIDING: int = 1;
@@ -12,6 +7,10 @@ const DEFAULTS = [false, false];
 var collisions_dict = {};
 
 var dragging: bool = false;
+
+func _ready():
+	._ready()
+	#Wwise.register_game_obj(self, self.get_name())
 
 func _physics_process(delta):
 	var drag_count: int = 0;
@@ -22,26 +21,37 @@ func _physics_process(delta):
 		collisions_dict[item][STARTED_COLLIDING] = false;
 		
 	if drag_count > 0:
+		if dragging != true:
+			#Wwise.post_event_id(AK.EVENTS.FRICTION_HAMMER_START, self);
+			pass
 		dragging = true;
 	else:
 		dragging = false;
+		#Wwise.post_event_id(AK.EVENTS.FRICTION_HAMMER_STOP, self);
+
+func grabbed(grabber: Spatial):
+	.grabbed(grabber)
+	connect("body_entered", self, "_drag_body_entered")
+	connect("body_exited", self, "_drag_body_exited")
+	
+func released():
+	.released()
+	disconnect("body_entered", self, "_drag_body_entered")
+	disconnect("body_exited", self, "_drag_body_exited")
 
 func body_entered(body):
+	#Wwise.post_event_id(AK.EVENTS.IMPACT_HEAVY_HAMMER, self);
+	pass
+
+func _drag_body_exited(body):
+	var node_path: String = str(body.get_path());
+	if (node_path in collisions_dict):
+		collisions_dict[node_path][STARTED_COLLIDING] = false;
+		collisions_dict[node_path][IS_COLLIDING] = false;
+
+func _drag_body_entered(body):
 	var node_path: String = str(body.get_path());
 	if !(node_path in collisions_dict):
 		collisions_dict[node_path] = DEFAULTS;
 	collisions_dict[node_path][STARTED_COLLIDING] = true;
 	collisions_dict[node_path][IS_COLLIDING] = true;
-	
-func _on_Timer_timeout():
-	print("Dragging is "+str(dragging));
-
-
-func body_exited(body):
-	var node_path: String = str(body.get_path());
-	collisions_dict[node_path][STARTED_COLLIDING] = false;
-	collisions_dict[node_path][IS_COLLIDING] = false;
-
-
-func launch():
-	apply_impulse(Vector3(0,0,0), Vector3(0,100,0));
