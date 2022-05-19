@@ -39,6 +39,9 @@ transform = Transform( 0.694055, -0.719922, 0, 0.719922, 0.694055, 0, 0, 0, 1, 0
 open_mesh = ExtResource( 3 )
 fist_mesh = ExtResource( 2 )
 
+[node name="Timer" type="Timer" parent="RotationHelper/RightHand"]
+autostart = true
+
 [node name="GrabZone" type="Area" parent="RotationHelper"]
 transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -3.7059 )
 collision_layer = 8
@@ -52,3 +55,5 @@ transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, 0.179, 0, -0.412 )
 
 [node name="AkListener" type="Spatial" parent="."]
 script = ExtResource( 5 )
+
+[connection signal="timeout" from="RotationHelper/RightHand/Timer" to="RotationHelper/RightHand" method="_on_Timer_timeout"]

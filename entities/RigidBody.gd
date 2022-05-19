@@ -20,10 +20,10 @@ func _physics_process(delta):
 				drag_count = drag_count + 1;
 		collisions_dict[item][STARTED_COLLIDING] = false;
 		
-	if drag_count > 0:
+	if drag_count > 0 and holder:
 		if dragging != true:
 			Wwise.post_event_id(AK.EVENTS.FRICTION_HAMMER_START, self);
-			pass
+		Wwise.set_rtpc_id(AK.GAME_PARAMETERS.PHYSICS_CONTROLLER_SPEED, holder.velocity, self);
 		dragging = true;
 	else:
 		dragging = false;

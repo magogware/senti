@@ -11,6 +11,8 @@ var global_controller_velocity: Vector3 = Vector3(0,0,0)
 var global_prior_controller_position: Vector3 = Vector3(0,0,0)
 var global_prior_controller_velocities = []
 
+var velocity: float = 0;
+
 var held_object: GrabbableBody = null
 		
 func _grab_body(bodies_in_zone):
