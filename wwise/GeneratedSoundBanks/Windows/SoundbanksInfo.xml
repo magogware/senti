@@ -1,0 +1,133 @@
+<?xml version="1.0" encoding="utf-8"?>
+<SoundBanksInfo Platform="Windows" BasePlatform="Windows" SchemaVersion="12" SoundbankVersion="140">
+	<RootPaths>
+		<ProjectRoot>/Users/alex/Library/Application Support/Wwise2019/Bottles/Wwise2019x64/dosdevices/y:/Desktop/Senti/senti-sound/</ProjectRoot>
+		<SourceFilesRoot>/Users/alex/Library/Application Support/Wwise2019/Bottles/Wwise2019x64/dosdevices/y:/Desktop/Senti/senti-sound/.cache/Windows/</SourceFilesRoot>
+		<SoundBanksRoot>/Users/alex/Library/Application Support/Wwise2019/Bottles/Wwise2019x64/dosdevices/y:/Desktop/Senti/wwise/GeneratedSoundBanks/Windows/</SoundBanksRoot>
+		<ExternalSourcesInputFile></ExternalSourcesInputFile>
+		<ExternalSourcesOutputRoot>Y:\Desktop\Senti\senti-sound\GeneratedSoundBanks\Windows</ExternalSourcesOutputRoot>
+	</RootPaths>
+	<DialogueEvents/>
+	<StreamedFiles/>
+	<MediaFilesNotInAnyBank/>
+	<SoundBanks>
+		<SoundBank Id="1355168291" Language="SFX" Hash="342503954">
+			<ObjectPath>Init</ObjectPath>
+			<ShortName>Init</ShortName>
+			<Path>1355168291.bnk</Path>
+		</SoundBank>
+		<SoundBank Id="2793162419" Language="SFX" Hash="492699965">
+			<ObjectPath>\SoundBanks\haptics_you_can_hear\haptics_you_can_hear</ObjectPath>
+			<ShortName>haptics_you_can_hear</ShortName>
+			<Path>2793162419.bnk</Path>
+			<IncludedEvents>
+				<Event Id="2986304931" Name="friction_door_start" ObjectPath="\Events\haptics-you-can-hear\friction_door_start">
+					<IncludedMemoryFiles>
+						<File Id="915421228" Language="SFX">
+							<ShortName>Friction\Friction_Scrape_Polystyrene_04.wav</ShortName>
+							<Path>Plugins/SoundSeed Grain/Friction/Friction_Scrape_Polystyrene_04_D79FB2B7.wem</Path>
+						</File>
+					</IncludedMemoryFiles>
+				</Event>
+				<Event Id="884199073" Name="friction_door_stop" ObjectPath="\Events\haptics-you-can-hear\friction_door_stop"/>
+				<Event Id="2838252737" Name="friction_hammer_start" ObjectPath="\Events\haptics-you-can-hear\friction_hammer_start">
+					<IncludedMemoryFiles>
+						<File Id="201083148" Language="SFX">
+							<ShortName>Friction\Friction_Scrape_Polystyrene_05.wav</ShortName>
+							<Path>Plugins/SoundSeed Grain/Friction/Friction_Scrape_Polystyrene_05_D79FB2B7.wem</Path>
+						</File>
+					</IncludedMemoryFiles>
+				</Event>
+				<Event Id="1803454843" Name="friction_hammer_stop" ObjectPath="\Events\haptics-you-can-hear\friction_hammer_stop"/>
+				<Event Id="2270287439" Name="friction_lever_start" ObjectPath="\Events\haptics-you-can-hear\friction_lever_start">
+					<IncludedMemoryFiles>
+						<File Id="944397738" Language="SFX">
+							<ShortName>Creepy Door, Slow Creak_03.wav</ShortName>
+							<Path>Plugins/SoundSeed Grain/Creepy Door, Slow Creak_03_D79FB2B7.wem</Path>
+						</File>
+					</IncludedMemoryFiles>
+				</Event>
+				<Event Id="1818779349" Name="friction_lever_stop" ObjectPath="\Events\haptics-you-can-hear\friction_lever_stop"/>
+				<Event Id="2826139286" Name="impact_door" ObjectPath="\Events\haptics-you-can-hear\impact_door">
+					<IncludedMemoryFiles>
+						<File Id="167702876" Language="SFX">
+							<ShortName>Bluezone_BC0251_heavy_metal_impact_steel_barrel_01.wav</ShortName>
+							<Path>Plugins/Impacter/Bluezone_BC0251_heavy_metal_impact_steel_barrel_01_1C77B6BC.wem</Path>
+						</File>
+						<File Id="228937748" Language="SFX">
+							<ShortName>Bluezone_BC0251_heavy_metal_impact_metal_plate_medium.wav</ShortName>
+							<Path>Plugins/Impacter/Bluezone_BC0251_heavy_metal_impact_metal_plate_medium_1C77B6BC.wem</Path>
+						</File>
+						<File Id="965805220" Language="SFX">
+							<ShortName>Bluezone_BC0251_heavy_metal_impact_large_tank_01_03.wav</ShortName>
+							<Path>Plugins/Impacter/Bluezone_BC0251_heavy_metal_impact_large_tank_01_03_1C77B6BC.wem</Path>
+						</File>
+					</IncludedMemoryFiles>
+				</Event>
+				<Event Id="1917250544" Name="impact_heavy_hammer" ObjectPath="\Events\haptics-you-can-hear\impact_heavy_hammer">
+					<IncludedMemoryFiles>
+						<File Id="12830906" Language="SFX">
+							<ShortName>impactGlass_medium_000.ogg.wav</ShortName>
+							<Path>SFX/impactGlass_medium_000.ogg_10C4C929.wem</Path>
+						</File>
+						<File Id="481219743" Language="SFX">
+							<ShortName>impactGlass_medium_001.ogg.wav</ShortName>
+							<Path>SFX/impactGlass_medium_001.ogg_10C4C929.wem</Path>
+						</File>
+						<File Id="485639075" Language="SFX">
+							<ShortName>impactGlass_medium_003.ogg.wav</ShortName>
+							<Path>SFX/impactGlass_medium_003.ogg_10C4C929.wem</Path>
+						</File>
+						<File Id="846086585" Language="SFX">
+							<ShortName>impactGlass_medium_002.ogg.wav</ShortName>
+							<Path>SFX/impactGlass_medium_002.ogg_10C4C929.wem</Path>
+						</File>
+						<File Id="1027230596" Language="SFX">
+							<ShortName>impactGlass_medium_004.ogg.wav</ShortName>
+							<Path>SFX/impactGlass_medium_004.ogg_10C4C929.wem</Path>
+						</File>
+					</IncludedMemoryFiles>
+				</Event>
+				<Event Id="1322522298" Name="impact_lever" ObjectPath="\Events\haptics-you-can-hear\impact_lever">
+					<IncludedMemoryFiles>
+						<File Id="416518504" Language="SFX">
+							<ShortName>Pop Toy_TS 02.wav</ShortName>
+							<Path>SFX/Pop Toy_TS 02_C5D896FD.wem</Path>
+						</File>
+					</IncludedMemoryFiles>
+				</Event>
+				<Event Id="160312839" Name="impact_light_hammer" ObjectPath="\Events\haptics-you-can-hear\impact_light_hammer">
+					<IncludedMemoryFiles>
+						<File Id="137962797" Language="SFX">
+							<ShortName>impactGlass_light_000.ogg.wav</ShortName>
+							<Path>SFX/impactGlass_light_000.ogg_10C4C929.wem</Path>
+						</File>
+						<File Id="208226989" Language="SFX">
+							<ShortName>impactGlass_light_002.ogg.wav</ShortName>
+							<Path>SFX/impactGlass_light_002.ogg_10C4C929.wem</Path>
+						</File>
+						<File Id="281148767" Language="SFX">
+							<ShortName>impactGlass_light_003.ogg.wav</ShortName>
+							<Path>SFX/impactGlass_light_003.ogg_10C4C929.wem</Path>
+						</File>
+						<File Id="614741120" Language="SFX">
+							<ShortName>impactGlass_light_001.ogg.wav</ShortName>
+							<Path>SFX/impactGlass_light_001.ogg_10C4C929.wem</Path>
+						</File>
+						<File Id="1040298901" Language="SFX">
+							<ShortName>impactGlass_light_004.ogg.wav</ShortName>
+							<Path>SFX/impactGlass_light_004.ogg_10C4C929.wem</Path>
+						</File>
+					</IncludedMemoryFiles>
+				</Event>
+			</IncludedEvents>
+			<GameParameters>
+				<GameParameter Id="420396723" Name="physics_controller_speed" ObjectPath="\Game Parameters\Default Work Unit\haptics_you_can_hear\physics_controller_speed"/>
+				<GameParameter Id="1455917071" Name="physics_door_velocity" ObjectPath="\Game Parameters\Default Work Unit\haptics_you_can_hear\physics_door_velocity"/>
+				<GameParameter Id="2069418782" Name="controls_lever_rotation_percentage" ObjectPath="\Game Parameters\Default Work Unit\haptics_you_can_hear\controls_lever_rotation_percentage"/>
+				<GameParameter Id="2715217995" Name="Density_FA_SSGrain" ObjectPath="\Game Parameters\Factory SoundSeed Grain\Density_FA_SSGrain"/>
+				<GameParameter Id="4280574059" Name="physics_lever_pull_strength" ObjectPath="\Game Parameters\Default Work Unit\haptics_you_can_hear\physics_lever_pull_strength"/>
+			</GameParameters>
+		</SoundBank>
+	</SoundBanks>
+</SoundBanksInfo>

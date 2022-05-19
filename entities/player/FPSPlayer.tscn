@@ -1,9 +1,10 @@
-[gd_scene load_steps=8 format=2]
+[gd_scene load_steps=9 format=2]
 
 [ext_resource path="res://entities/player/FPSPlayer.gd" type="Script" id=1]
 [ext_resource path="res://assets/meshes/hands/HandRfist.mesh" type="ArrayMesh" id=2]
 [ext_resource path="res://assets/meshes/hands/HandRopen.mesh" type="ArrayMesh" id=3]
 [ext_resource path="res://entities/controller/Hand.tscn" type="PackedScene" id=4]
+[ext_resource path="res://addons/wwise/runtime/nodes/ak_listener.gd" type="Script" id=5]
 
 [sub_resource type="BoxShape" id=1]
 extents = Vector3( 0.5, 0.5, 0.1 )
@@ -48,3 +49,6 @@ shape = SubResource( 3 )
 
 [node name="RightHandPos" type="Position3D" parent="RotationHelper"]
 transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, 0.179, 0, -0.412 )
+
+[node name="AkListener" type="Spatial" parent="."]
+script = ExtResource( 5 )

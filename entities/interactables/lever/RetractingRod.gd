@@ -26,7 +26,7 @@ func _ready():
 	
 	global_transform = fully_closed
 	
-	#Wwise.register_game_obj(self, self.get_name())
+	Wwise.register_game_obj(self, self.get_name())
 	
 func _integrate_forces(state):
 	pass
@@ -59,7 +59,7 @@ func _physics_process(delta):
 		global_transform.basis.y = v_y
 		global_transform.basis.z = start.basis.x.cross(v_y).normalized()
 		#set_physics_process(false)
-		#Wwise.post_event_id(AK.EVENTS.FRICTION_LEVER_STOP, self)
+		Wwise.post_event_id(AK.EVENTS.FRICTION_LEVER_STOP, self)
 		#return
 
 	if v_y.dot(fully_closed.basis.z) > 0:
@@ -73,19 +73,19 @@ func _physics_process(delta):
 
 	var prev_rotation_percentage = rotation_percentage
 	rotation_percentage = abs((global_transform.basis.y.angle_to(fully_closed.basis.y)) / RANGE_OF_MOTION) * 100
-	#Wwise.set_rtpc_id(AK.GAME_PARAMETERS.CONTROLS_LEVER_ROTATION_PERCENTAGE, rotation_percentage, self);
+	Wwise.set_rtpc_id(AK.GAME_PARAMETERS.CONTROLS_LEVER_ROTATION_PERCENTAGE, rotation_percentage, self);
 	
 	var prev_rotation_adjusted = ceil(prev_rotation_percentage/CLUNKS_INV)
 	var rotation_adjusted = ceil(rotation_percentage/CLUNKS_INV)
 	if prev_rotation_adjusted != rotation_adjusted and prev_rotation_adjusted != 0 and rotation_adjusted != 0:
 		#print("Passed a thing, "+str(prev_rotation_adjusted)+", "+str(rotation_adjusted))
-		#Wwise.post_event_id(AK.EVENTS.IMPACT_LEVER, self);
+		Wwise.post_event_id(AK.EVENTS.IMPACT_LEVER, self);
 		
 func grabbed(controller):
 	holder = controller;
-	#set_physics_process(true)
-	#Wwise.post_event_id(AK.EVENTS.FRICTION_LEVER_START, self);
+	set_physics_process(true)
+	Wwise.post_event_id(AK.EVENTS.FRICTION_LEVER_START, self);
 
 func released():
 	holder = null
-	#Wwise.post_event_id(AK.EVENTS.FRICTION_LEVER_STOP, self);
+	Wwise.post_event_id(AK.EVENTS.FRICTION_LEVER_STOP, self);

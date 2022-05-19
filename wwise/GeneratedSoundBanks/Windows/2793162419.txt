@@ -1,0 +1,54 @@
+Event	ID	Name			Wwise Object Path	Notes
+	160312839	impact_light_hammer			\haptics-you-can-hear\impact_light_hammer	
+	884199073	friction_door_stop			\haptics-you-can-hear\friction_door_stop	
+	1322522298	impact_lever			\haptics-you-can-hear\impact_lever	
+	1803454843	friction_hammer_stop			\haptics-you-can-hear\friction_hammer_stop	
+	1818779349	friction_lever_stop			\haptics-you-can-hear\friction_lever_stop	
+	1917250544	impact_heavy_hammer			\haptics-you-can-hear\impact_heavy_hammer	
+	2270287439	friction_lever_start			\haptics-you-can-hear\friction_lever_start	
+	2826139286	impact_door			\haptics-you-can-hear\impact_door	
+	2838252737	friction_hammer_start			\haptics-you-can-hear\friction_hammer_start	
+	2986304931	friction_door_start			\haptics-you-can-hear\friction_door_start	
+
+Game Parameter	ID	Name			Wwise Object Path	Notes
+	420396723	physics_controller_speed			\Default Work Unit\haptics_you_can_hear\physics_controller_speed	
+	1455917071	physics_door_velocity			\Default Work Unit\haptics_you_can_hear\physics_door_velocity	
+	2069418782	controls_lever_rotation_percentage			\Default Work Unit\haptics_you_can_hear\controls_lever_rotation_percentage	
+	2715217995	Density_FA_SSGrain			\Factory SoundSeed Grain\Density_FA_SSGrain	Density is used on certain presets modulating grain emission.
+	4280574059	physics_lever_pull_strength			\Default Work Unit\haptics_you_can_hear\physics_lever_pull_strength	
+
+Modulator Envelope	ID	Name			Wwise Object Path	Notes
+	910037960	Modulator Envelope (Custom)				
+
+Effect plug-ins	ID	Name	Type				Notes
+	220758869	Wwise Matrix Reverb (Custom)	Wwise Matrix Reverb			
+	450692374	Wwise Matrix Reverb (Custom)	Wwise Matrix Reverb			
+	616523409	Wwise Matrix Reverb (Custom)	Wwise Matrix Reverb			
+
+Source plug-ins	ID	Name	Type		Wwise Object Path	Notes
+	132177706	Impacter	Impacter		\Actor-Mixer Hierarchy\haptics-you-can-hear\impact_door\Impacter	
+	191800556	Friction Scrape Polystyrene 04	SoundSeed Grain		\Actor-Mixer Hierarchy\haptics-you-can-hear\friction_door\Friction Scrape Polystyrene 04	
+	366296558	SoundSeed Grain	SoundSeed Grain		\Actor-Mixer Hierarchy\haptics-you-can-hear\friction_lever\SoundSeed Grain	
+	709448035	Friction Scrape Polystyrene 05	SoundSeed Grain		\Actor-Mixer Hierarchy\haptics-you-can-hear\friction_hammer\Friction Scrape Polystyrene 05	
+
+In Memory Audio	ID	Name	Audio source file		Wwise Object Path	Notes	Data Size
+	12830906	impactGlass_medium_000_ogg	Y:\Desktop\Senti\senti-sound\.cache\Windows\SFX\impactGlass_medium_000.ogg_10C4C929.wem		\Actor-Mixer Hierarchy\haptics-you-can-hear\impact_heavy_hammer\impactGlass_medium_000_ogg		95912
+	137962797	impactGlass_light_000_ogg	Y:\Desktop\Senti\senti-sound\.cache\Windows\SFX\impactGlass_light_000.ogg_10C4C929.wem		\Actor-Mixer Hierarchy\haptics-you-can-hear\impact_light_hammer\impactGlass_light_000_ogg		37036
+	201083148	Friction Scrape Polystyrene 05	Y:\Desktop\Senti\senti-sound\.cache\Windows\Plugins\SoundSeed Grain\Friction\Friction_Scrape_Polystyrene_05_D79FB2B7.wem	SoundSeed Grain (Custom)	\Actor-Mixer Hierarchy\haptics-you-can-hear\friction_hammer\Friction Scrape Polystyrene 05		335262
+	208226989	impactGlass_light_002_ogg	Y:\Desktop\Senti\senti-sound\.cache\Windows\SFX\impactGlass_light_002.ogg_10C4C929.wem		\Actor-Mixer Hierarchy\haptics-you-can-hear\impact_light_hammer\impactGlass_light_002_ogg		37036
+	281148767	impactGlass_light_003_ogg	Y:\Desktop\Senti\senti-sound\.cache\Windows\SFX\impactGlass_light_003.ogg_10C4C929.wem		\Actor-Mixer Hierarchy\haptics-you-can-hear\impact_light_hammer\impactGlass_light_003_ogg		37036
+	416518504	impact_lever	Y:\Desktop\Senti\senti-sound\.cache\Windows\SFX\Pop Toy_TS 02_C5D896FD.wem		\Actor-Mixer Hierarchy\haptics-you-can-hear\impact_lever		32204
+	481219743	impactGlass_medium_001_ogg	Y:\Desktop\Senti\senti-sound\.cache\Windows\SFX\impactGlass_medium_001.ogg_10C4C929.wem		\Actor-Mixer Hierarchy\haptics-you-can-hear\impact_heavy_hammer\impactGlass_medium_001_ogg		95912
+	485639075	impactGlass_medium_003_ogg	Y:\Desktop\Senti\senti-sound\.cache\Windows\SFX\impactGlass_medium_003.ogg_10C4C929.wem		\Actor-Mixer Hierarchy\haptics-you-can-hear\impact_heavy_hammer\impactGlass_medium_003_ogg		95912
+	614741120	impactGlass_light_001_ogg	Y:\Desktop\Senti\senti-sound\.cache\Windows\SFX\impactGlass_light_001.ogg_10C4C929.wem		\Actor-Mixer Hierarchy\haptics-you-can-hear\impact_light_hammer\impactGlass_light_001_ogg		37036
+	846086585	impactGlass_medium_002_ogg	Y:\Desktop\Senti\senti-sound\.cache\Windows\SFX\impactGlass_medium_002.ogg_10C4C929.wem		\Actor-Mixer Hierarchy\haptics-you-can-hear\impact_heavy_hammer\impactGlass_medium_002_ogg		95912
+	915421228	Friction Scrape Polystyrene 04	Y:\Desktop\Senti\senti-sound\.cache\Windows\Plugins\SoundSeed Grain\Friction\Friction_Scrape_Polystyrene_04_D79FB2B7.wem	SoundSeed Grain (Custom)	\Actor-Mixer Hierarchy\haptics-you-can-hear\friction_door\Friction Scrape Polystyrene 04		535824
+	944397738	SoundSeed Grain	Y:\Desktop\Senti\senti-sound\.cache\Windows\Plugins\SoundSeed Grain\Creepy Door, Slow Creak_03_D79FB2B7.wem	SoundSeed Grain (Custom)	\Actor-Mixer Hierarchy\haptics-you-can-hear\friction_lever\SoundSeed Grain		1236500
+	1027230596	impactGlass_medium_004_ogg	Y:\Desktop\Senti\senti-sound\.cache\Windows\SFX\impactGlass_medium_004.ogg_10C4C929.wem		\Actor-Mixer Hierarchy\haptics-you-can-hear\impact_heavy_hammer\impactGlass_medium_004_ogg		95912
+	1040298901	impactGlass_light_004_ogg	Y:\Desktop\Senti\senti-sound\.cache\Windows\SFX\impactGlass_light_004.ogg_10C4C929.wem		\Actor-Mixer Hierarchy\haptics-you-can-hear\impact_light_hammer\impactGlass_light_004_ogg		37036
+
+Plug-in Media	ID	Name	Source file	Type	Wwise Object Path	Notes	Data Size
+	167702876	Impacter	Y:\Desktop\Senti\senti-sound\.cache\Windows\Plugins\Impacter\Bluezone_BC0251_heavy_metal_impact_steel_barrel_01_1C77B6BC.wem	Impacter (Custom)	\Actor-Mixer Hierarchy\haptics-you-can-hear\impact_door\Impacter		8072
+	228937748	Impacter	Y:\Desktop\Senti\senti-sound\.cache\Windows\Plugins\Impacter\Bluezone_BC0251_heavy_metal_impact_metal_plate_medium_1C77B6BC.wem	Impacter (Custom)	\Actor-Mixer Hierarchy\haptics-you-can-hear\impact_door\Impacter		8640
+	965805220	Impacter	Y:\Desktop\Senti\senti-sound\.cache\Windows\Plugins\Impacter\Bluezone_BC0251_heavy_metal_impact_large_tank_01_03_1C77B6BC.wem	Impacter (Custom)	\Actor-Mixer Hierarchy\haptics-you-can-hear\impact_door\Impacter		968680
+

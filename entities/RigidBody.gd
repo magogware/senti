@@ -10,7 +10,7 @@ var dragging: bool = false;
 
 func _ready():
 	._ready()
-	#Wwise.register_game_obj(self, self.get_name())
+	Wwise.register_game_obj(self, self.get_name())
 
 func _physics_process(delta):
 	var drag_count: int = 0;
@@ -22,12 +22,12 @@ func _physics_process(delta):
 		
 	if drag_count > 0:
 		if dragging != true:
-			#Wwise.post_event_id(AK.EVENTS.FRICTION_HAMMER_START, self);
+			Wwise.post_event_id(AK.EVENTS.FRICTION_HAMMER_START, self);
 			pass
 		dragging = true;
 	else:
 		dragging = false;
-		#Wwise.post_event_id(AK.EVENTS.FRICTION_HAMMER_STOP, self);
+		Wwise.post_event_id(AK.EVENTS.FRICTION_HAMMER_STOP, self);
 
 func grabbed(grabber: Spatial):
 	.grabbed(grabber)
@@ -40,8 +40,7 @@ func released():
 	disconnect("body_exited", self, "_drag_body_exited")
 
 func body_entered(body):
-	#Wwise.post_event_id(AK.EVENTS.IMPACT_HEAVY_HAMMER, self);
-	pass
+	Wwise.post_event_id(AK.EVENTS.IMPACT_HEAVY_HAMMER, self);
 
 func _drag_body_exited(body):
 	var node_path: String = str(body.get_path());

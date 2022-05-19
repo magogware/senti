@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="utf-8"?>
+<PluginInfo Project="senti-sound" Platform="Mac" BasePlatform="Mac">
+	<Plugins>
+		<Plugin Name="Wwise Matrix Reverb" ID="7536643" DLL="AkMatrixReverb" StaticLib="AkMatrixReverbFX"/>
+		<Plugin Name="System" ID="11403271"/>
+		<Plugin Name="No Output" ID="11862023"/>
+		<Plugin Name="SoundSeed Grain" ID="11993090" DLL="AkSoundSeedGrain" StaticLib="AkSoundSeedGrainSource"/>
+		<Plugin Name="Impacter" ID="12058626" DLL="AkImpacter" StaticLib="AkImpacterSource"/>
+	</Plugins>
+</PluginInfo>

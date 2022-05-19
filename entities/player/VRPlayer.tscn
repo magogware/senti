@@ -1,6 +1,7 @@
-[gd_scene load_steps=3 format=2]
+[gd_scene load_steps=4 format=2]
 
 [ext_resource path="res://entities/controller/Controller.tscn" type="PackedScene" id=1]
+[ext_resource path="res://addons/wwise/runtime/nodes/ak_listener.gd" type="Script" id=2]
 
 [sub_resource type="GDScript" id=1]
 script/source = "extends ARVROrigin
@@ -98,3 +99,6 @@ script = SubResource( 1 )
 controller_id = 2
 
 [node name="Camera" type="ARVRCamera" parent="."]
+
+[node name="AkListener" type="Spatial" parent="."]
+script = ExtResource( 2 )
