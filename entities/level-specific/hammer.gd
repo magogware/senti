@@ -1,4 +1,18 @@
 extends GrabbableBody
+class_name Hammer
+
+enum Type {
+	HAMMER_HEAVY,
+	HAMMER_LIGHT
+}
+
+enum Damage {
+	HAMMER_DAMAGE_HEAVY = 40,
+	HAMMER_DAMAGE_LIGHT = 200
+}
+
+var type: int
+var damage: int
 
 const STARTED_COLLIDING: int = 0;
 const IS_COLLIDING: int = 1;

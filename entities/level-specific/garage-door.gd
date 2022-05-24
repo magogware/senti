@@ -1,13 +1,15 @@
-extends StaticBody
-
+extends RigidBody
 
 var lever: Spatial = null
-const RANGE_OF_MOTION: float = 10.0
+const RANGE_OF_MOTION: float = 1.0
 var fully_open: Transform
 var fully_closed: Transform
 
 var avg_velocity: float = 0
 var prior_displacements: Array = []
+
+var _light_hits: int = 0;
+var _health: int = 100;
 
 # Called when the node enters the scene tree for the first time.
 func _ready():
@@ -35,6 +37,24 @@ func _physics_process(delta):
 	avg_velocity /= prior_displacements.size();
 	
 	Wwise.set_rtpc_id(AK.GAME_PARAMETERS.PHYSICS_DOOR_VELOCITY, avg_velocity, self);
+	
+	if lever.open:
+		set_physics_process(false)
+		Wwise.post_event_id(AK.EVENTS.FRICTION_DOOR_STOP, self)
+#		Wwise.post_trigger_id(AK.TRIGGERS.DOOR_OPEN, self)
+		_spawn_light_hammer()
+		connect("body_entered", self, "_struck")
+
+func _struck(body):
+	if body is Hammer:
+		if body.type == Hammer.Type.HAMMER_LIGHT:
+			_light_hits = _light_hits + 1;
+			if _light_hits > 2:
+				pass
+#				_spawn_heavy_hammer()
+		_health -= body.damage;
+		if _health <= 0:
+			$Destruction.destroy()
 
 func _start_lifting(_body):
 	Wwise.post_event_id(AK.EVENTS.FRICTION_DOOR_START, self);
@@ -46,3 +66,19 @@ func _end_lifting(_body):
 func _delay_first_entry(body):
 	get_node("../door-close-detection").disconnect("body_entered", self, "_delay_first_entry");
 	get_node("../door-close-detection").connect("body_entered", self, "_end_lifting");
+	
+func _spawn_light_hammer():
+	var parent: Spatial = get_parent()
+	var pos: Position3D = get_node("../hammer-spawn")
+	var light_hammer_scene: PackedScene = preload("res://entities/level-specific/light-hammer.tscn")
+	var light_hammer: Spatial = light_hammer_scene.instance()
+	light_hammer.global_transform.origin = pos.global_transform.origin
+	parent.add_child(light_hammer, true)
+
+#func _spawn_heavy_hammer():
+#	var parent: Spatial = get_parent()
+#	var pos: Position3D = get_node("../hammer-spawn")
+#	var heavy_hammer_scene: PackedScene = preload("res://entities/level-specific/heavy-hammer.tscn")
+#	var heavy_hammer: Spatial = heavy_hammer_scene.instance()
+#	heavy_hammer.global_transform.origin = pos.global_transform.origin
+#	parent.add_child(heavy_hammer, true)

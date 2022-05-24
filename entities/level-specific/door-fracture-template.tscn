@@ -1,0 +1,14 @@
+[gd_scene load_steps=3 format=2]
+
+[ext_resource path="res://assets/shaders/per-object-dither/dither-mat.tres" type="Material" id=1]
+
+[sub_resource type="CubeMesh" id=1]
+
+[node name="{name}Shard{number}" type="RigidBody"]
+collision_mask = 3
+
+[node name="CollisionShape" type="CollisionShape" parent="."]
+
+[node name="MeshInstance" type="MeshInstance" parent="."]
+mesh = SubResource( 1 )
+material/0 = ExtResource( 1 )
