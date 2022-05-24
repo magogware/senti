@@ -56,13 +56,14 @@ func _physics_process(delta):
 		v_y = global_transform.basis.y.rotated(fully_closed.basis.x, delta*deg2rad(CLOSING_DEGS))
 
 	if v_y.dot(-fully_open.basis.z) > 0 or open:
+		if !open:
+			Wwise.post_event_id(AK.EVENTS.FRICTION_LEVER_STOP, self)
 		open = true
 		v_y = fully_open.basis.y
 		global_transform.basis.x = start.basis.x
 		global_transform.basis.y = v_y
 		global_transform.basis.z = start.basis.x.cross(v_y).normalized()
 		#set_physics_process(false)
-		Wwise.post_event_id(AK.EVENTS.FRICTION_LEVER_STOP, self)
 		#return
 
 	if v_y.dot(fully_closed.basis.z) > 0:
