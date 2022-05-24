@@ -70,7 +70,3 @@ func _physics_process(delta):
 	avg_velocity = avg_displacement.length();
 	avg_velocity /= prior_displacements.size();
 	velocity = avg_velocity;
-
-
-func _on_Timer_timeout():
-	print(velocity)
