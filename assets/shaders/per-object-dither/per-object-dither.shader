@@ -11,6 +11,14 @@ uniform float u_contrast = 1.0;
 uniform float u_offset = 0.0;
 uniform int u_dither_size = 1;
 
+uniform float u_min_ground_height = 1.0;
+uniform float u_max_ground_height = -5.0;
+uniform vec4 u_ground_color: hint_color = vec4(1);
+
+uniform float u_min_fog_height = 5.0;
+uniform float u_max_fog_height = 10.0;
+uniform vec4 u_fog_color: hint_color = vec4(0);
+
 void fragment() {
 		// calculate pixel luminosity (https://stackoverflow.com/questions/596216/formula-to-determine-brightness-of-rgb-color)
 		
@@ -54,6 +62,11 @@ void fragment() {
 	vec2 noise_uv = mod(SCREEN_UV * ratio, 1.0);
 	float threshold = texture(u_dither_tex, noise_uv).r;
 
+	float height = (CAMERA_MATRIX * vec4(VERTEX, 1.0)).y;
+	float fog_height_scaled = (height - u_min_fog_height) / (u_max_fog_height - u_min_fog_height);
+	fog_height_scaled = log(fog_height_scaled) +1.0;
+	fog_height_scaled = clamp(fog_height_scaled, 0.0, 1.0);
+	float ground_height_scaled = (height - u_min_ground_height) / (u_max_ground_height - u_min_ground_height);
 	
 	// adjust the dither slightly so min and max aren't quite at 0.0 and 1.0
 	// otherwise we wouldn't get fullly dark and fully light dither patterns at lum 0.0 and 1.0
@@ -65,7 +78,12 @@ void fragment() {
 	// sample at the lower bound colour if ramp_val is 0.0, upper bound colour if 1.0
 	float col_sample = mix(lum_lower, lum_upper, ramp_val);
 	col_sample = clamp(col_sample, 0.05, 0.95);
-	vec3 final_col = texture(u_color_tex, vec2(col_sample, 0.5)).rgb;
+	vec3 dither_col = texture(u_color_tex, vec2(col_sample, 0.5)).rgb;
+	
+	float fog_height_ramp = (fog_height_scaled) < threshold ? 0.0f : 1.0f;
+	vec3 final_col = mix(dither_col, u_fog_color.rgb, fog_height_ramp);
+	float ground_height_ramp = (ground_height_scaled) < threshold ? 0.0f : 1.0f;
+	final_col = mix(final_col, u_ground_color.rgb, ground_height_ramp);
 	
 	// return the final colour!
 	ALBEDO = final_col;

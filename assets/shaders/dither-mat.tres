@@ -1,22 +1,24 @@
-[gd_resource type="ShaderMaterial" load_steps=6 format=2]
+[gd_resource type="ShaderMaterial" load_steps=4 format=2]
 
 [ext_resource path="res://assets/shaders/per-object-dither/first-pass.shader" type="Shader" id=1]
 [ext_resource path="res://assets/shaders/per-object-dither/per-object-dither.shader" type="Shader" id=2]
-[ext_resource path="res://assets/shaders/per-object-dither/blue_noise.png" type="Texture" id=3]
-[ext_resource path="res://assets/shaders/per-object-dither/palettes/haptics-you-can-hear-1.png" type="Texture" id=4]
 
-[sub_resource type="ShaderMaterial" id=7]
+[sub_resource type="ShaderMaterial" id=48]
 render_priority = -1
 shader = ExtResource( 2 )
 shader_param/u_bit_depth = 48
 shader_param/u_contrast = 1.0
 shader_param/u_offset = 0.0
 shader_param/u_dither_size = 1
-shader_param/u_dither_tex = ExtResource( 3 )
-shader_param/u_color_tex = ExtResource( 4 )
+shader_param/u_min_ground_height = 1.0
+shader_param/u_max_ground_height = -5.0
+shader_param/u_ground_color = Color( 1, 1, 1, 1 )
+shader_param/u_min_fog_height = 5.0
+shader_param/u_max_fog_height = 10.0
+shader_param/u_fog_color = Color( 0, 0, 0, 0 )
 
 [resource]
 render_priority = -2
-next_pass = SubResource( 7 )
+next_pass = SubResource( 48 )
 shader = ExtResource( 1 )
 shader_param/u_albedo = Color( 1, 1, 1, 1 )
