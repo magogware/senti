@@ -67,6 +67,7 @@ Constants="*res://entities/classes/Constants.gd"
 WwiseSettings="*res://addons/wwise/editor/wwise_settings.gd"
 Wwise="*res://addons/wwise/bin/wwise-gdnative.gdns"
 Waapi="*res://addons/wwise/bin/waapi-gdnative.gdns"
+Utils="*res://entities/classes/Utils.gd"
 
 [display]
 
@@ -125,6 +126,8 @@ movement_jump={
 3d_physics/layer_2="Player"
 3d_physics/layer_3="Grabbables"
 3d_physics/layer_4="Hand"
+3d_physics/layer_5="Moving map"
+3d_physics/layer_6="Debris"
 
 [physics]
 

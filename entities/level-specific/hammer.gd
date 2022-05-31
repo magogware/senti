@@ -24,6 +24,7 @@ var dragging: bool = false;
 
 func _ready():
 	._ready()
+	connect("body_entered", self, "body_entered")
 	Wwise.register_game_obj(self, self.get_name())
 
 func _physics_process(delta):

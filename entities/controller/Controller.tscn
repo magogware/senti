@@ -31,13 +31,13 @@ roughness = 0.0
 [node name="Controller" type="ARVRController"]
 script = ExtResource( 2 )
 
-[node name="GrabZone" type="Area" parent="."]
+[node name="GrabZone" type="Area" parent="." groups=["physics/grabber"]]
 collision_mask = 2
 
 [node name="CollisionShape" type="CollisionShape" parent="GrabZone"]
 shape = SubResource( 2 )
 
-[node name="Hand" parent="." instance=ExtResource( 1 )]
+[node name="Hand" parent="." groups=["physics/player"] instance=ExtResource( 1 )]
 
 [node name="Controls" type="Spatial" parent="."]
 
@@ -50,7 +50,7 @@ script = ExtResource( 6 )
 [node name="Armswinger" type="Node" parent="Controls"]
 script = ExtResource( 5 )
 
-[node name="Teleporter" type="KinematicBody" parent="Controls"]
+[node name="Teleporter" type="KinematicBody" parent="Controls" groups=["physics/player"]]
 collision_layer = 2
 collision_mask = 5
 script = ExtResource( 8 )

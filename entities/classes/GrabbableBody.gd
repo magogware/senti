@@ -11,14 +11,12 @@ func _ready():
 
 func grabbed(grabber: Spatial):
 	holder = grabber
-	#mode = RigidBody.MODE_STATIC
+	#mode = RigidBody.MODE_KINEMATIC
 	gravity_scale = 0
-	collision_mask = 17
-	collision_layer = 2
+	Utils.set_grabbed(self)
 	
 func released():
 	holder = null
 	mode = RigidBody.MODE_RIGID
 	gravity_scale = 1
-	collision_layer = collision_layer_storage
-	collision_mask = collision_mask_storage
+	Utils.set_released(self)
