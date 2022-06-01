@@ -38,11 +38,6 @@ _global_script_classes=[ {
 "class": "Handle",
 "language": "GDScript",
 "path": "res://entities/classes/Handle.gd"
-}, {
-"base": "GrabbableBody",
-"class": "InteractableBody",
-"language": "GDScript",
-"path": "res://entities/classes/InteractableBody.gd"
 } ]
 _global_script_class_icons={
 "AK": "",
@@ -50,8 +45,7 @@ _global_script_class_icons={
 "GitAPI": "",
 "GrabbableBody": "",
 "Hammer": "",
-"Handle": "",
-"InteractableBody": ""
+"Handle": ""
 }
 
 [application]

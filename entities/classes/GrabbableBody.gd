@@ -1,22 +1,28 @@
 class_name GrabbableBody
 extends RigidBody
 
-var collision_layer_storage: int
-var collision_mask_storage: int
+export var can_interact: bool = false
 var holder: Spatial
-
-func _ready():
-	collision_layer_storage = collision_layer
-	collision_mask_storage = collision_mask
 
 func grabbed(grabber: Spatial):
 	holder = grabber
-	#mode = RigidBody.MODE_KINEMATIC
 	gravity_scale = 0
+	if can_interact:
+		set_process_input(true)
 	Utils.set_grabbed(self)
 	
 func released():
 	holder = null
-	mode = RigidBody.MODE_RIGID
 	gravity_scale = 1
+	set_process_input(false)
 	Utils.set_released(self)
+
+func _ready():
+	set_process_input(false)
+	
+func _interact():
+	pass
+
+func _input(event):
+	if event.is_action_pressed("interact"):
+		_interact()
