@@ -82,20 +82,29 @@ func _input(event):
 		var bodies_in_zone = $RotationHelper/GrabZone.get_overlapping_bodies()
 		if bodies_in_zone.size() > 0:
 			_grab_body(bodies_in_zone)
-			$RotationHelper/RightHand.change("GRABBING")
+			if held_object:
+				$RotationHelper/RightHand.change("GRABBING")
+			else:
+				$RotationHelper/RightHand.change("FIST")
 		else:
 			$RotationHelper/RightHand.change("FIST")
 	elif event.is_action_released("grab"):
 		if held_object:
 			_drop_body()
 		$RotationHelper/RightHand.change("OPEN")
+	elif event.is_action_pressed("point"):
+		$RotationHelper/RightHand.change("POINT")
+	elif event.is_action_released("point"):
+		$RotationHelper/RightHand.change("OPEN")
 		
 func _grab_body(bodies_in_zone):
 	var grabbed_body
 	for body in bodies_in_zone:
 		if body is GrabbableBody:
+			print(body.get_path())
 			held_object = body
 			held_object.grabbed($RotationHelper/RightHand)
+			
 			break
 			
 func _drop_body():

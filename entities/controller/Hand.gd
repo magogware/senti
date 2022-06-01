@@ -12,7 +12,8 @@ var prior_displacements: Array = []
 enum State {
 	OPEN,
 	FIST,
-	GRABBING
+	GRABBING,
+	POINT
 }
 
 var state: int = State.OPEN
@@ -20,13 +21,15 @@ var state: int = State.OPEN
 var states = {
 	"OPEN": State.OPEN,
 	"FIST": State.FIST,
-	"GRABBING": State.GRABBING
+	"GRABBING": State.GRABBING,
+	"POINT": State.POINT
 }
 
 var transitions = {
-	State.OPEN: ["FIST", "GRABBING"],
-	State.FIST: ["OPEN"],
-	State.GRABBING: ["OPEN"]
+	State.OPEN: ["FIST", "GRABBING", "POINT"],
+	State.FIST: ["OPEN", "POINT"],
+	State.GRABBING: ["OPEN"],
+	State.POINT: ["FIST", "OPEN"]
 }
 
 func _ready():
@@ -52,6 +55,9 @@ func change(transition: String):
 			State.GRABBING:
 				collision_layer = 0
 				$MeshInstance.visible = false
+			State.POINT:
+				$MeshInstance.visible = false
+				print("huge cock")
 
 func _physics_process(delta):
 	
