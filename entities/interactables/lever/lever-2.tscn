@@ -1,8 +1,9 @@
-[gd_scene load_steps=41 format=2]
+[gd_scene load_steps=42 format=2]
 
 [ext_resource path="res://entities/interactables/lever/RetractingRod.gd" type="Script" id=1]
 [ext_resource path="res://entities/classes/Handle.gd" type="Script" id=2]
 [ext_resource path="res://assets/dither-materials/haptics-you-can-hear/interactables.tres" type="Material" id=3]
+[ext_resource path="res://addons/wwise/runtime/nodes/ak_event.gd" type="Script" id=4]
 
 [sub_resource type="ArrayMesh" id=38]
 resource_name = "haptics-you-can-hear-v2_Cylinder007"
@@ -325,6 +326,20 @@ shape = SubResource( 36 )
 [node name="CollisionShape" type="CollisionShape" parent="rod"]
 transform = Transform( 1, 0, 0, 0, 0.568163, 0, 0, 0, 1, 0, -0.1, 0 )
 shape = SubResource( 37 )
+
+[node name="friction" type="Spatial" parent="rod"]
+script = ExtResource( 4 )
+event = {
+"Id": 2270287439,
+"Name": "FRICTION LEVER START"
+}
+
+[node name="tick" type="Spatial" parent="rod"]
+script = ExtResource( 4 )
+event = {
+"Id": 1322522298,
+"Name": "IMPACT LEVER"
+}
 
 [connection signal="grabbed" from="rod/knob" to="rod" method="grabbed"]
 [connection signal="released" from="rod/knob" to="rod" method="released"]

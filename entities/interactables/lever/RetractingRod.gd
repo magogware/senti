@@ -77,21 +77,20 @@ func _physics_process(delta):
 
 	var prev_rotation_percentage = rotation_percentage
 	rotation_percentage = abs((global_transform.basis.y.angle_to(fully_closed.basis.y)) / RANGE_OF_MOTION) * 100
-	Wwise.set_rtpc_id(AK.GAME_PARAMETERS.CONTROLS_LEVER_ROTATION_PERCENTAGE, rotation_percentage, self);
+	Wwise.set_rtpc_id(AK.GAME_PARAMETERS.CONTROLS_LEVER_ROTATION_PERCENTAGE, rotation_percentage, $tick);
 	
-	Wwise.set_rtpc_id(AK.GAME_PARAMETERS.PHYSICS_LEVER_PULL_STRENGTH, rotation_excess, self);
+	Wwise.set_rtpc_id(AK.GAME_PARAMETERS.PHYSICS_LEVER_PULL_STRENGTH, rotation_excess, $friction);
 	
 	var prev_rotation_adjusted = ceil(prev_rotation_percentage/CLUNKS_INV)
 	var rotation_adjusted = ceil(rotation_percentage/CLUNKS_INV)
 	if prev_rotation_adjusted != rotation_adjusted and prev_rotation_adjusted != 0 and rotation_adjusted != 0:
-		#print("Passed a thing, "+str(prev_rotation_adjusted)+", "+str(rotation_adjusted))
-		Wwise.post_event_id(AK.EVENTS.IMPACT_LEVER, self);
+		$tick.post_event()
 		
 func grabbed(controller):
 	holder = controller;
 	set_physics_process(true)
-	Wwise.post_event_id(AK.EVENTS.FRICTION_LEVER_START, self);
+	$friction.post_event()
 
 func released():
 	holder = null
-	Wwise.post_event_id(AK.EVENTS.FRICTION_LEVER_STOP, self);
+	$friction.stop_event()

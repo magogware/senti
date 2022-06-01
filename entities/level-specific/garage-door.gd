@@ -36,7 +36,7 @@ func _physics_process(delta):
 	avg_velocity /= delta;
 	avg_velocity /= prior_displacements.size();
 	
-	Wwise.set_rtpc_id(AK.GAME_PARAMETERS.PHYSICS_DOOR_VELOCITY, avg_velocity, self);
+	Wwise.set_rtpc_id(AK.GAME_PARAMETERS.PHYSICS_DOOR_VELOCITY, avg_velocity, $friction);
 	
 	if lever.open:
 		set_physics_process(false)
@@ -55,17 +55,6 @@ func _struck(body):
 		_health -= body.damage;
 		if _health <= 0:
 			$Destruction.destroy()
-
-func _start_lifting(_body):
-	Wwise.post_event_id(AK.EVENTS.FRICTION_DOOR_START, self);
-	
-func _end_lifting(_body):
-	Wwise.post_event_id(AK.EVENTS.FRICTION_DOOR_STOP, self);
-	Wwise.post_event_id(AK.EVENTS.IMPACT_DOOR, self);
-
-func _delay_first_entry(body):
-	get_node("../door-close-detection").disconnect("body_entered", self, "_delay_first_entry");
-	get_node("../door-close-detection").connect("body_entered", self, "_end_lifting");
 	
 func _spawn_light_hammer():
 	var parent: Spatial = get_parent()
