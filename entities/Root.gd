@@ -18,6 +18,7 @@ func _ready():
 		player = FPSPlayer.instance()
 		add_child(player)
 	player.global_transform.origin = $PlayerSpawn.global_transform.origin
+	Utils.set_collisions(get_tree())
 	get_tree().connect("node_added", self, "node_entered")
 
 func node_entered(node: Node):
