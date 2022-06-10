@@ -5,14 +5,16 @@ enum CollisionLayer {
 	LAYER_MOVING_MAP
 	LAYER_GRABBABLES
 	LAYER_PLAYER
-	LAYER_GRABBER
+	LAYER_GRABBER,
+	LAYER_HANDLES
 };
 
 const groups: Array = ["physics/map",
 	"physics/moving-map",
 	"physics/grabbables",
 	"physics/player",
-	"physics/grabber"] ;
+	"physics/grabber",
+	"physics/handles"] ;
 
 func set_collisions(tree: SceneTree):
 	for group in groups:
@@ -46,9 +48,13 @@ func set_collision(group: String, node: Node):
 					CollisionLayer.LAYER_GRABBABLES])
 			"physics/grabber":
 				_set_layer(node, CollisionLayer.LAYER_GRABBER)
-				_set_mask(node, [CollisionLayer.LAYER_GRABBABLES])
+				_set_mask(node, [CollisionLayer.LAYER_GRABBABLES,
+					CollisionLayer.LAYER_HANDLES])
+			"physics/handles":
+				_set_layer(node, CollisionLayer.LAYER_HANDLES)
+				_set_mask(node, [CollisionLayer.LAYER_GRABBER])
 				
-		#print(str(node.get_path()) + " layer: " + str(node.collision_layer) + ", mask: " + str(node.collision_mask))
+		print(str(node.get_path()) + " layer: " + str(node.collision_layer) + ", mask: " + str(node.collision_mask))
 		
 func _set_layer(node: CollisionObject, layer: int):
 	node.collision_layer = 0
@@ -60,19 +66,24 @@ func _set_mask(node: CollisionObject, mask: Array):
 		node.set_collision_mask_bit(bit, true)
 
 func set_grabbed(node: CollisionObject):
-	if node is Handle:
-		_set_layer(node, CollisionLayer.LAYER_PLAYER);
-		_set_mask(node, [CollisionLayer.LAYER_GRABBER])
-	else:
+	if !(node is Handle):
 		_set_layer(node, CollisionLayer.LAYER_PLAYER);
 		_set_mask(node, [CollisionLayer.LAYER_MAP,
 			CollisionLayer.LAYER_MOVING_MAP,
 			CollisionLayer.LAYER_GRABBABLES])
+#		_set_layer(node, CollisionLayer.LAYER_PLAYER);
+#		_set_mask(node, [CollisionLayer.LAYER_GRABBER])
+#	else:
+
 		
 func set_released(node: CollisionObject):
-	_set_layer(node, CollisionLayer.LAYER_GRABBABLES)
-	_set_mask(node, [CollisionLayer.LAYER_MAP,
-		CollisionLayer.LAYER_MOVING_MAP,
-		CollisionLayer.LAYER_GRABBABLES,
-		CollisionLayer.LAYER_PLAYER,
-		CollisionLayer.LAYER_GRABBER])
+	if node is Handle:
+		_set_layer(node, CollisionLayer.LAYER_HANDLES)
+		_set_mask(node, [CollisionLayer.LAYER_GRABBER])
+	else:
+		_set_layer(node, CollisionLayer.LAYER_GRABBABLES)
+		_set_mask(node, [CollisionLayer.LAYER_MAP,
+			CollisionLayer.LAYER_MOVING_MAP,
+			CollisionLayer.LAYER_GRABBABLES,
+			CollisionLayer.LAYER_PLAYER,
+			CollisionLayer.LAYER_GRABBER])
