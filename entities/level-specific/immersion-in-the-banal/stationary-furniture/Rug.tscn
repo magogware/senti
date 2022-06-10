@@ -1,0 +1,22 @@
+[gd_scene load_steps=3 format=2]
+
+[ext_resource path="res://assets/dither-materials/immersion-in-the-banal/palette-5/stationary-furniture.tres" type="Material" id=1]
+
+[sub_resource type="ArrayMesh" id=40]
+resource_name = "Plane003"
+surfaces/0 = {
+"aabb": AABB( -1.28152, 0.00668186, -0.681372, 2.56304, 1.00001e-05, 1.36275 ),
+"array_data": PoolByteArray( 217, 8, 164, 191, 129, 243, 218, 59, 101, 110, 46, 63, 0, 126, 126, 127, 0, 0, 12, 43, 217, 8, 164, 63, 129, 243, 218, 59, 101, 110, 46, 63, 0, 126, 130, 127, 0, 0, 0, 60, 217, 8, 164, 63, 90, 245, 218, 59, 101, 110, 46, 191, 0, 126, 130, 127, 4, 56, 0, 60, 217, 8, 164, 191, 90, 245, 218, 59, 101, 110, 46, 191, 0, 126, 130, 127, 4, 56, 12, 43 ),
+"array_index_data": PoolByteArray( 0, 0, 2, 0, 1, 0, 0, 0, 3, 0, 2, 0 ),
+"blend_shape_data": [  ],
+"format": 2194711,
+"index_count": 6,
+"primitive": 4,
+"skeleton_aabb": [  ],
+"vertex_count": 4
+}
+
+[node name="Rug" type="MeshInstance"]
+mesh = SubResource( 40 )
+skeleton = NodePath("../..")
+material/0 = ExtResource( 1 )
