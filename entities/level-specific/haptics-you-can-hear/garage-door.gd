@@ -70,7 +70,7 @@ func _delay_first_entry(body):
 func _spawn_light_hammer():
 	var parent: Spatial = get_parent()
 	var pos: Position3D = get_node("../hammer-spawn")
-	var light_hammer_scene: PackedScene = preload("res://entities/level-specific/light-hammer-2.tscn")
+	var light_hammer_scene: PackedScene = preload("res://entities/level-specific/haptics-you-can-hear/light-hammer-2.tscn")
 	var light_hammer: Spatial = light_hammer_scene.instance()
 	light_hammer.global_transform.origin = pos.global_transform.origin
 	parent.add_child(light_hammer, true)

@@ -1,7 +1,7 @@
 [gd_scene load_steps=4 format=2]
 
 [ext_resource path="res://assets/shaders/dither-mat.tres" type="Material" id=1]
-[ext_resource path="res://entities/level-specific/door-fracture-template.gd" type="Script" id=2]
+[ext_resource path="res://entities/level-specific/haptics-you-can-hear/door-fracture-template.gd" type="Script" id=2]
 
 [sub_resource type="CubeMesh" id=1]
 

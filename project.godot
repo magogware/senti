@@ -32,7 +32,7 @@ _global_script_classes=[ {
 "base": "GrabbableBody",
 "class": "Hammer",
 "language": "GDScript",
-"path": "res://entities/level-specific/hammer.gd"
+"path": "res://entities/level-specific/haptics-you-can-hear/hammer.gd"
 }, {
 "base": "GrabbableBody",
 "class": "Handle",
