@@ -2,7 +2,6 @@ extends RigidBody
 
 export var open_mesh: Mesh = null
 export var fist_mesh: Mesh = null
-var collision_layer_storage: int = 0
 
 var velocity: float = 0;
 var avg_velocity: float = 0
@@ -33,8 +32,6 @@ var transitions = {
 }
 
 func _ready():
-	collision_layer_storage = collision_layer
-	collision_layer = 0
 	$MeshInstance.mesh = open_mesh
 	$MeshInstance.visible = true
 	prior_origins.append(global_transform.origin)
@@ -49,7 +46,7 @@ func change(transition: String):
 				$MeshInstance.mesh = open_mesh
 				$MeshInstance.visible = true
 			State.FIST:
-				collision_layer = collision_layer_storage
+				Utils.set_collision("physics/player", self)
 				$MeshInstance.mesh = fist_mesh
 				$MeshInstance.visible = true
 			State.GRABBING:
