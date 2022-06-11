@@ -2,6 +2,8 @@ extends RigidBody
 class_name SlidingBody
 
 signal tick;
+signal opened;
+signal closed;
 
 enum TranslationAxis {
 	X,
@@ -21,8 +23,20 @@ enum StartingPosition {
 	UNCHANGED
 }
 
+enum LatchingBehaviour {
+	LATCH_FOREVER,
+	LATCH_UNTIL_GRABBED,
+	LATCH_NEVER
+}
+
+enum Status {
+	CLOSED,
+	OPEN,
+	AT_START,
+	MOVING
+}
+
 export(TranslationAxis) var translation_axis: int = TranslationAxis.Z;
-#export(float, 0, 1.79769e308) var displacement_threshold: float = 0.01;
 export(float, 0, 1.79769e308) var range_of_forward_motion: float = 1.0;
 export(float, 0, 1.79769e308) var range_of_backward_motion: float = 0.0;
 export(int, 0, 9223372036854775806) var ticks: int = 0;
@@ -34,6 +48,9 @@ export(bool) var limit_max_closing_speed: bool = false;
 export(float, 0, 1.79769e308) var max_closing_speed = 10;
 export(bool) var calculate_percentage_over_full_rom: bool = false
 export(StartingPosition) var starting_position: int = StartingPosition.UNCHANGED;
+export(LatchingBehaviour) var latch_when_open: int = LatchingBehaviour.LATCH_NEVER;
+export(LatchingBehaviour) var latch_when_closed: int = LatchingBehaviour.LATCH_NEVER;
+export(LatchingBehaviour) var latch_at_start: int = LatchingBehaviour.LATCH_NEVER;
 
 var open_percentage: float = 0.0;
 
@@ -47,6 +64,7 @@ var _closed: Transform
 var _start: Transform
 var _prev_origin: Vector3
 var _full_rom: float
+var _status: int
 
 func _ready():
 	custom_integrator = true;
@@ -78,10 +96,13 @@ func _ready():
 	match starting_position:
 		StartingPosition.CLOSED:
 			global_transform = _closed;
+			_status = Status.CLOSED
 		StartingPosition.OPEN:
 			global_transform = _open;
+			_status = Status.OPEN;
 		StartingPosition.UNCHANGED:
 			global_transform = _start;
+			_status = Status.AT_START;
 	
 	_calculate_open_percentage()
 	
@@ -89,35 +110,46 @@ func _integrate_forces(state):
 	pass
 	
 func _physics_process(delta):
+	var translation_vector: Vector3
 	if _holder != null:
 		var displacement: Vector3 = global_transform.xform_inv(_holder.global_transform.origin)
 		var parallel_displacement: Vector3 = _local_translation_basis * _local_translation_basis.dot(displacement)
 
-		if _open.xform_inv(_holder.global_transform.origin).dot(_local_translation_basis) > 0:
-			parallel_displacement = Vector3.ZERO;
-		if _closed.xform_inv(_holder.global_transform.origin).dot(-_local_translation_basis) > 0:
-			parallel_displacement = Vector3.ZERO;	
-		
-		var prev_open_percentage: float = open_percentage
-		_calculate_open_percentage()
-		
 		if limit_max_opening_speed:
 			parallel_displacement = _clamp_max_open(parallel_displacement, delta)
 		if limit_max_closing_speed:
 			parallel_displacement = _clamp_max_close(parallel_displacement, delta)
-	
-		# FIXME: Work out how to calculate this properly
-		var prev_open_percentage_adjusted = ceil(prev_open_percentage/_tick_distance)
-		var open_percentage_adjusted = ceil(open_percentage/_tick_distance)
-		if prev_open_percentage_adjusted != open_percentage_adjusted and prev_open_percentage_adjusted != 0 and open_percentage_adjusted != 0:
-			emit_signal("tick")
-		
-		global_transform = global_transform.translated(parallel_displacement);
+			
+		translation_vector = parallel_displacement
 	else:
 		var retraction_vector: Vector3 = _retraction_basis * retraction_speed*delta;
-		global_transform = global_transform.translated(retraction_vector);
+		translation_vector = retraction_vector;
 		
-	# TODO: Pull general code out to here to minimise code repetition
+	var translated_origin = global_transform.translated(translation_vector);
+	if _open.xform_inv(translated_origin.origin).dot(_local_translation_basis) > 0:
+		if latch_when_open != LatchingBehaviour.LATCH_NEVER:
+			set_physics_process(false)
+		translation_vector = Vector3.ZERO;
+		emit_signal("opened")
+		_status = Status.OPEN;
+	if _closed.xform_inv(translated_origin.origin).dot(-_local_translation_basis) > 0:
+		if latch_when_closed != LatchingBehaviour.LATCH_NEVER:
+			set_physics_process(false)
+		translation_vector = Vector3.ZERO;	
+		emit_signal("closed")
+		_status = Status.CLOSED;
+	
+	global_transform = global_transform.translated(translation_vector);
+	
+	var prev_open_percentage: float = open_percentage
+	_calculate_open_percentage()
+
+	# FIXME: Work out how to calculate this properly
+	# use this to calculate if the start is passed, then do the latching shit there
+	var prev_open_percentage_adjusted = ceil(prev_open_percentage/_tick_distance)
+	var open_percentage_adjusted = ceil(open_percentage/_tick_distance)
+	if prev_open_percentage_adjusted != open_percentage_adjusted and prev_open_percentage_adjusted != 0 and open_percentage_adjusted != 0:
+		emit_signal("tick")
 	
 func _clamp_max_open(v: Vector3, delta: float) -> Vector3:
 	if v.dot(_local_translation_basis) > 0:
@@ -147,6 +179,16 @@ func _calculate_open_percentage():
 			open_percentage = -(global_transform.origin.distance_to(_start.origin) / range_of_backward_motion)
 
 func _grabbed(holder: Spatial):
+	match _status:
+		Status.OPEN:
+			if latch_when_open != LatchingBehaviour.LATCH_FOREVER:
+				set_physics_process(true)
+		Status.CLOSED:
+			if latch_when_closed != LatchingBehaviour.LATCH_FOREVER:
+				set_physics_process(true)
+		Status.AT_START:
+			if latch_at_start != LatchingBehaviour.LATCH_FOREVER:
+				set_physics_process(true)
 	_holder = holder;
 
 func _released():
