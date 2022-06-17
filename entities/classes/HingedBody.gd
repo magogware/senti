@@ -1,5 +1,6 @@
 extends RigidBody
 class_name HingedBody
+tool
 
 signal tick;
 signal opened;
@@ -49,3 +50,9 @@ func _grabbed(holder: Spatial):
 
 func _released():
 	_holder = null;
+	
+func _get_configuration_warning() -> String:
+	if rotation_axis == edge_axis:
+		return "Edge and rotation axes must be different!"
+	else:
+		return ""
