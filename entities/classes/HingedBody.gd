@@ -12,6 +12,19 @@ enum Axis {
 	Z
 }
 
+enum LatchingBehaviour {
+	LATCH_FOREVER,
+	LATCH_UNTIL_GRABBED,
+	LATCH_NEVER
+}
+
+enum Status {
+	CLOSED,
+	OPEN,
+	AT_START,
+	MOVING
+}
+
 # TODO: Use a tool thing and a setget to make sure these axes aren't the same
 export(Axis) var rotation_axis: int = Axis.Y;
 export(Axis) var edge_axis: int = Axis.X;
@@ -21,6 +34,9 @@ export(bool) var limit_max_open_speed: bool = false;
 export(float) var max_open_speed: float = 0;
 export(bool) var limit_max_close_speed: bool = false;
 export(float) var max_close_speed: float = 0;
+export(LatchingBehaviour) var latch_when_open: int = LatchingBehaviour.LATCH_NEVER;
+export(LatchingBehaviour) var latch_when_closed: int = LatchingBehaviour.LATCH_NEVER;
+export(LatchingBehaviour) var latch_at_start: int = LatchingBehaviour.LATCH_NEVER;
 
 var force_excess: float = 0;
 
@@ -33,9 +49,12 @@ var _open_rom_rads: float;
 var _closed_rom_rads: float;
 var _open_speed_rads: float;
 var _close_speed_rads: float;
+var _status: int
 
 func _ready():
 	mode = MODE_KINEMATIC;
+	
+	_status = Status.AT_START;
 	
 	_open_rom_rads = deg2rad(open_range_of_motion)
 	_closed_rom_rads = deg2rad(close_range_of_motion)
@@ -71,8 +90,18 @@ func _physics_process(delta):
 		
 		if _start[edge_axis].signed_angle_to(new_edge, _start[rotation_axis]) > 0 and new_edge.angle_to(_start[edge_axis]) > _open_rom_rads:
 			new_edge = _open[edge_axis];
+			emit_signal("opened")
+			if latch_when_open != LatchingBehaviour.LATCH_NEVER:
+				set_physics_process(false) # FIXME: maybe use something less aggressive
+			_status = Status.OPEN;
 		if _start[edge_axis].signed_angle_to(new_edge, _start[rotation_axis]) < 0 and new_edge.angle_to(_start[edge_axis]) > _closed_rom_rads:
 			new_edge = _closed[edge_axis];
+			emit_signal("closed")
+			if latch_when_closed != LatchingBehaviour.LATCH_NEVER:
+				set_physics_process(false)
+			_status = Status.CLOSED;
+			
+		# TODO: Check for start latch
 		
 		global_transform.basis[edge_axis] = new_edge;
 		global_transform.basis[_remaining_axis] = global_transform.basis[edge_axis].cross(global_transform.basis[rotation_axis]).normalized();
@@ -99,10 +128,21 @@ func _clamp_max_close(current_edge: Vector3, new_edge: Vector3, delta: float) ->
 
 func _grabbed(holder: Spatial):
 	_holder = holder;
+	match _status:
+		Status.OPEN:
+			if latch_when_open != LatchingBehaviour.LATCH_FOREVER:
+				set_physics_process(true)
+		Status.CLOSED:
+			if latch_when_closed != LatchingBehaviour.LATCH_FOREVER:
+				set_physics_process(true)
+		Status.AT_START:
+			if latch_at_start != LatchingBehaviour.LATCH_FOREVER:
+				set_physics_process(true)
 	print("Grabbed")
 
 func _released():
 	_holder = null;
+	force_excess = 0;
 	
 func _get_configuration_warning() -> String:
 	if rotation_axis == edge_axis:
