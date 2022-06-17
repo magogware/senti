@@ -59,6 +59,7 @@ var _translation_basis: Vector3
 var _local_translation_basis: Vector3
 var _retraction_basis: Vector3
 var _tick_distance: float = (range_of_forward_motion + range_of_backward_motion) / (ticks + 1);
+var _ticks_inv: float;
 var _open: Transform
 var _closed: Transform
 var _start: Transform
@@ -70,6 +71,7 @@ func _ready():
 	custom_integrator = true;
 	mode = MODE_RIGID;
 	
+	_ticks_inv = 100/float(ticks + 1);
 	match translation_axis:
 		TranslationAxis.Z:
 			_translation_basis = global_transform.basis.z;
@@ -144,10 +146,8 @@ func _physics_process(delta):
 	var prev_open_percentage: float = open_percentage
 	_calculate_open_percentage()
 
-	# FIXME: Work out how to calculate this properly
-	# use this to calculate if the start is passed, then do the latching shit there
-	var prev_open_percentage_adjusted = ceil(prev_open_percentage/_tick_distance)
-	var open_percentage_adjusted = ceil(open_percentage/_tick_distance)
+	var prev_open_percentage_adjusted = ceil((prev_open_percentage * 100)/_ticks_inv)
+	var open_percentage_adjusted = ceil((open_percentage * 100)/_ticks_inv)
 	if prev_open_percentage_adjusted != open_percentage_adjusted and prev_open_percentage_adjusted != 0 and open_percentage_adjusted != 0:
 		emit_signal("tick")
 	
