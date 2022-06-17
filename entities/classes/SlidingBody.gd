@@ -53,6 +53,7 @@ export(LatchingBehaviour) var latch_when_closed: int = LatchingBehaviour.LATCH_N
 export(LatchingBehaviour) var latch_at_start: int = LatchingBehaviour.LATCH_NEVER;
 
 var open_percentage: float = 0.0;
+var force_excess: float = 0;
 
 var _holder: Spatial
 var _translation_basis: Vector3
@@ -168,6 +169,7 @@ func _physics_process(delta):
 	
 func _clamp_max_open(v: Vector3, delta: float) -> Vector3:
 	if v.dot(_local_translation_basis) > 0:
+		force_excess = v.length() / (max_opening_speed*delta);
 		if v.length() > max_opening_speed*delta:
 			return v.normalized() * max_opening_speed * delta;
 		else:
@@ -177,6 +179,7 @@ func _clamp_max_open(v: Vector3, delta: float) -> Vector3:
 		
 func _clamp_max_close(v: Vector3, delta: float) -> Vector3:
 	if v.dot(-_local_translation_basis) > 0:
+		force_excess = v.length() / (max_closing_speed*delta);
 		if v.length() > max_closing_speed*delta:
 			return v.normalized() * max_closing_speed * delta;
 		else:
@@ -208,6 +211,4 @@ func _grabbed(holder: Spatial):
 
 func _released():
 	_holder = null;
-
-func _on_SlidingBody_tick():
-	print("tick")
+	force_excess = 0;
