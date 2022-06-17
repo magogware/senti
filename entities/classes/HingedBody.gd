@@ -33,8 +33,6 @@ var _open_rom_rads: float;
 var _closed_rom_rads: float;
 var _open_speed_rads: float;
 var _close_speed_rads: float;
-var _front: Vector3
-var _back: Vector3
 
 func _ready():
 	mode = MODE_KINEMATIC;
@@ -55,8 +53,6 @@ func _ready():
 	_start = global_transform.basis
 	_open = global_transform.basis.rotated(global_transform.basis[rotation_axis], _open_rom_rads)
 	_closed = global_transform.basis.rotated(global_transform.basis[rotation_axis], -_closed_rom_rads)
-	_front = global_transform.basis.rotated(global_transform.basis[rotation_axis], PI/2)[edge_axis]
-	_back = global_transform.basis.rotated(global_transform.basis[rotation_axis], -PI/2)[edge_axis]
 	
 func _integrate_forces(state):
 	pass
@@ -73,16 +69,16 @@ func _physics_process(delta):
 		if limit_max_close_speed:
 			new_edge = _clamp_max_close(global_transform.basis[edge_axis], new_edge, delta)
 		
-		if _front.dot(new_edge) > 0 and new_edge.angle_to(_start[edge_axis]) > _open_rom_rads:
+		if _start[edge_axis].signed_angle_to(new_edge, _start[rotation_axis]) > 0 and new_edge.angle_to(_start[edge_axis]) > _open_rom_rads:
 			new_edge = _open[edge_axis];
-		if _back.dot(new_edge) > 0 and new_edge.angle_to(_start[edge_axis]) > _closed_rom_rads:
+		if _start[edge_axis].signed_angle_to(new_edge, _start[rotation_axis]) < 0 and new_edge.angle_to(_start[edge_axis]) > _closed_rom_rads:
 			new_edge = _closed[edge_axis];
 		
 		global_transform.basis[edge_axis] = new_edge;
 		global_transform.basis[_remaining_axis] = global_transform.basis[edge_axis].cross(global_transform.basis[rotation_axis]).normalized();
 
 func _clamp_max_open(current_edge: Vector3, new_edge: Vector3, delta: float) -> Vector3:
-	if current_edge.direction_to(new_edge).dot(_front) > 0:
+	if current_edge.signed_angle_to(new_edge, _start[rotation_axis]) > 0:
 		force_excess = current_edge.angle_to(new_edge) / (_open_speed_rads*delta);
 		if current_edge.angle_to(new_edge) > _open_speed_rads*delta:
 			return current_edge.rotated(_start[rotation_axis], _open_speed_rads*delta);
@@ -92,7 +88,7 @@ func _clamp_max_open(current_edge: Vector3, new_edge: Vector3, delta: float) -> 
 		return new_edge
 		
 func _clamp_max_close(current_edge: Vector3, new_edge: Vector3, delta: float) -> Vector3:
-	if current_edge.direction_to(new_edge).dot(_back) > 0:
+	if current_edge.signed_angle_to(new_edge, _start[rotation_axis]) < 0:
 		force_excess = current_edge.angle_to(new_edge) / (_close_speed_rads*delta);
 		if current_edge.angle_to(new_edge) > _close_speed_rads*delta:
 			return current_edge.rotated(_start[rotation_axis], -_close_speed_rads*delta);
