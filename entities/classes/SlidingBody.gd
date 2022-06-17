@@ -66,6 +66,7 @@ var _start: Transform
 var _prev_origin: Vector3
 var _full_rom: float
 var _status: int
+var _start_percentage: float;
 
 func _ready():
 	custom_integrator = true;
@@ -106,7 +107,16 @@ func _ready():
 			global_transform = _start;
 			_status = Status.AT_START;
 	
-	_calculate_open_percentage()
+	if calculate_percentage_over_full_rom:
+		_start_percentage = _start.origin.distance_to(_closed.origin) / _full_rom;
+	else:
+		match starting_position:
+			StartingPosition.CLOSED:
+				_start_percentage = -1.0
+			StartingPosition.OPEN:
+				_start_percentage = 1.0
+			StartingPosition.UNCHANGED:
+				_start_percentage = 0.0
 	
 func _integrate_forces(state):
 	pass
@@ -150,6 +160,11 @@ func _physics_process(delta):
 	var open_percentage_adjusted = ceil((open_percentage * 100)/_ticks_inv)
 	if prev_open_percentage_adjusted != open_percentage_adjusted and prev_open_percentage_adjusted != 0 and open_percentage_adjusted != 0:
 		emit_signal("tick")
+	if ((prev_open_percentage < _start_percentage and open_percentage > _start_percentage)
+		or (prev_open_percentage > _start_percentage and open_percentage < _start_percentage)):
+		if latch_at_start != LatchingBehaviour.LATCH_NEVER:
+			set_physics_process(false)
+			_status = Status.AT_START
 	
 func _clamp_max_open(v: Vector3, delta: float) -> Vector3:
 	if v.dot(_local_translation_basis) > 0:
@@ -173,7 +188,7 @@ func _calculate_open_percentage():
 	if calculate_percentage_over_full_rom:
 			open_percentage = global_transform.origin.distance_to(_closed.origin) / _full_rom;
 	else:
-		if _start.origin.direction_to(_holder.global_transform.origin).dot(_translation_basis) > 0 and range_of_forward_motion > 0:
+		if _start.origin.direction_to(global_transform.origin).dot(_translation_basis) > 0 and range_of_forward_motion > 0:
 			open_percentage = global_transform.origin.distance_to(_start.origin) / range_of_forward_motion
 		if _start.origin.direction_to(global_transform.origin).dot(-_translation_basis) > 0 and range_of_backward_motion > 0:
 			open_percentage = -(global_transform.origin.distance_to(_start.origin) / range_of_backward_motion)
