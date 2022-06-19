@@ -49,6 +49,7 @@ var _open_rom_rads: float;
 var _closed_rom_rads: float;
 var _open_speed_rads: float;
 var _close_speed_rads: float;
+var _latch_angle_rads: float;
 var _status: int
 
 func _ready():
@@ -91,19 +92,28 @@ func _physics_process(delta):
 		if _start[edge_axis].signed_angle_to(new_edge, _start[rotation_axis]) > 0 and new_edge.angle_to(_start[edge_axis]) > _open_rom_rads:
 			new_edge = _open[edge_axis];
 			emit_signal("opened")
-			if latch_when_open != LatchingBehaviour.LATCH_NEVER:
+			if latch_when_open == LatchingBehaviour.LATCH_FOREVER:
 				set_physics_process(false) # FIXME: maybe use something less aggressive
 			_status = Status.OPEN;
-		if _start[edge_axis].signed_angle_to(new_edge, _start[rotation_axis]) < 0 and new_edge.angle_to(_start[edge_axis]) > _closed_rom_rads:
-			new_edge = _closed[edge_axis];
+		if _start[edge_axis].signed_angle_to(replace_edge, _start[rotation_axis]) < 0 and replace_edge.angle_to(_start[edge_axis]) > _closed_rom_rads:
+			replace_edge = _closed[edge_axis];
 			emit_signal("closed")
-			if latch_when_closed != LatchingBehaviour.LATCH_NEVER:
+			if latch_when_closed == LatchingBehaviour.LATCH_FOREVER:
 				set_physics_process(false)
 			_status = Status.CLOSED;
 			
-		# TODO: Check for start latch
-		
-		global_transform.basis[edge_axis] = new_edge;
+		if _status == Status.OPEN and latch_when_open == LatchingBehaviour.LATCH_UNTIL_GRABBED:
+			if replace_edge.angle_to(_open[edge_axis]) <= _latch_angle_rads:
+				replace_edge = _open[edge_axis]
+			else:
+				_status == Status.MOVING
+		if _status == Status.CLOSED and latch_when_closed == LatchingBehaviour.LATCH_UNTIL_GRABBED:
+			if replace_edge.angle_to(_closed[edge_axis]) <= _latch_angle_rads:
+				replace_edge = _closed[edge_axis]
+			else:
+				_status == Status.MOVING
+			
+		global_transform.basis[edge_axis] = replace_edge;
 		global_transform.basis[_remaining_axis] = global_transform.basis[edge_axis].cross(global_transform.basis[rotation_axis]).normalized();
 
 func _clamp_max_open(current_edge: Vector3, new_edge: Vector3, delta: float) -> Vector3:
