@@ -37,8 +37,10 @@ export(float) var max_close_speed: float = 0;
 export(LatchingBehaviour) var latch_when_open: int = LatchingBehaviour.LATCH_NEVER;
 export(LatchingBehaviour) var latch_when_closed: int = LatchingBehaviour.LATCH_NEVER;
 export(LatchingBehaviour) var latch_at_start: int = LatchingBehaviour.LATCH_NEVER;
+export(bool) var calculate_percentage_over_full_rom: bool = false;
 
 var force_excess: float = 0;
+var open_percentage: float = 0.0;
 
 var _holder: Spatial
 var _remaining_axis: int;
@@ -51,6 +53,8 @@ var _open_speed_rads: float;
 var _close_speed_rads: float;
 var _latch_angle_rads: float;
 var _status: int
+var _start_percentage: float = 0;
+var _full_rom: float;
 
 func _ready():
 	mode = MODE_KINEMATIC;
@@ -73,6 +77,9 @@ func _ready():
 	_start = global_transform.basis
 	_open = global_transform.basis.rotated(global_transform.basis[rotation_axis], _open_rom_rads)
 	_closed = global_transform.basis.rotated(global_transform.basis[rotation_axis], -_closed_rom_rads)
+	
+	if calculate_percentage_over_full_rom:
+		_full_rom = _closed[edge_axis].angle_to(_start[edge_axis]) + _open[edge_axis].angle_to(_start[edge_axis])
 	
 func _integrate_forces(state):
 	pass
@@ -115,6 +122,17 @@ func _physics_process(delta):
 			
 		global_transform.basis[edge_axis] = replace_edge;
 		global_transform.basis[_remaining_axis] = global_transform.basis[edge_axis].cross(global_transform.basis[rotation_axis]).normalized();
+			
+		var prev_open_percentage: float = open_percentage
+		_calculate_open_percentage()
+func _calculate_open_percentage():
+	if calculate_percentage_over_full_rom:
+			open_percentage = global_transform.basis[edge_axis].angle_to(_closed[edge_axis]) / _full_rom;
+	else:
+		if _start[edge_axis].signed_angle_to(global_transform.basis[edge_axis], _start[rotation_axis]) > 0 and _open_rom_rads > 0:
+			open_percentage = global_transform.basis[edge_axis].signed_angle_to(_start[edge_axis], _start[rotation_axis]) / _open_rom_rads
+		if _start[edge_axis].signed_angle_to(global_transform.basis[edge_axis], _start[rotation_axis]) < 0 and _closed_rom_rads > 0:
+			open_percentage = global_transform.basis[edge_axis].signed_angle_to(_start[edge_axis], _start[rotation_axis]) / _closed_rom_rads
 
 func _clamp_max_open(current_edge: Vector3, new_edge: Vector3, delta: float) -> Vector3:
 	if current_edge.signed_angle_to(new_edge, _start[rotation_axis]) > 0:
