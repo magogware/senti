@@ -19,6 +19,16 @@ _global_script_classes=[ {
 "language": "GDScript",
 "path": "res://addons/wwise/runtime/helpers/ak_utils.gd"
 }, {
+"base": "RigidBody",
+"class": "DOFBody",
+"language": "GDScript",
+"path": "res://entities/classes/DOFBody.gd"
+}, {
+"base": "Resource",
+"class": "DoF",
+"language": "GDScript",
+"path": "res://entities/classes/DOF.gd"
+}, {
 "base": "",
 "class": "GitAPI",
 "language": "NativeScript",
@@ -40,7 +50,17 @@ _global_script_classes=[ {
 "path": "res://entities/classes/Handle.gd"
 }, {
 "base": "RigidBody",
-"class": "HingedBody",
+"class": "HingedBodyInherited",
+"language": "GDScript",
+"path": "res://entities/classes/HingedBodyInherited.gd"
+}, {
+"base": "RigidBody",
+"class": "LimitedBody",
+"language": "GDScript",
+"path": "res://entities/classes/LimitedBody.gd"
+}, {
+"base": "RigidBody",
+"class": "RotatingBody",
 "language": "GDScript",
 "path": "res://entities/classes/HingedBody.gd"
 }, {
@@ -48,16 +68,26 @@ _global_script_classes=[ {
 "class": "SlidingBody",
 "language": "GDScript",
 "path": "res://entities/classes/SlidingBody.gd"
+}, {
+"base": "LimitedBody",
+"class": "SlidingBodyInherited",
+"language": "GDScript",
+"path": "res://entities/classes/SlidingBodyInherited.gd"
 } ]
 _global_script_class_icons={
 "AK": "",
 "AkUtils": "",
+"DOFBody": "",
+"DoF": "",
 "GitAPI": "",
 "GrabbableBody": "",
 "Hammer": "",
 "Handle": "",
-"HingedBody": "",
-"SlidingBody": ""
+"HingedBodyInherited": "",
+"LimitedBody": "",
+"RotatingBody": "",
+"SlidingBody": "",
+"SlidingBodyInherited": ""
 }
 
 [application]
