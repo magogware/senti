@@ -16,7 +16,7 @@ func _ready():
 func _physics_process(delta):
 	if _holder != null:
 		var total_displacement: Vector3 = Vector3.ZERO
-#		var rotations: Vector3 = Vector3.ZERO
+		var prior_rotations: Vector3 = global_transform.basis.get_euler()
 		for dof_resource in dofs:
 			var dof: DoF = dof_resource as DoF
 			if dof.mode == DoF.DoFMode.TRANSLATION:
@@ -34,23 +34,30 @@ func _physics_process(delta):
 				holder_axial_displacement[dof.primary_axis] = clamp(holder_axial_displacement[dof.primary_axis], -dof.close_rom, dof.open_rom)
 				total_displacement += holder_axial_displacement
 		global_transform = _start.translated(total_displacement)
+		
+		var rotated_transform: Transform = global_transform
 		for dof_resource in dofs:
 			var dof: DoF = dof_resource as DoF
 			if dof.mode == DoF.DoFMode.ROTATION:
-				var rotation_basis: Vector3 = global_transform.basis[dof.primary_axis]
-				var rotation_axis: Vector3 = global_transform.basis.xform_inv(global_transform.basis[dof.primary_axis])
-				var edge_axis: Vector3 = global_transform.basis.xform_inv(global_transform.basis[dof.secondary_axis])
-#				var body_axial_rotation: float = _start.basis[dof.secondary_axis].signed_angle_to(global_transform.basis[dof.secondary_axis], rotation_basis)
-				var holder_displacement: Vector3 = global_transform.xform_inv(_holder.global_transform.origin)
-#				holder_displacement[dof.primary_axis] = 0
-				var holder_axial_rotation: float = edge_axis.signed_angle_to(holder_displacement, rotation_axis)
-				global_transform.basis = global_transform.basis.rotated(rotation_basis, holder_axial_rotation)
-#				rotations[dof.primary_axis] = holder_axial_rotation
-#		look_at_from_position(global_transform.origin, _holder.global_transform.origin, global_transform.basis.y)
-#		print(rotations)
-#		global_transform.basis = global_transform.basis.rotated(_start.basis.z, rotations.z)
-#		global_transform.basis = global_transform.basis.rotated(_start.basis.x, rotations.x)
-#		global_transform.basis = global_transform.basis.rotated(_start.basis.y, rotations.y)
+				var holder_direction: Vector3 = rotated_transform.xform_inv(_holder.global_transform.origin)
+				holder_direction[dof.primary_axis] = 0;
+				holder_direction  = holder_direction.normalized()
+				rotated_transform.basis[dof.secondary_axis] = rotated_transform.basis.xform(holder_direction)
+				rotated_transform.basis[3 - (dof.primary_axis + dof.secondary_axis)] = rotated_transform.basis[dof.secondary_axis].cross(rotated_transform.basis[dof.primary_axis])
+		var rotations: Vector3 = rotated_transform.basis.get_euler()
+		for dof_resource in dofs:
+			var dof: DoF = dof_resource as DoF
+			if dof.mode == DoF.DoFMode.ROTATION:
+				if dof.max_open_speed > 0:
+					rotations[dof.primary_axis] = clamp(rotations[dof.primary_axis], 
+						-INF,
+						prior_rotations[dof.primary_axis]+(deg2rad(dof.max_open_speed) * delta))
+				if dof.max_close_speed > 0:
+					rotations[dof.primary_axis] = clamp(rotations[dof.primary_axis], 
+						prior_rotations[dof.primary_axis]-(deg2rad(dof.max_close_speed) * delta),
+						INF)
+				rotations[dof.primary_axis] = clamp(rotations[dof.primary_axis], -deg2rad(dof.close_rom), deg2rad(dof.open_rom))
+		global_transform.basis = Basis(rotations)
 #	else:
 #		var current_displacement: Vector3 = _start.xform_inv(global_transform.origin)
 #		for dof_resource in dofs:
