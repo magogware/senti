@@ -13,7 +13,15 @@ enum RetractMode {
 	NO_RETRACT
 }
 
-export(Axis) var axis: int = Axis.X;
+enum DoFMode {
+	ROTATION,
+	TRANSLATION
+}
+
+export(DoFMode) var mode: int = DoFMode.TRANSLATION;
+export(Axis) var primary_axis: int = Axis.X;
+export(Axis) var secondary_axis: int;
+
 export(float) var open_rom: float = 0;
 export(float) var close_rom: float = 0;
 
