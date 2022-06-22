@@ -1,4 +1,5 @@
 extends RigidBody
+class_name Hand
 
 export var open_mesh: Mesh = null
 export var fist_mesh: Mesh = null
@@ -17,14 +18,14 @@ enum State {
 
 var state: int = State.OPEN
 
-var states = {
+const states: Dictionary = {
 	"OPEN": State.OPEN,
 	"FIST": State.FIST,
 	"GRABBING": State.GRABBING,
 	"POINT": State.POINT
 }
 
-var transitions = {
+const transitions: Dictionary = {
 	State.OPEN: ["FIST", "GRABBING", "POINT"],
 	State.FIST: ["OPEN", "POINT"],
 	State.GRABBING: ["OPEN"],
