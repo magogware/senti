@@ -3,8 +3,14 @@ extends RigidBody
 
 signal interaction_began
 
-export var interactable: bool = false
+export(bool) var interactable: bool = false
+export(NodePath) var impact_event_path: NodePath
+export(NodePath) var drag_event_path: NodePath
+export(String) var drag_rtpc: String;
 var holder: Spatial
+
+var _impact_event: AkEvent = null
+var _drag_event: AkEvent = null
 
 func grabbed(grabber: Spatial):
 	holder = grabber
@@ -20,7 +26,13 @@ func released():
 	Utils.set_released(self)
 
 func _ready():
+	_impact_event = get_node(impact_event_path)
+	_drag_event = get_node(drag_event_path)
 	set_process_input(false)
+	
+func _physics_process(delta):
+	if _drag_event:
+		Wwise.set_rtpc(drag_rtpc, 0, _drag_event)
 	
 func _interact():
 	pass

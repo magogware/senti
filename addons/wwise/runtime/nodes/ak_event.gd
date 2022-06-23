@@ -1,4 +1,5 @@
 extends "res://addons/wwise/runtime/helpers/ak_event_handler.gd"
+class_name AkEvent
 
 var listener:Spatial
 var ray:RayCast
