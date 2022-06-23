@@ -1,7 +1,8 @@
-[gd_scene load_steps=9 format=2]
+[gd_scene load_steps=11 format=2]
 
 [ext_resource path="res://assets/dither-materials/immersion-in-the-banal/palette-5/interactables.tres" type="Material" id=1]
 [ext_resource path="res://assets/dither-materials/immersion-in-the-banal/palette-5/stationary-furniture.tres" type="Material" id=2]
+[ext_resource path="res://entities/classes/InteractionArea.gd" type="Script" id=3]
 
 [sub_resource type="PhysicsMaterial" id=31]
 resource_name = "DispenserBottlePhysicsMaterial"
@@ -47,6 +48,9 @@ surfaces/0 = {
 resource_name = "Cube160"
 points = PoolVector3Array( 0.0917386, -0.0088655, -9.53674e-09, 0.0917386, 0.00886541, -9.53674e-09, 0.0919286, -0.0088655, 0.22393, 0.0919286, 0.00886541, 0.22393, 0.0675681, -0.0088655, 0.245109, 0.0675681, 0.00886541, 0.245109, -0.0917386, 0.00886541, -9.53674e-09, -0.0917386, -0.0088655, -9.53674e-09, -0.0675681, -0.0088655, 0.245109, -0.0675681, 0.00886541, 0.245109, -0.0919285, -0.0088655, 0.22393, -0.0919285, 0.00886541, 0.22393, 0.0691035, -0.0088655, 0.253145, 0.100233, -0.0088655, 0.225648, -0.100233, -0.0088655, 0.225648, -0.0691034, -0.0088655, 0.253145, 0.100233, -0.0088655, -9.53674e-09, -0.100233, -0.0088655, -9.53674e-09, 0.0691035, 0.00886541, 0.253145, 0.100233, 0.00886541, 0.225648, -0.100233, 0.00886541, 0.225648, -0.0691034, 0.00886541, 0.253145, 0.100233, 0.00886541, -9.53674e-09, -0.100233, 0.00886541, -9.53674e-09, 0.0779769, -0.0088655, 0.241605, 0.0883388, -0.0088655, 0.232159, 0.0883388, 0.00886541, 0.232159, 0.0779769, 0.00886541, 0.241605, -0.0779768, -0.0088655, 0.241605, -0.0883387, -0.0088655, 0.232159, -0.0779768, 0.00886541, 0.241605, -0.0883387, 0.00886541, 0.232159, 0.0839518, -0.0088655, 0.247712, 0.0943169, -0.0088655, 0.238264, -0.0943168, -0.0088655, 0.238264, -0.0839518, -0.0088655, 0.247712, 0.0943169, 0.00886541, 0.238264, 0.0839518, 0.00886541, 0.247712, -0.0839518, 0.00886541, 0.247712, -0.0943168, 0.00886541, 0.238264 )
 
+[sub_resource type="BoxShape" id=37]
+extents = Vector3( 1, 0.0287067, 0.0288219 )
+
 [node name="SoapDispenser" type="Spatial"]
 
 [node name="Dispenser" type="RigidBody" parent="."]
@@ -78,3 +82,10 @@ material/0 = ExtResource( 2 )
 [node name="CollisionShape" type="CollisionShape" parent="Holder"]
 transform = Transform( 1, 0, 0, 0, -4.37114e-08, 1, 0, -1, -4.37114e-08, 0, 0, 0 )
 shape = SubResource( 35 )
+
+[node name="InteractionArea" type="Area" parent="."]
+transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, 0, -0.0657654, -0.265276 )
+script = ExtResource( 3 )
+
+[node name="CollisionShape" type="CollisionShape" parent="InteractionArea"]
+shape = SubResource( 37 )

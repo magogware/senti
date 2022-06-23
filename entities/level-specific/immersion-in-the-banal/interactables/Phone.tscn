@@ -1,7 +1,8 @@
-[gd_scene load_steps=9 format=2]
+[gd_scene load_steps=11 format=2]
 
 [ext_resource path="res://assets/dither-materials/immersion-in-the-banal/palette-5/grabbables.tres" type="Material" id=1]
 [ext_resource path="res://assets/dither-materials/immersion-in-the-banal/palette-5/interactables.tres" type="Material" id=2]
+[ext_resource path="res://entities/classes/InteractionArea.gd" type="Script" id=3]
 
 [sub_resource type="PhysicsMaterial" id=134]
 resource_name = "PhoneBase001PhysicsMaterial"
@@ -24,6 +25,9 @@ surfaces/0 = {
 [sub_resource type="ConvexPolygonShape" id=135]
 resource_name = "Cube231"
 points = PoolVector3Array( -0.102374, -0.165774, -2.7008e-08, 0.102374, -0.165774, -2.7008e-08, -0.102374, 0.151684, 2.47125e-08, 0.102374, 0.151684, 2.47125e-08, -0.102374, 0.138476, 0.0484142, -0.102374, -0.138476, 0.0283608, 0.102374, -0.138476, 0.0283608, 0.102374, 0.138476, 0.0484142, 0.059119, -0.0800983, 0.0398145, 0.059119, -0.10165, 0.037929, 0.0865973, -0.10165, 0.037929, 0.0865973, -0.0800983, 0.0398145, 0.0263571, -0.0800983, 0.0398145, 0.0263571, -0.10165, 0.037929, 0.0538354, -0.10165, 0.037929, 0.0538354, -0.0800983, 0.0398145, -0.00591577, -0.0800983, 0.0398145, -0.00591577, -0.10165, 0.037929, 0.0215625, -0.10165, 0.037929, 0.0215625, -0.0800983, 0.0398145, 0.059119, -0.0540858, 0.0420903, 0.059119, -0.0756371, 0.0402048, 0.0865973, -0.0756371, 0.0402048, 0.0865973, -0.0540858, 0.0420903, 0.0263571, -0.0540858, 0.0420903, 0.0263571, -0.0756371, 0.0402048, 0.0538354, -0.0756371, 0.0402048, 0.0538354, -0.0540858, 0.0420903, -0.00591577, -0.0540858, 0.0420903, -0.00591577, -0.0756371, 0.0402048, 0.0215625, -0.0756371, 0.0402048, 0.0215625, -0.0540858, 0.0420903, 0.059119, -0.0272939, 0.0444343, 0.059119, -0.0488452, 0.0425488, 0.0865973, -0.0488452, 0.0425488, 0.0865973, -0.0272939, 0.0444343, 0.0263571, -0.0272939, 0.0444343, 0.0263571, -0.0488452, 0.0425488, 0.0538354, -0.0488452, 0.0425488, 0.0538354, -0.0272939, 0.0444343, -0.00591577, -0.0272939, 0.0444343, -0.00591577, -0.0488452, 0.0425488, 0.0215625, -0.0488452, 0.0425488, 0.0215625, -0.0272939, 0.0444343, 0.059119, -0.000355822, 0.0467911, 0.059119, -0.0219071, 0.0449056, 0.0865973, -0.0219071, 0.0449056, 0.0865973, -0.000355822, 0.0467911, 0.0263571, -0.000355822, 0.0467911, 0.0263571, -0.0219071, 0.0449056, 0.0538354, -0.0219071, 0.0449056, 0.0538354, -0.000355822, 0.0467911, -0.00591577, -0.000355822, 0.0467911, -0.00591577, -0.0219071, 0.0449056, 0.0215625, -0.0219071, 0.0449056, 0.0215625, -0.000355822, 0.0467911, 0.059119, -0.0789701, 0.0269182, 0.059119, -0.100521, 0.0250327, 0.0865973, -0.100521, 0.0250327, 0.0865973, -0.0789701, 0.0269182, 0.0263571, -0.100521, 0.0250327, 0.0263571, -0.0789701, 0.0269182, 0.0538354, -0.100521, 0.0250327, 0.0538354, -0.0789701, 0.0269182, -0.00591577, -0.100521, 0.0250327, -0.00591577, -0.0789701, 0.0269182, 0.0215625, -0.100521, 0.0250327, 0.0215625, -0.0789701, 0.0269182, 0.059119, -0.0745088, 0.0273085, 0.059119, -0.0529575, 0.029194, 0.0865973, -0.0745088, 0.0273085, 0.0865973, -0.0529575, 0.029194, 0.0263571, -0.0745088, 0.0273085, 0.0263571, -0.0529575, 0.029194, 0.0538354, -0.0745088, 0.0273085, 0.0538354, -0.0529575, 0.029194, -0.00591577, -0.0745088, 0.0273085, -0.00591577, -0.0529575, 0.029194, 0.0215625, -0.0745088, 0.0273085, 0.0215625, -0.0529575, 0.029194, 0.059119, -0.0477169, 0.0296525, 0.059119, -0.0261656, 0.031538, 0.0865973, -0.0477169, 0.0296525, 0.0865973, -0.0261656, 0.031538, 0.0263571, -0.0477169, 0.0296525, 0.0263571, -0.0261656, 0.031538, 0.0538354, -0.0477169, 0.0296525, 0.0538354, -0.0261656, 0.031538, -0.00591577, -0.0477169, 0.0296525, -0.00591577, -0.0261656, 0.031538, 0.0215625, -0.0477169, 0.0296525, 0.0215625, -0.0261656, 0.031538, 0.059119, -0.0207789, 0.0320093, 0.059119, 0.00077246, 0.0338948, 0.0865973, -0.0207789, 0.0320093, 0.0865973, 0.00077246, 0.0338948, 0.0263571, -0.0207789, 0.0320093, 0.0263571, 0.00077246, 0.0338948, 0.0538354, -0.0207789, 0.0320093, 0.0538354, 0.00077246, 0.0338948, -0.00591577, -0.0207789, 0.0320093, -0.00591577, 0.00077246, 0.0338948, 0.0215625, -0.0207789, 0.0320093, 0.0215625, 0.00077246, 0.0338948, -0.0066161, 0.0678242, 0.0340475, -0.0066161, 0.0893755, 0.0359331, 0.0868101, 0.0678242, 0.0340475, 0.0868101, 0.0893755, 0.0359331, -0.00123204, 0.109133, 0.0552345, 0.081426, 0.109133, 0.0552345, -0.0066161, 0.115588, 0.0382264, 0.0868101, 0.115588, 0.0382264, 0.081426, 0.0551357, 0.0472665, -0.00123204, 0.0551357, 0.0472665, 0.0868101, 0.034057, 0.0310933, -0.0066161, 0.034057, 0.0310933, -0.0066161, 0.11446, 0.0560205, 0.0868101, 0.11446, 0.0560205, -0.0066161, 0.0329287, 0.0439896, 0.0868101, 0.0329287, 0.0439896, -0.0852642, 0.096864, 0.0530539, -0.0852642, 0.0696638, 0.050055, -0.0217332, 0.0696638, 0.050055, -0.0217332, 0.096864, 0.0530539, -0.0852642, 0.0714583, 0.0295436, -0.0852642, 0.0986585, 0.0325425, -0.0217332, 0.0714583, 0.0295436, -0.0217332, 0.0986585, 0.0325425 )
+
+[sub_resource type="BoxShape" id=140]
+extents = Vector3( 0.0153766, 0.0122674, 0.0122152 )
 
 [sub_resource type="PhysicsMaterial" id=137]
 resource_name = "PhoneHandsetPhysicsMaterial"
@@ -69,6 +73,90 @@ material/0 = ExtResource( 2 )
 transform = Transform( 1, 0, 0, 0, -4.37114e-08, 1, 0, -1, -4.37114e-08, 0, 0, 0 )
 shape = SubResource( 135 )
 
+[node name="InteractionArea" type="Area" parent="Base"]
+transform = Transform( 1, 2.07094e-08, -4.25366e-09, -2.09866e-08, 0.996691, -0.0812775, 2.55638e-09, 0.0812775, 0.996691, 0.00782365, 0.0407797, 0.0107301 )
+script = ExtResource( 3 )
+
+[node name="CollisionShape" type="CollisionShape" parent="Base/InteractionArea"]
+shape = SubResource( 140 )
+
+[node name="InteractionArea2" type="Area" parent="Base"]
+transform = Transform( 1, 2.07094e-08, -4.25366e-09, -2.09866e-08, 0.996691, -0.0812775, 2.55638e-09, 0.0812775, 0.996691, 0.0402626, 0.0407797, 0.0107301 )
+script = ExtResource( 3 )
+
+[node name="CollisionShape" type="CollisionShape" parent="Base/InteractionArea2"]
+shape = SubResource( 140 )
+
+[node name="InteractionArea3" type="Area" parent="Base"]
+transform = Transform( 1, 2.07094e-08, -4.25366e-09, -2.09866e-08, 0.996691, -0.0812775, 2.55638e-09, 0.0812775, 0.996691, 0.0731918, 0.0407797, 0.0107301 )
+script = ExtResource( 3 )
+
+[node name="CollisionShape" type="CollisionShape" parent="Base/InteractionArea3"]
+shape = SubResource( 140 )
+
+[node name="InteractionArea4" type="Area" parent="Base"]
+transform = Transform( 1, 2.07094e-08, -4.25366e-09, -2.09866e-08, 0.996691, -0.0812775, 2.55638e-09, 0.0812775, 0.996691, 0.00782365, 0.0382368, 0.037162 )
+script = ExtResource( 3 )
+
+[node name="CollisionShape" type="CollisionShape" parent="Base/InteractionArea4"]
+shape = SubResource( 140 )
+
+[node name="InteractionArea5" type="Area" parent="Base"]
+transform = Transform( 1, 2.07094e-08, -4.25366e-09, -2.09866e-08, 0.996691, -0.0812775, 2.55638e-09, 0.0812775, 0.996691, 0.0402626, 0.0384206, 0.037177 )
+script = ExtResource( 3 )
+
+[node name="CollisionShape" type="CollisionShape" parent="Base/InteractionArea5"]
+shape = SubResource( 140 )
+
+[node name="InteractionArea6" type="Area" parent="Base"]
+transform = Transform( 1, 2.07094e-08, -4.25366e-09, -2.09866e-08, 0.996691, -0.0812775, 2.55638e-09, 0.0812775, 0.996691, 0.0731918, 0.0384356, 0.0371782 )
+script = ExtResource( 3 )
+
+[node name="CollisionShape" type="CollisionShape" parent="Base/InteractionArea6"]
+shape = SubResource( 140 )
+
+[node name="InteractionArea7" type="Area" parent="Base"]
+transform = Transform( 1, 2.07094e-08, -4.25366e-09, -2.09866e-08, 0.996691, -0.0812775, 2.55638e-09, 0.0812775, 0.996691, 0.00782365, 0.0363691, 0.064759 )
+script = ExtResource( 3 )
+
+[node name="CollisionShape" type="CollisionShape" parent="Base/InteractionArea7"]
+shape = SubResource( 140 )
+
+[node name="InteractionArea8" type="Area" parent="Base"]
+transform = Transform( 1, 2.07094e-08, -4.25366e-09, -2.09866e-08, 0.996691, -0.0812775, 2.55638e-09, 0.0812775, 0.996691, 0.0402626, 0.0363841, 0.0647603 )
+script = ExtResource( 3 )
+
+[node name="CollisionShape" type="CollisionShape" parent="Base/InteractionArea8"]
+shape = SubResource( 140 )
+
+[node name="InteractionArea9" type="Area" parent="Base"]
+transform = Transform( 1, 2.07094e-08, -4.25366e-09, -2.09866e-08, 0.996691, -0.0812775, 2.55638e-09, 0.0812775, 0.996691, 0.0731918, 0.0367367, 0.064789 )
+script = ExtResource( 3 )
+
+[node name="CollisionShape" type="CollisionShape" parent="Base/InteractionArea9"]
+shape = SubResource( 140 )
+
+[node name="InteractionArea10" type="Area" parent="Base"]
+transform = Transform( 1, 2.07094e-08, -4.25366e-09, -2.09866e-08, 0.996691, -0.0812775, 2.55638e-09, 0.0812775, 0.996691, 0.00782365, 0.033995, 0.0910198 )
+script = ExtResource( 3 )
+
+[node name="CollisionShape" type="CollisionShape" parent="Base/InteractionArea10"]
+shape = SubResource( 140 )
+
+[node name="InteractionArea11" type="Area" parent="Base"]
+transform = Transform( 1, 2.07094e-08, -4.25366e-09, -2.09866e-08, 0.996691, -0.0812775, 2.55638e-09, 0.0812775, 0.996691, 0.0402626, 0.0341938, 0.091036 )
+script = ExtResource( 3 )
+
+[node name="CollisionShape" type="CollisionShape" parent="Base/InteractionArea11"]
+shape = SubResource( 140 )
+
+[node name="InteractionArea12" type="Area" parent="Base"]
+transform = Transform( 1, 2.07094e-08, -4.25366e-09, -2.09866e-08, 0.996691, -0.0812775, 2.55638e-09, 0.0812775, 0.996691, 0.0731918, 0.0343476, 0.0910485 )
+script = ExtResource( 3 )
+
+[node name="CollisionShape" type="CollisionShape" parent="Base/InteractionArea12"]
+shape = SubResource( 140 )
+
 [node name="Handset" type="RigidBody" parent="." groups=["physics/grabbables"]]
 transform = Transform( -1, 0, -8.74228e-08, 0, 1, 0, 8.74228e-08, 0, -1, 0.052309, 0.0638918, -4.8141e-07 )
 mass = 0.3
@@ -81,7 +169,7 @@ linear_damp = 0.04
 angular_damp = 0.1
 
 [node name="MeshInstance" type="MeshInstance" parent="Handset"]
-transform = Transform( 1, 0, -7.10543e-15, 0, 1, 0, 7.10543e-15, 0, 1, 0, 0, 0 )
+transform = Transform( 1, 0, -7.10543e-15, 0, 1, 0, 7.10543e-15, 0, 1, 0, 0.000184998, -0.000554986 )
 mesh = SubResource( 139 )
 skeleton = NodePath("../CollisionShape")
 material/0 = ExtResource( 1 )

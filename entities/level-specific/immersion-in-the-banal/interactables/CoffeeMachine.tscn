@@ -1,6 +1,7 @@
-[gd_scene load_steps=6 format=2]
+[gd_scene load_steps=8 format=2]
 
 [ext_resource path="res://assets/dither-materials/immersion-in-the-banal/palette-5/interactables.tres" type="Material" id=1]
+[ext_resource path="res://entities/classes/InteractionArea.gd" type="Script" id=2]
 
 [sub_resource type="PhysicsMaterial" id=4]
 resource_name = "CoffeeMachinePhysicsMaterial"
@@ -26,7 +27,10 @@ points = PoolVector3Array( 0.232561, 0.19575, -0.021, -0.23037, -0.167094, -0.20
 [sub_resource type="ConvexPolygonShape" id=8]
 points = PoolVector3Array( 0.2388, 0.199052, -0.21429, -0.226796, -0.165354, -0.5286, -0.216688, -0.185469, -0.5286, 0.138516, 0.1497, -0.633883, 0.142261, -0.30129, -0.449279, -0.229389, 0.1991, -0.214237, -0.127347, -0.289043, -0.214546, -0.0907, 0.292447, -0.570852, 0.238027, -0.156558, -0.21498, 0.236267, -0.155296, -0.5286, -0.135, -0.0940354, -0.627606, 0.0999603, 0.322893, -0.449279, -0.226796, 0.197015, -0.5286, 0.236267, 0.197015, -0.5286, -0.2301, -0.167868, -0.213602, -0.132742, -0.30129, -0.449279, 0.135121, -0.0945084, -0.628529, 0.132732, -0.279664, -0.221064, -0.135, 0.145567, -0.627606, 0.0962, 0.310569, -0.580371, -0.101017, 0.322893, -0.449279, 0.156796, 0.2186, -0.215078, -0.0858734, -0.225758, -0.5286, -0.1565, 0.217371, -0.216307, 0.226159, -0.185469, -0.5286, 0.226442, -0.18572, -0.216284, 0.0953448, -0.225758, -0.5286, -0.219361, -0.187839, -0.214056, 0.195971, -0.205585, -0.5286, -0.1865, -0.205585, -0.5286, 0.216097, -0.195527, -0.5286, -0.206625, -0.195527, -0.5286 )
 
-[node name="CoffeeMachine" type="RigidBody" groups=["physics/grabbables"]]
+[sub_resource type="BoxShape" id=9]
+extents = Vector3( 0.131, 0.049, 0.012 )
+
+[node name="CoffeeMachine" type="RigidBody" groups=["physics/map"]]
 transform = Transform( 1, 0, 0, 0, 1, 1.38554e-14, 0, 1.38554e-14, 1, 0, 0, 0 )
 physics_material_override = SubResource( 4 )
 contacts_reported = 4
@@ -52,3 +56,10 @@ shape = SubResource( 7 )
 [node name="CollisionShape" type="CollisionShape" parent="."]
 transform = Transform( -1, 0, 8.74228e-08, -8.74228e-08, -4.37114e-08, -1, 3.82137e-15, -1, 4.37114e-08, 0, 0, 0 )
 shape = SubResource( 8 )
+
+[node name="InteractionArea" type="Area" parent="." groups=["physics/map"]]
+transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.49, -0.319 )
+script = ExtResource( 2 )
+
+[node name="CollisionShape" type="CollisionShape" parent="InteractionArea"]
+shape = SubResource( 9 )
