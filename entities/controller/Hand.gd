@@ -3,6 +3,7 @@ class_name Hand
 
 export var open_mesh: Mesh = null
 export var fist_mesh: Mesh = null
+export var point_mesh: Mesh = null
 
 var velocity: float = 0;
 var avg_velocity: float = 0
@@ -46,16 +47,25 @@ func change(transition: String):
 				collision_layer = 0
 				$MeshInstance.mesh = open_mesh
 				$MeshInstance.visible = true
+				$Fist.disabled = true
+				$Pointing.disabled = true
 			State.FIST:
 				Utils.set_collision("physics/player", self)
 				$MeshInstance.mesh = fist_mesh
 				$MeshInstance.visible = true
+				$Fist.disabled = false
+				$Pointing.disabled = true
 			State.GRABBING:
 				collision_layer = 0
 				$MeshInstance.visible = false
+				$Fist.disabled = true
+				$Pointing.disabled = true
 			State.POINT:
-				$MeshInstance.visible = false
-				print("huge cock")
+				Utils.set_collision("physics/player", self)
+				$MeshInstance.mesh = point_mesh
+				$MeshInstance.visible = true
+				$Fist.disabled = false
+				$Pointing.disabled = true
 
 func _physics_process(delta):
 	
