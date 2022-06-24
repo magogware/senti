@@ -33,6 +33,11 @@ func _physics_process(delta):
 						INF)
 				holder_axial_displacement[dof.primary_axis] = clamp(holder_axial_displacement[dof.primary_axis], -dof.close_rom, dof.open_rom)
 				total_displacement += holder_axial_displacement
+				if dof.num_ticks > 0:
+					var total_rom: float = dof.open_rom + dof.close_rom # This should be calculated in the resource to optimise
+					var tick_distance: float = total_rom / dof.num_ticks
+					if floor(holder_axial_displacement[dof.primary_axis] / tick_distance) != floor(body_axial_displacement[dof.primary_axis] / tick_distance):
+						emit_signal("tick")
 		global_transform = _start.translated(total_displacement)
 		
 		var rotated_transform: Transform = global_transform
@@ -57,6 +62,11 @@ func _physics_process(delta):
 						prior_rotations[dof.primary_axis]-(deg2rad(dof.max_close_speed) * delta),
 						INF)
 				rotations[dof.primary_axis] = clamp(rotations[dof.primary_axis], -deg2rad(dof.close_rom), deg2rad(dof.open_rom))
+				if dof.num_ticks > 0:
+					var total_rom: float = deg2rad(dof.open_rom + dof.close_rom) # This should be calculated in the resource to optimise
+					var tick_distance: float = total_rom / dof.num_ticks
+					if floor(rotations[dof.primary_axis] / tick_distance) != floor(prior_rotations[dof.primary_axis] / tick_distance):
+						emit_signal("tick")
 		global_transform.basis = Basis(rotations)
 #	else:
 #		var current_displacement: Vector3 = _start.xform_inv(global_transform.origin)

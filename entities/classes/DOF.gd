@@ -32,6 +32,8 @@ export(float) var retract_speed: float = 0# setget _set_retract_speed;
 export(float) var max_open_speed: float = 0# setget _set_max_open_speed;
 export(float) var max_close_speed: float = 0# setget _set_max_close_speed;
 
+export(int) var num_ticks: int = 0
+
 func _set_open_rom(val: float):
 	if mode == DoFMode.ROTATION:
 		open_rom = deg2rad(val)
