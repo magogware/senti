@@ -195,8 +195,9 @@ fog_height_max = 10.0
 [node name="haptics-you-can-hear-v2" type="Spatial"]
 script = ExtResource( 12 )
 
-[node name="map" type="StaticBody" parent="." groups=["physics/map"]]
+[node name="map" type="RigidBody" parent="." groups=["physics/map"]]
 collision_mask = 7
+mode = 3
 
 [node name="CollisionShape" type="CollisionShape" parent="map"]
 shape = SubResource( 26 )
@@ -206,8 +207,9 @@ mesh = SubResource( 44 )
 material/0 = ExtResource( 4 )
 material/1 = ExtResource( 13 )
 
-[node name="boundary" type="StaticBody" parent="." groups=["physics/map"]]
+[node name="boundary" type="RigidBody" parent="." groups=["physics/map"]]
 collision_mask = 7
+mode = 1
 
 [node name="boundary" type="MeshInstance" parent="boundary"]
 visible = false
@@ -223,7 +225,7 @@ visible = false
 mesh = SubResource( 24 )
 material/0 = SubResource( 31 )
 
-[node name="door" type="RigidBody" parent="." groups=["physics/moving-map"]]
+[node name="door" type="RigidBody" parent="." groups=["physics/map"]]
 collision_layer = 17
 collision_mask = 22
 mode = 1
@@ -253,9 +255,10 @@ transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, -1.421, 0.896, -22.137 )
 
 [node name="broken-lever" type="Spatial" parent="."]
 
-[node name="broken-rod-lower" type="StaticBody" parent="broken-lever" groups=["physics/map"]]
+[node name="broken-rod-lower" type="RigidBody" parent="broken-lever" groups=["physics/map"]]
 transform = Transform( 1.27759, 0, 0, 0, 1.27759, 0, 0, 0, 1.27759, 1.9, 0.89552, -22.1365 )
 collision_mask = 6
+mode = 1
 
 [node name="broken-rod-lower" type="MeshInstance" parent="broken-lever/broken-rod-lower"]
 transform = Transform( 0.782721, 0, 0, 0, 0.444713, 0, 0, 0, 0.782721, 0, 0, 0 )
@@ -289,8 +292,9 @@ shape = SubResource( 39 )
 transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.662699, 0 )
 shape = SubResource( 40 )
 
-[node name="broken-lever" type="StaticBody" parent="broken-lever" groups=["physics/map"]]
+[node name="broken-lever" type="RigidBody" parent="broken-lever" groups=["physics/map"]]
 collision_mask = 6
+mode = 1
 
 [node name="broken-lever" type="MeshInstance" parent="broken-lever/broken-lever"]
 transform = Transform( 1.27759, 0, 0, 0, 1.27759, 0, 0, 0, 1.27759, 1.9, 0.89552, -22.1365 )

@@ -44,7 +44,7 @@ open_mesh = ExtResource( 3 )
 fist_mesh = ExtResource( 2 )
 point_mesh = SubResource( 4 )
 
-[node name="GrabZone" type="Area" parent="RotationHelper" groups=["physics/grabber"]]
+[node name="GrabZone" type="Area" parent="RotationHelper" groups=["physics/grabzone"]]
 transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -3.7059 )
 collision_layer = 8
 collision_mask = 4
