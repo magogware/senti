@@ -8,6 +8,12 @@ signal moving;
 
 export(Array, Resource) var dofs: Array;
 
+enum DoFStatus {
+	OPEN,
+	CLOSED,
+	MOVING
+}
+
 var _start: Transform;
 var _holder: Spatial
 
@@ -24,6 +30,16 @@ func _physics_process(delta):
 				var translation_basis: Vector3 = _start.basis[dof.primary_axis]
 				var body_axial_displacement: Vector3 = _start.xform_inv(global_transform.origin).project(translation_basis)
 				var holder_axial_displacement: Vector3 = _start.xform_inv(_holder.global_transform.origin).project(translation_basis)
+				
+				if body_axial_displacement[dof.primary_axis] == dof.open_rom and dof.open_latch_mode != DoF.LatchMode.NEVER_LATCH:
+					var distance_limit: float = dof.latch_dist if dof.open_latch_mode == DoF.LatchMode.LATCH_WITHIN_DIST else INF
+					if body_axial_displacement.distance_to(holder_axial_displacement) < distance_limit:
+						holder_axial_displacement = body_axial_displacement
+				elif body_axial_displacement[dof.primary_axis] == (-dof.close_rom) and dof.open_latch_mode != DoF.LatchMode.NEVER_LATCH:
+					var distance_limit: float = dof.latch_dist if dof.close_latch_mode == DoF.LatchMode.LATCH_WITHIN_DIST else INF
+					if body_axial_displacement.distance_squared_to(holder_axial_displacement) < distance_limit:
+						holder_axial_displacement = body_axial_displacement
+						
 				if dof.max_open_speed > 0:
 					holder_axial_displacement[dof.primary_axis] = clamp(holder_axial_displacement[dof.primary_axis], 
 						-INF,

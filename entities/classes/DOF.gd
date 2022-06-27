@@ -19,6 +19,12 @@ enum DoFMode {
 	TRANSLATION
 }
 
+enum LatchMode {
+	LATCH_FOREVER,
+	LATCH_WITHIN_DIST,
+	NEVER_LATCH
+}
+
 export(DoFMode) var mode: int = DoFMode.TRANSLATION;
 export(Axis) var primary_axis: int = Axis.X;
 export(Axis) var secondary_axis: int;
@@ -33,6 +39,11 @@ export(float) var max_open_speed: float = 0# setget _set_max_open_speed;
 export(float) var max_close_speed: float = 0# setget _set_max_close_speed;
 
 export(int) var num_ticks: int = 0
+
+export(float) var latch_dist: float = 0;
+export(LatchMode) var open_latch_mode: int = LatchMode.NEVER_LATCH
+export(LatchMode) var close_latch_mode: int = LatchMode.NEVER_LATCH
+#export(LatchMode) var open_latch_mode: int = LatchMode.NEVER_LATCH
 
 func _set_open_rom(val: float):
 	if mode == DoFMode.ROTATION:
