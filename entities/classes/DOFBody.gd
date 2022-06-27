@@ -4,6 +4,7 @@ class_name DOFBody
 signal tick;
 signal opened;
 signal closed;
+signal moving;
 
 export(Array, Resource) var dofs: Array;
 
@@ -31,8 +32,22 @@ func _physics_process(delta):
 					holder_axial_displacement[dof.primary_axis] = clamp(holder_axial_displacement[dof.primary_axis], 
 						body_axial_displacement[dof.primary_axis]-(dof.max_close_speed * delta),
 						INF)
-				holder_axial_displacement[dof.primary_axis] = clamp(holder_axial_displacement[dof.primary_axis], -dof.close_rom, dof.open_rom)
+						
+				var clamp_result: Array = clamp_with_result(holder_axial_displacement[dof.primary_axis], -dof.close_rom, dof.open_rom)
+				holder_axial_displacement[dof.primary_axis] = clamp_result.front()
+				match clamp_result.back():
+					-1:
+						if body_axial_displacement[dof.primary_axis] != (-dof.close_rom):
+							emit_signal("closed")
+					0:
+						if (body_axial_displacement[dof.primary_axis] == (-dof.close_rom)
+							or body_axial_displacement[dof.primary_axis] == (dof.open_rom)):
+							emit_signal("moving")
+					1:
+						if body_axial_displacement[dof.primary_axis] != (dof.open_rom):
+							emit_signal("opened")
 				total_displacement += holder_axial_displacement
+				
 				if dof.num_ticks > 0:
 					var total_rom: float = dof.open_rom + dof.close_rom # This should be calculated in the resource to optimise
 					var tick_distance: float = total_rom / dof.num_ticks
@@ -79,9 +94,20 @@ func _physics_process(delta):
 #					current_displacement[dof.primary_axis] -= dof.retract_speed * delta
 #			current_displacement[dof.primary_axis] = clamp(current_displacement[dof.primary_axis], -dof.close_rom, dof.open_rom)
 #		global_transform = _start.translated(current_displacement)
-	
+
 func _grabbed(holder: Spatial):
 	_holder = holder;
 
 func _released():
 	_holder = null;
+
+func clamp_with_result(value: float, mini: float, maxi: float) -> Array:
+	var results: Array = []
+	results.append(clamp(value, mini, maxi))
+	if value <= mini:
+		results.append(-1)
+	elif value >= maxi:
+		results.append(1)
+	else:
+		results.append(0)
+	return results
