@@ -16,6 +16,7 @@ enum DoFStatus {
 
 var _start: Transform;
 var _holder: Spatial
+var _prior_rotations: Vector3
 
 func _ready():
 	_start = global_transform
@@ -23,93 +24,101 @@ func _ready():
 func _physics_process(delta):
 	if _holder != null:
 		var total_displacement: Vector3 = Vector3.ZERO
-		var prior_rotations: Vector3 = global_transform.basis.get_euler()
 		for dof_resource in dofs:
 			var dof: DoF = dof_resource as DoF
 			if dof.mode == DoF.DoFMode.TRANSLATION:
-				var translation_basis: Vector3 = _start.basis[dof.primary_axis]
-				var body_axial_displacement: Vector3 = _start.xform_inv(global_transform.origin).project(translation_basis)
-				var holder_axial_displacement: Vector3 = _start.xform_inv(_holder.global_transform.origin).project(translation_basis)
+				var translation_basis: Vector3 = _start.basis.xform_inv(_start.basis[dof.primary_axis])
+				var body_axial_displacement: float = _start.xform_inv(global_transform.origin).project(translation_basis)[dof.primary_axis]
+				var holder_axial_displacement: float = _start.xform_inv(_holder.global_transform.origin).project(translation_basis)[dof.primary_axis]
 				
-				if body_axial_displacement[dof.primary_axis] == dof.open_rom and dof.open_latch_mode != DoF.LatchMode.NEVER_LATCH:
-					var distance_limit: float = dof.latch_dist if dof.open_latch_mode == DoF.LatchMode.LATCH_WITHIN_DIST else INF
-					if body_axial_displacement.distance_to(holder_axial_displacement) < distance_limit:
-						holder_axial_displacement = body_axial_displacement
-				elif body_axial_displacement[dof.primary_axis] == (-dof.close_rom) and dof.open_latch_mode != DoF.LatchMode.NEVER_LATCH:
-					var distance_limit: float = dof.latch_dist if dof.close_latch_mode == DoF.LatchMode.LATCH_WITHIN_DIST else INF
-					if body_axial_displacement.distance_squared_to(holder_axial_displacement) < distance_limit:
-						holder_axial_displacement = body_axial_displacement
-						
-				if dof.max_open_speed > 0:
-					holder_axial_displacement[dof.primary_axis] = clamp(holder_axial_displacement[dof.primary_axis], 
-						-INF,
-						body_axial_displacement[dof.primary_axis]+(dof.max_open_speed * delta))
-				if dof.max_close_speed > 0:
-					holder_axial_displacement[dof.primary_axis] = clamp(holder_axial_displacement[dof.primary_axis], 
-						body_axial_displacement[dof.primary_axis]-(dof.max_close_speed * delta),
-						INF)
-						
-				var clamp_result: Array = clamp_with_result(holder_axial_displacement[dof.primary_axis], -dof.close_rom, dof.open_rom)
-				holder_axial_displacement[dof.primary_axis] = clamp_result.front()
-				match clamp_result.back():
-					-1:
-						if body_axial_displacement[dof.primary_axis] != (-dof.close_rom):
-							emit_signal("closed")
-					0:
-						if (body_axial_displacement[dof.primary_axis] == (-dof.close_rom)
-							or body_axial_displacement[dof.primary_axis] == (dof.open_rom)):
-							emit_signal("moving")
-					1:
-						if body_axial_displacement[dof.primary_axis] != (dof.open_rom):
-							emit_signal("opened")
-				total_displacement += holder_axial_displacement
+				holder_axial_displacement = _latch_within_dist(body_axial_displacement, holder_axial_displacement, dof.open_rom, dof.latch_dist, dof.open_latch_mode)
+				holder_axial_displacement = _latch_within_dist(body_axial_displacement, holder_axial_displacement, dof.close_rom, dof.latch_dist, dof.close_latch_mode)
+				holder_axial_displacement = _limit_speed(body_axial_displacement, holder_axial_displacement, dof.max_open_speed, dof.max_close_speed, delta)
+				holder_axial_displacement = _limit_max_rom(body_axial_displacement, holder_axial_displacement, dof.close_rom, dof.open_rom) # FIXME: 'moving' signal emits constantly
 				
-				if dof.num_ticks > 0:
-					var total_rom: float = dof.open_rom + dof.close_rom # This should be calculated in the resource to optimise
-					var tick_distance: float = total_rom / dof.num_ticks
-					if floor(holder_axial_displacement[dof.primary_axis] / tick_distance) != floor(body_axial_displacement[dof.primary_axis] / tick_distance):
-						emit_signal("tick")
+				_emit_ticks(body_axial_displacement, holder_axial_displacement, dof.close_rom, dof.open_rom, dof.num_ticks)		# FIXME: ticks emit constantly at max rom
+				
+				total_displacement[dof.primary_axis] += holder_axial_displacement
 		global_transform = _start.translated(total_displacement)
-		
-		var rotated_transform: Transform = global_transform
+
 		for dof_resource in dofs:
 			var dof: DoF = dof_resource as DoF
 			if dof.mode == DoF.DoFMode.ROTATION:
-				var holder_direction: Vector3 = rotated_transform.xform_inv(_holder.global_transform.origin)
-				holder_direction[dof.primary_axis] = 0;
-				holder_direction  = holder_direction.normalized()
-				rotated_transform.basis[dof.secondary_axis] = rotated_transform.basis.xform(holder_direction)
-				rotated_transform.basis[3 - (dof.primary_axis + dof.secondary_axis)] = rotated_transform.basis[dof.secondary_axis].cross(rotated_transform.basis[dof.primary_axis])
-		var rotations: Vector3 = rotated_transform.basis.get_euler()
-		for dof_resource in dofs:
-			var dof: DoF = dof_resource as DoF
-			if dof.mode == DoF.DoFMode.ROTATION:
-				if dof.max_open_speed > 0:
-					rotations[dof.primary_axis] = clamp(rotations[dof.primary_axis], 
-						-INF,
-						prior_rotations[dof.primary_axis]+(deg2rad(dof.max_open_speed) * delta))
-				if dof.max_close_speed > 0:
-					rotations[dof.primary_axis] = clamp(rotations[dof.primary_axis], 
-						prior_rotations[dof.primary_axis]-(deg2rad(dof.max_close_speed) * delta),
-						INF)
-				rotations[dof.primary_axis] = clamp(rotations[dof.primary_axis], -deg2rad(dof.close_rom), deg2rad(dof.open_rom))
-				if dof.num_ticks > 0:
-					var total_rom: float = deg2rad(dof.open_rom + dof.close_rom) # This should be calculated in the resource to optimise
-					var tick_distance: float = total_rom / dof.num_ticks
-					if floor(rotations[dof.primary_axis] / tick_distance) != floor(prior_rotations[dof.primary_axis] / tick_distance):
-						emit_signal("tick")
-		global_transform.basis = Basis(rotations)
+				var rotation_basis: Vector3 = global_transform.basis[dof.primary_axis]
+				var rotation_axis: Vector3 = global_transform.basis.xform_inv(global_transform.basis[dof.primary_axis])
+				var edge_axis: Vector3 = global_transform.basis.xform_inv(global_transform.basis[dof.secondary_axis])
+				var holder_displacement: Vector3 = global_transform.xform_inv(_holder.global_transform.origin)
+				holder_displacement[dof.primary_axis] = 0
+				var holder_axial_rotation: float = edge_axis.signed_angle_to(holder_displacement, rotation_axis)
+				
+				holder_axial_rotation = _latch_within_dist(_prior_rotations[dof.primary_axis], holder_axial_rotation, dof.open_rom, dof.latch_dist, dof.open_latch_mode)
+				holder_axial_rotation = _latch_within_dist(_prior_rotations[dof.primary_axis], holder_axial_rotation, dof.close_rom, dof.latch_dist, dof.close_latch_mode)
+				holder_axial_rotation = _limit_speed(_prior_rotations[dof.primary_axis], holder_axial_rotation, dof.max_open_speed, dof.max_close_speed, delta)
+				holder_axial_rotation = _limit_max_rom(_prior_rotations[dof.primary_axis], holder_axial_rotation, dof.close_rom, dof.open_rom)
+				
+				_emit_ticks(_prior_rotations[dof.primary_axis], holder_axial_rotation, dof.close_rom, dof.open_rom, dof.num_ticks)
+
+				_prior_rotations[dof.primary_axis] = holder_axial_rotation
+				global_transform.basis = global_transform.basis.rotated(rotation_basis, holder_axial_rotation)
+				
 #	else:
 #		var current_displacement: Vector3 = _start.xform_inv(global_transform.origin)
 #		for dof_resource in dofs:
 #			var dof: DoF = dof_resource
-#			match dof.retract_mode:
-#				dof.RetractMode.RETRACTS_OPEN:
-#					current_displacement[dof.primary_axis] += dof.retract_speed * delta
-#				dof.RetractMode.RETRACTS_CLOSED:
-#					current_displacement[dof.primary_axis] -= dof.retract_speed * delta
-#			current_displacement[dof.primary_axis] = clamp(current_displacement[dof.primary_axis], -dof.close_rom, dof.open_rom)
+#			if dof.mode == DoF.DoFMode.TRANSLATION:
+#				match dof.retract_mode:
+#					dof.RetractMode.RETRACTS_OPEN:
+#						current_displacement[dof.primary_axis] += dof.retract_speed * delta
+#					dof.RetractMode.RETRACTS_CLOSED:
+#						current_displacement[dof.primary_axis] -= dof.retract_speed * delta
+#				current_displacement[dof.primary_axis] = clamp(current_displacement[dof.primary_axis], -dof.close_rom, dof.open_rom)
 #		global_transform = _start.translated(current_displacement)
+
+func _latch_within_dist(current_axial_displacement, holder_axial_displacement, rom, latch_dist, latch_mode) -> float:
+	var delta_axial_displacement: float = abs(current_axial_displacement) - abs(holder_axial_displacement)
+	if is_equal_approx(abs(current_axial_displacement), abs(rom)) and latch_mode != DoF.LatchMode.NEVER_LATCH:
+		var distance_limit: float = latch_dist if latch_mode == DoF.LatchMode.LATCH_WITHIN_DIST else -INF
+		if delta_axial_displacement < distance_limit:
+			holder_axial_displacement = current_axial_displacement
+	return holder_axial_displacement
+
+func _limit_speed(current_axial_displacement, holder_axial_displacement, max_open_speed, max_close_speed, delta) -> float:
+	if max_open_speed > 0:
+		holder_axial_displacement = clamp(holder_axial_displacement, 
+			-INF,
+			current_axial_displacement+(max_open_speed * delta))
+	if max_close_speed > 0:
+		holder_axial_displacement = clamp(holder_axial_displacement, 
+			current_axial_displacement-(max_close_speed * delta),
+			INF)
+	return holder_axial_displacement
+
+func _limit_max_rom(current_axial_displacement, holder_axial_displacement, close_rom, open_rom) -> float:
+	# just use a dictionary and state to do this, no computation of it
+	var clamp_result: Array = clamp_with_result(holder_axial_displacement, -close_rom, open_rom)
+	holder_axial_displacement = clamp_result.front()
+	match clamp_result.back():
+		-1:
+			if !is_equal_approx(current_axial_displacement, -close_rom):
+				emit_signal("closed")
+		0:
+			if (is_equal_approx(current_axial_displacement, -close_rom)
+				or is_equal_approx(current_axial_displacement, open_rom)):
+#				print(current_axial_displacement)
+#				print(-close_rom)
+#				print(open_rom)
+				emit_signal("moving")
+		1:
+			if !is_equal_approx(current_axial_displacement, open_rom):
+				emit_signal("opened")
+	return holder_axial_displacement
+
+func _emit_ticks(current_axial_displacement, holder_axial_displacement, close_rom, open_rom, num_ticks):
+	if num_ticks > 0:
+		var total_rom: float = open_rom + close_rom # This should be calculated in the resource to optimise
+		var tick_distance: float = total_rom / num_ticks
+		if floor(holder_axial_displacement / tick_distance) != floor(current_axial_displacement / tick_distance):
+			emit_signal("tick")
 
 func _grabbed(holder: Spatial):
 	_holder = holder;
@@ -127,3 +136,19 @@ func clamp_with_result(value: float, mini: float, maxi: float) -> Array:
 	else:
 		results.append(0)
 	return results
+
+
+func _on_DOFBody_opened():
+	print("open")
+
+
+func _on_DOFBody_moving():
+	print("moving")
+
+
+func _on_DOFBody_closed():
+	print("closed")
+
+
+func _on_DOFBody_tick():
+	print("tick")
