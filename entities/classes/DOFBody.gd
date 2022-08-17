@@ -61,18 +61,50 @@ func _physics_process(delta):
 				_prior_rotations[dof.primary_axis] = holder_axial_rotation
 				global_transform.basis = global_transform.basis.rotated(rotation_basis, holder_axial_rotation)
 				
-#	else:
-#		var current_displacement: Vector3 = _start.xform_inv(global_transform.origin)
-#		for dof_resource in dofs:
-#			var dof: DoF = dof_resource
-#			if dof.mode == DoF.DoFMode.TRANSLATION:
-#				match dof.retract_mode:
-#					dof.RetractMode.RETRACTS_OPEN:
-#						current_displacement[dof.primary_axis] += dof.retract_speed * delta
-#					dof.RetractMode.RETRACTS_CLOSED:
-#						current_displacement[dof.primary_axis] -= dof.retract_speed * delta
-#				current_displacement[dof.primary_axis] = clamp(current_displacement[dof.primary_axis], -dof.close_rom, dof.open_rom)
-#		global_transform = _start.translated(current_displacement)
+	else:
+		var total_displacement: Vector3 = Vector3.ZERO
+		for dof_resource in dofs:
+			var dof: DoF = dof_resource as DoF
+			if dof.mode == DoF.DoFMode.TRANSLATION:
+				var translation_basis: Vector3 = _start.basis.xform_inv(_start.basis[dof.primary_axis])
+				var body_axial_displacement: float = _start.xform_inv(global_transform.origin).project(translation_basis)[dof.primary_axis]
+				var retracted_body_axial_displacement: float = body_axial_displacement
+				
+				match dof.retract_mode:
+					dof.RetractMode.RETRACTS_OPEN:
+						retracted_body_axial_displacement += (dof.retract_speed * delta)
+					dof.RetractMode.RETRACTS_CLOSED:
+						retracted_body_axial_displacement -= (dof.retract_speed * delta)
+				
+				retracted_body_axial_displacement = _latch_within_dist(body_axial_displacement, retracted_body_axial_displacement, dof.open_rom, dof.latch_dist, dof.open_latch_mode)
+				retracted_body_axial_displacement = _latch_within_dist(body_axial_displacement, retracted_body_axial_displacement, dof.close_rom, dof.latch_dist, dof.close_latch_mode)
+				retracted_body_axial_displacement = _limit_max_rom(body_axial_displacement, retracted_body_axial_displacement, dof.close_rom, dof.open_rom) # FIXME: 'moving' signal emits constantly
+				
+				_emit_ticks(body_axial_displacement, retracted_body_axial_displacement, dof.close_rom, dof.open_rom, dof.num_ticks)		# FIXME: ticks emit constantly at max rom
+				total_displacement[dof.primary_axis] += retracted_body_axial_displacement
+		global_transform = _start.translated(total_displacement)
+		
+		for dof_resource in dofs:
+			var dof: DoF = dof_resource as DoF
+			if dof.mode == DoF.DoFMode.ROTATION:
+				var rotation_basis: Vector3 = global_transform.basis[dof.primary_axis]
+				var retracted_axial_rotation: float = 0
+				
+				match dof.retract_mode:
+					dof.RetractMode.RETRACTS_OPEN:
+						retracted_axial_rotation = _prior_rotations[dof.primary_axis] + (dof.retract_speed * delta)
+					dof.RetractMode.RETRACTS_CLOSED:
+						retracted_axial_rotation = _prior_rotations[dof.primary_axis] - (dof.retract_speed * delta)
+				
+				retracted_axial_rotation = _latch_within_dist(_prior_rotations[dof.primary_axis], retracted_axial_rotation, dof.open_rom, dof.latch_dist, dof.open_latch_mode)
+				retracted_axial_rotation = _latch_within_dist(_prior_rotations[dof.primary_axis], retracted_axial_rotation, dof.close_rom, dof.latch_dist, dof.close_latch_mode)
+				retracted_axial_rotation = _limit_speed(_prior_rotations[dof.primary_axis], retracted_axial_rotation, dof.max_open_speed, dof.max_close_speed, delta)
+				retracted_axial_rotation = _limit_max_rom(_prior_rotations[dof.primary_axis], retracted_axial_rotation, dof.close_rom, dof.open_rom)
+				
+				_emit_ticks(_prior_rotations[dof.primary_axis], retracted_axial_rotation, dof.close_rom, dof.open_rom, dof.num_ticks)
+
+				_prior_rotations[dof.primary_axis] = retracted_axial_rotation
+				global_transform.basis = global_transform.basis.rotated(rotation_basis, retracted_axial_rotation)
 
 func _latch_within_dist(current_axial_displacement, holder_axial_displacement, rom, latch_dist, latch_mode) -> float:
 	var delta_axial_displacement: float = abs(current_axial_displacement) - abs(holder_axial_displacement)
