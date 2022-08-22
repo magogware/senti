@@ -95,6 +95,8 @@ func _physics_process(delta):
 						retracted_axial_rotation = _prior_rotations[dof.primary_axis] + (dof.retract_speed * delta)
 					dof.RetractMode.RETRACTS_CLOSED:
 						retracted_axial_rotation = _prior_rotations[dof.primary_axis] - (dof.retract_speed * delta)
+					dof.RetractMode.NO_RETRACT:
+						retracted_axial_rotation = _prior_rotations[dof.primary_axis]
 				
 				retracted_axial_rotation = _latch_within_dist(_prior_rotations[dof.primary_axis], retracted_axial_rotation, dof.open_rom, dof.latch_dist, dof.open_latch_mode)
 				retracted_axial_rotation = _latch_within_dist(_prior_rotations[dof.primary_axis], retracted_axial_rotation, dof.close_rom, dof.latch_dist, dof.close_latch_mode)
