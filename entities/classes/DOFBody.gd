@@ -15,8 +15,9 @@ enum DoFStatus {
 }
 
 var _start: Transform;
-var _holder: Spatial
-var _prior_rotations: Vector3
+var _holder: Spatial;
+var _prior_rotations: Vector3;
+var _holder_transform_at_grab: Transform;
 
 func _ready():
 	_start = global_transform
@@ -45,11 +46,18 @@ func _physics_process(delta):
 			var dof: DoF = dof_resource as DoF
 			if dof.mode == DoF.DoFMode.ROTATION:
 				var rotation_basis: Vector3 = global_transform.basis[dof.primary_axis]
+				var rotation_plane: Plane = Plane(rotation_basis, 0)
 				var rotation_axis: Vector3 = global_transform.basis.xform_inv(global_transform.basis[dof.primary_axis])
 				var edge_axis: Vector3 = global_transform.basis.xform_inv(global_transform.basis[dof.secondary_axis])
-				var holder_displacement: Vector3 = global_transform.xform_inv(_holder.global_transform.origin)
-				holder_displacement[dof.primary_axis] = 0
-				var holder_axial_rotation: float = edge_axis.signed_angle_to(holder_displacement, rotation_axis)
+				var holder_axial_rotation: float
+				if dof.rotation_linked_to_controller:
+					var holder_axis: Vector3 = rotation_plane.project(_holder.global_transform.basis[dof.linked_axis])
+					edge_axis = global_transform.basis[dof.secondary_axis]
+					holder_axial_rotation = edge_axis.signed_angle_to(holder_axis, rotation_basis)
+				else:
+					var holder_displacement: Vector3 = global_transform.xform_inv(_holder.global_transform.origin)
+					holder_displacement[dof.primary_axis] = 0
+					holder_axial_rotation = edge_axis.signed_angle_to(holder_displacement, rotation_axis)
 				
 				holder_axial_rotation = _latch_within_dist(_prior_rotations[dof.primary_axis], holder_axial_rotation, dof.open_rom, dof.latch_dist, dof.open_latch_mode)
 				holder_axial_rotation = _latch_within_dist(_prior_rotations[dof.primary_axis], holder_axial_rotation, dof.close_rom, dof.latch_dist, dof.close_latch_mode)
@@ -156,6 +164,7 @@ func _emit_ticks(current_axial_displacement, holder_axial_displacement, close_ro
 
 func _grabbed(holder: Spatial):
 	_holder = holder;
+	_holder_transform_at_grab = _holder.global_transform
 
 func _released():
 	_holder = null;

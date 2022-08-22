@@ -28,6 +28,7 @@ enum LatchMode {
 export(DoFMode) var mode: int = DoFMode.TRANSLATION;
 export(Axis) var primary_axis: int = Axis.X;
 export(Axis) var secondary_axis: int;
+export(Axis) var linked_axis: int;
 export(bool) var rotation_linked_to_controller: bool = false
 
 export(float) var open_rom: float = 0 setget _set_open_rom;
