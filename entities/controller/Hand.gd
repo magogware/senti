@@ -10,6 +10,8 @@ var avg_velocity: float = 0
 var prior_origins: Array = []
 var prior_displacements: Array = []
 
+var rotating: int = 0
+
 enum State {
 	OPEN,
 	FIST,
@@ -84,3 +86,5 @@ func _physics_process(delta):
 	avg_velocity = avg_displacement.length();
 	avg_velocity /= prior_displacements.size();
 	velocity = avg_velocity;
+	
+	rotate(global_transform.basis.x, (PI/8)*delta*float(rotating))

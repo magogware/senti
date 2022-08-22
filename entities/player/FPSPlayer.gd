@@ -96,6 +96,14 @@ func _input(event):
 		$RotationHelper/RightHand.change("POINT")
 	elif event.is_action_released("point"):
 		$RotationHelper/RightHand.change("OPEN")
+	elif event.is_action_pressed("rotate_cw"):
+		$RotationHelper/RightHand.rotating = -1;
+	elif event.is_action_released("rotate_cw"):
+		$RotationHelper/RightHand.rotating = 0;
+	elif event.is_action_pressed("rotate_ccw"):
+		$RotationHelper/RightHand.rotating = 1;
+	elif event.is_action_released("rotate_ccw"):
+		$RotationHelper/RightHand.rotating = 0;
 		
 func _grab_body(bodies_in_zone):
 	var grabbed_body
