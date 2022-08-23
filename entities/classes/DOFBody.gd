@@ -18,9 +18,13 @@ var _start: Transform;
 var _holder: Spatial;
 var _prior_rotations: Vector3;
 var _holder_transform_at_grab: Transform;
+var _force_excesses: Dictionary
 
 func _ready():
 	_start = global_transform
+	for dof_resource in dofs:
+		var dof: DoF = dof_resource as DoF
+		_force_excesses[dof] = 0.0
 	
 func _physics_process(delta):
 	if _holder != null:
@@ -34,7 +38,7 @@ func _physics_process(delta):
 				
 				holder_axial_displacement = _latch_within_dist(body_axial_displacement, holder_axial_displacement, dof.open_rom, dof.latch_dist, dof.open_latch_mode)
 				holder_axial_displacement = _latch_within_dist(body_axial_displacement, holder_axial_displacement, dof.close_rom, dof.latch_dist, dof.close_latch_mode)
-				holder_axial_displacement = _limit_speed(body_axial_displacement, holder_axial_displacement, dof.max_open_speed, dof.max_close_speed, delta)
+				holder_axial_displacement = _limit_speed(body_axial_displacement, holder_axial_displacement, dof.max_open_speed, dof.max_close_speed, delta, dof)
 				holder_axial_displacement = _limit_max_rom(body_axial_displacement, holder_axial_displacement, dof.close_rom, dof.open_rom) # FIXME: 'moving' signal emits constantly
 				
 				_emit_ticks(body_axial_displacement, holder_axial_displacement, dof.close_rom, dof.open_rom, dof.num_ticks)		# FIXME: ticks emit constantly at max rom
@@ -45,6 +49,7 @@ func _physics_process(delta):
 		for dof_resource in dofs:
 			var dof: DoF = dof_resource as DoF
 			if dof.mode == DoF.DoFMode.ROTATION:
+				print(_force_excesses[dof])
 				var rotation_basis: Vector3 = global_transform.basis[dof.primary_axis]
 				var rotation_plane: Plane = Plane(rotation_basis, 0)
 				var rotation_axis: Vector3 = global_transform.basis.xform_inv(global_transform.basis[dof.primary_axis])
@@ -53,7 +58,7 @@ func _physics_process(delta):
 				if dof.rotation_linked_to_controller:
 					var holder_axis: Vector3 = rotation_plane.project(_holder.global_transform.basis[dof.linked_axis])
 					edge_axis = global_transform.basis[dof.secondary_axis]
-					holder_axial_rotation = edge_axis.signed_angle_to(holder_axis, rotation_basis)
+					holder_axial_rotation = -edge_axis.signed_angle_to(holder_axis, rotation_basis)
 				else:
 					var holder_displacement: Vector3 = global_transform.xform_inv(_holder.global_transform.origin)
 					holder_displacement[dof.primary_axis] = 0
@@ -61,7 +66,7 @@ func _physics_process(delta):
 				
 				holder_axial_rotation = _latch_within_dist(_prior_rotations[dof.primary_axis], holder_axial_rotation, dof.open_rom, dof.latch_dist, dof.open_latch_mode)
 				holder_axial_rotation = _latch_within_dist(_prior_rotations[dof.primary_axis], holder_axial_rotation, dof.close_rom, dof.latch_dist, dof.close_latch_mode)
-				holder_axial_rotation = _limit_speed(_prior_rotations[dof.primary_axis], holder_axial_rotation, dof.max_open_speed, dof.max_close_speed, delta)
+				holder_axial_rotation = _limit_speed(_prior_rotations[dof.primary_axis], holder_axial_rotation, dof.max_open_speed, dof.max_close_speed, delta, dof)
 				holder_axial_rotation = _limit_max_rom(_prior_rotations[dof.primary_axis], holder_axial_rotation, dof.close_rom, dof.open_rom)
 				
 				_emit_ticks(_prior_rotations[dof.primary_axis], holder_axial_rotation, dof.close_rom, dof.open_rom, dof.num_ticks)
@@ -108,7 +113,7 @@ func _physics_process(delta):
 				
 				retracted_axial_rotation = _latch_within_dist(_prior_rotations[dof.primary_axis], retracted_axial_rotation, dof.open_rom, dof.latch_dist, dof.open_latch_mode)
 				retracted_axial_rotation = _latch_within_dist(_prior_rotations[dof.primary_axis], retracted_axial_rotation, dof.close_rom, dof.latch_dist, dof.close_latch_mode)
-				retracted_axial_rotation = _limit_speed(_prior_rotations[dof.primary_axis], retracted_axial_rotation, dof.max_open_speed, dof.max_close_speed, delta)
+				retracted_axial_rotation = _limit_speed(_prior_rotations[dof.primary_axis], retracted_axial_rotation, dof.max_open_speed, dof.max_close_speed, delta, dof)
 				retracted_axial_rotation = _limit_max_rom(_prior_rotations[dof.primary_axis], retracted_axial_rotation, dof.close_rom, dof.open_rom)
 				
 				_emit_ticks(_prior_rotations[dof.primary_axis], retracted_axial_rotation, dof.close_rom, dof.open_rom, dof.num_ticks)
@@ -124,33 +129,39 @@ func _latch_within_dist(current_axial_displacement, holder_axial_displacement, r
 			holder_axial_displacement = current_axial_displacement
 	return holder_axial_displacement
 
-func _limit_speed(current_axial_displacement, holder_axial_displacement, max_open_speed, max_close_speed, delta) -> float:
+func _limit_speed(current_axial_displacement, holder_axial_displacement, max_open_speed, max_close_speed, delta, dof) -> float:
 	if max_open_speed > 0:
-		holder_axial_displacement = clamp(holder_axial_displacement, 
+		var clamp_result: ClampResult = clamp_with_result(holder_axial_displacement,
 			-INF,
 			current_axial_displacement+(max_open_speed * delta))
+		holder_axial_displacement = clamp_result.result
+		if clamp_result.bounds != ClampResult.Bounds.IN_RANGE:
+			_force_excesses[dof] = clamp_result.overflow
 	if max_close_speed > 0:
-		holder_axial_displacement = clamp(holder_axial_displacement, 
+		var clamp_result: ClampResult= clamp_with_result(holder_axial_displacement, 
 			current_axial_displacement-(max_close_speed * delta),
 			INF)
+		holder_axial_displacement = clamp_result.result
+		if clamp_result.bounds != ClampResult.Bounds.IN_RANGE:
+			_force_excesses[dof] = clamp_result.overflow
 	return holder_axial_displacement
 
 func _limit_max_rom(current_axial_displacement, holder_axial_displacement, close_rom, open_rom) -> float:
 	# just use a dictionary and state to do this, no computation of it
-	var clamp_result: Array = clamp_with_result(holder_axial_displacement, -close_rom, open_rom)
-	holder_axial_displacement = clamp_result.front()
-	match clamp_result.back():
-		-1:
+	var clamp_result: ClampResult = clamp_with_result(holder_axial_displacement, -close_rom, open_rom)
+	holder_axial_displacement = clamp_result.result
+	match clamp_result.bounds:
+		ClampResult.Bounds.LOWER_THAN_RANGE:
 			if !is_equal_approx(current_axial_displacement, -close_rom):
 				emit_signal("closed")
-		0:
+		ClampResult.Bounds.IN_RANGE:
 			if (is_equal_approx(current_axial_displacement, -close_rom)
 				or is_equal_approx(current_axial_displacement, open_rom)):
 #				print(current_axial_displacement)
 #				print(-close_rom)
 #				print(open_rom)
 				emit_signal("moving")
-		1:
+		ClampResult.Bounds.GREATER_THAN_RANGE:
 			if !is_equal_approx(current_axial_displacement, open_rom):
 				emit_signal("opened")
 	return holder_axial_displacement
@@ -169,16 +180,20 @@ func _grabbed(holder: Spatial):
 func _released():
 	_holder = null;
 
-func clamp_with_result(value: float, mini: float, maxi: float) -> Array:
-	var results: Array = []
-	results.append(clamp(value, mini, maxi))
+func clamp_with_result(value: float, mini: float, maxi: float) -> ClampResult:
+	var clamped_val: float = clamp(value, mini, maxi)
+	var bounds: int
+	var overflow: float
 	if value <= mini:
-		results.append(-1)
+		bounds = ClampResult.Bounds.LOWER_THAN_RANGE
+		overflow = abs(mini - value)
 	elif value >= maxi:
-		results.append(1)
+		bounds = ClampResult.Bounds.GREATER_THAN_RANGE
+		overflow = abs(value - maxi)
 	else:
-		results.append(0)
-	return results
+		bounds = ClampResult.Bounds.IN_RANGE
+		overflow = 0
+	return ClampResult.new(clamped_val, bounds, overflow)
 
 
 func _on_DOFBody_opened():
@@ -195,3 +210,20 @@ func _on_DOFBody_closed():
 
 func _on_DOFBody_tick():
 	print("tick")
+
+class ClampResult:
+	extends Reference
+	enum Bounds {
+		GREATER_THAN_RANGE,
+		LOWER_THAN_RANGE,
+		IN_RANGE
+	}
+	var result: float
+	var bounds: int
+	var overflow: float
+	
+	func _init(r, b, o):
+		result = r
+		bounds = b
+		overflow = o
+	
