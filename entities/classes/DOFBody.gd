@@ -148,6 +148,7 @@ func _limit_speed(current_axial_displacement, holder_axial_displacement, max_ope
 
 func _limit_max_rom(current_axial_displacement, holder_axial_displacement, close_rom, open_rom) -> float:
 	# just use a dictionary and state to do this, no computation of it
+	# FIXME: just use a dictionary and state to do this, no computation of it
 	var clamp_result: ClampResult = clamp_with_result(holder_axial_displacement, -close_rom, open_rom)
 	holder_axial_displacement = clamp_result.result
 	match clamp_result.bounds:
@@ -157,9 +158,6 @@ func _limit_max_rom(current_axial_displacement, holder_axial_displacement, close
 		ClampResult.Bounds.IN_RANGE:
 			if (is_equal_approx(current_axial_displacement, -close_rom)
 				or is_equal_approx(current_axial_displacement, open_rom)):
-#				print(current_axial_displacement)
-#				print(-close_rom)
-#				print(open_rom)
 				emit_signal("moving")
 		ClampResult.Bounds.GREATER_THAN_RANGE:
 			if !is_equal_approx(current_axial_displacement, open_rom):
@@ -169,6 +167,7 @@ func _limit_max_rom(current_axial_displacement, holder_axial_displacement, close
 func _emit_ticks(current_axial_displacement, holder_axial_displacement, close_rom, open_rom, num_ticks):
 	if num_ticks > 0:
 		var total_rom: float = open_rom + close_rom # This should be calculated in the resource to optimise
+		var total_rom: float = open_rom + close_rom # FIXME: This should be calculated in the resource to optimise
 		var tick_distance: float = total_rom / num_ticks
 		if floor(holder_axial_displacement / tick_distance) != floor(current_axial_displacement / tick_distance):
 			emit_signal("tick")
