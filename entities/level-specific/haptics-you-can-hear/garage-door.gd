@@ -23,7 +23,7 @@ func _ready():
 func _physics_process(delta):
 	
 	var prev_origin: Vector3 = global_transform.origin
-	global_transform.origin = fully_closed.origin.linear_interpolate(fully_open.origin, lever.rotation_percentage/100)
+	global_transform.origin = fully_closed.origin.linear_interpolate(fully_open.origin, lever.open_percentage[lever.dofs[0]])
 	
 	if prior_displacements.size() > 30:
 		prior_displacements.pop_back();
@@ -38,7 +38,7 @@ func _physics_process(delta):
 	
 	Wwise.set_rtpc_id(AK.GAME_PARAMETERS.PHYSICS_DOOR_VELOCITY, avg_velocity, self);
 	
-	if lever.open:
+	if lever.open_percentage[lever.dofs[0]] > 0.96:
 		set_physics_process(false)
 		Wwise.post_event_id(AK.EVENTS.FRICTION_DOOR_STOP, self)
 #		Wwise.post_trigger_id(AK.TRIGGERS.DOOR_OPEN, self)

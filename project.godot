@@ -24,15 +24,10 @@ _global_script_classes=[ {
 "language": "GDScript",
 "path": "res://addons/wwise/runtime/helpers/ak_utils.gd"
 }, {
-"base": "RigidBody",
-"class": "DOFBody",
-"language": "GDScript",
-"path": "res://entities/classes/DOFBody.gd"
-}, {
 "base": "Resource",
 "class": "DoF",
 "language": "GDScript",
-"path": "res://entities/classes/DOF.gd"
+"path": "res://addons/dofbody/DoF.gd"
 }, {
 "base": "",
 "class": "GitAPI",
@@ -59,53 +54,22 @@ _global_script_classes=[ {
 "language": "GDScript",
 "path": "res://entities/classes/Handle.gd"
 }, {
-"base": "RigidBody",
-"class": "HingedBodyInherited",
-"language": "GDScript",
-"path": "res://entities/classes/HingedBodyInherited.gd"
-}, {
 "base": "Area",
 "class": "InteractionArea",
 "language": "GDScript",
 "path": "res://entities/classes/InteractionArea.gd"
-}, {
-"base": "RigidBody",
-"class": "LimitedBody",
-"language": "GDScript",
-"path": "res://entities/classes/LimitedBody.gd"
-}, {
-"base": "RigidBody",
-"class": "RotatingBody",
-"language": "GDScript",
-"path": "res://entities/classes/HingedBody.gd"
-}, {
-"base": "RigidBody",
-"class": "SlidingBody",
-"language": "GDScript",
-"path": "res://entities/classes/SlidingBody.gd"
-}, {
-"base": "LimitedBody",
-"class": "SlidingBodyInherited",
-"language": "GDScript",
-"path": "res://entities/classes/SlidingBodyInherited.gd"
 } ]
 _global_script_class_icons={
 "AK": "",
 "AkEvent": "",
 "AkUtils": "",
-"DOFBody": "",
 "DoF": "",
 "GitAPI": "",
 "GrabbableBody": "",
 "Hammer": "",
 "Hand": "",
 "Handle": "",
-"HingedBodyInherited": "",
-"InteractionArea": "",
-"LimitedBody": "",
-"RotatingBody": "",
-"SlidingBody": "",
-"SlidingBodyInherited": ""
+"InteractionArea": ""
 }
 
 [application]
@@ -130,7 +94,7 @@ window/size/height=900
 
 [editor_plugins]
 
-enabled=PoolStringArray( "res://addons/destruction/plugin.cfg", "res://addons/godot-openvr/plugin.cfg", "res://addons/wwise/plugin.cfg" )
+enabled=PoolStringArray( "res://addons/destruction/plugin.cfg", "res://addons/dofbody/plugin.cfg", "res://addons/godot-openvr/plugin.cfg", "res://addons/wwise/plugin.cfg" )
 
 [gdnative]
 

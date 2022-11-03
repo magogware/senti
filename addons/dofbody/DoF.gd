@@ -34,18 +34,17 @@ var rotation_linked_to_controller: bool = false
 var open_rom: float = 0 setget _set_open_rom;
 var close_rom: float = 0 setget _set_close_rom;
 
-var retract_mode: int = RetractMode.NO_RETRACT# setget _set_retract_mode;
+var retract_mode: int = RetractMode.NO_RETRACT
 var retract_speed: float = 0 setget _set_retract_speed;
 
 var max_open_speed: float = 0 setget _set_max_open_speed;
 var max_close_speed: float = 0 setget _set_max_close_speed;
 
-var num_ticks: int = 0
+var num_ticks: int
 
 var latch_dist: float = 0 setget _set_latch_dist;
 var open_latch_mode: int = LatchMode.NEVER_LATCH
 var close_latch_mode: int = LatchMode.NEVER_LATCH
-#export(LatchMode) var open_latch_mode: int = LatchMode.NEVER_LATCH
 
 func _set_open_rom(val: float):
 	if !Engine.editor_hint and mode == DoFMode.ROTATION:
@@ -83,7 +82,6 @@ func _set_latch_dist(val: float):
 	else:
 		latch_dist = val
 
-# this now doesnt call setters and getters
 func _get_property_list() -> Array:
 	var properties: Array = []
 	properties.append({
@@ -92,15 +90,16 @@ func _get_property_list() -> Array:
 		"hint": PROPERTY_HINT_ENUM,
 		"hint_string": String(DoFMode.keys()).replace("[", "").replace("]", "")
 	})
+	var primary_axis_tip := "Translation axis" if mode != DoFMode.ROTATION else "Rotation axis"
 	properties.append({
-		"name": "Primary axis",
+		"name": primary_axis_tip,
 		"type": TYPE_INT,
 		"hint": PROPERTY_HINT_ENUM,
 		"hint_string": String(Axis.keys()).replace("[", "").replace("]", "")
 	})
 	if (mode == DoFMode.ROTATION):
 		properties.append({
-			"name": "Secondary axis",
+			"name": "Edge axis",
 			"type": TYPE_INT,
 			"hint": PROPERTY_HINT_ENUM,
 			"hint_string": String(Axis.keys()).replace("[", "").replace("]", "")
@@ -178,6 +177,10 @@ func _get_property_list() -> Array:
 			"name": "Latching distance",
 			"type": TYPE_REAL,
 		})
+	properties.append({
+		"name": "Number of ticks",
+		"type": TYPE_INT,
+	})
 
 	return properties
 
@@ -185,7 +188,7 @@ func _set(prop: String, val) -> bool:
 	match prop:
 		"Mode":
 			mode = val
-		"Primary axis":
+		"Translation axis", "Rotation axis":
 			primary_axis = val
 		"Edge axis":
 			secondary_axis = val
@@ -211,6 +214,8 @@ func _set(prop: String, val) -> bool:
 			close_latch_mode = val
 		"Latching distance":
 			_set_latch_dist(val)
+		"Number of ticks":
+			num_ticks = val
 	property_list_changed_notify()
 	return true
 
@@ -218,7 +223,7 @@ func _get(prop: String):
 	match prop:
 		"Mode":
 			return mode
-		"Primary axis":
+		"Translation axis", "Rotation axis":
 			return primary_axis
 		"Edge axis":
 			return secondary_axis
@@ -244,5 +249,7 @@ func _get(prop: String):
 			return close_latch_mode
 		"Latching distance":
 			return latch_dist
+		"Number of ticks":
+			return num_ticks
 		_:
 			return null
