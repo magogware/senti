@@ -4,6 +4,7 @@ var vel = Vector3()
 var dir = Vector3()
 
 var held_object: GrabbableBody = null
+var rotating = 0
 
 func _ready():
 	Input.set_mouse_mode(Input.MOUSE_MODE_CAPTURED)
@@ -13,6 +14,7 @@ func _physics_process(delta):
 	_process_movement(delta)
 	if held_object != null:
 		_process_object()
+	$RotationHelper/RightHand.rotate_z((PI/8)*delta*float(rotating))
 
 func _process_input(delta):
 	dir = Vector3()
@@ -97,13 +99,13 @@ func _input(event):
 	elif event.is_action_released("point"):
 		$RotationHelper/RightHand.change("OPEN")
 	elif event.is_action_pressed("rotate_cw"):
-		$RotationHelper/RightHand.rotating = -1;
+		rotating = -1;
 	elif event.is_action_released("rotate_cw"):
-		$RotationHelper/RightHand.rotating = 0;
+		rotating = 0;
 	elif event.is_action_pressed("rotate_ccw"):
-		$RotationHelper/RightHand.rotating = 1;
+		rotating = 1;
 	elif event.is_action_released("rotate_ccw"):
-		$RotationHelper/RightHand.rotating = 0;
+		rotating = 0;
 		
 func _grab_body(bodies_in_zone):
 	var grabbed_body

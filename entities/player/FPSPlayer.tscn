@@ -39,7 +39,7 @@ transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 2.03126, 0 )
 [node name="Camera" type="Camera" parent="RotationHelper"]
 
 [node name="RightHand" parent="RotationHelper" groups=["physics/player"] instance=ExtResource( 4 )]
-transform = Transform( 0.00031887, -0.999961, 0.00882596, -0.0361009, -0.00883172, -0.999309, 0.999348, 2.98023e-08, -0.0361023, 0.179199, 0, -0.412122 )
+transform = Transform( -0.0524069, -0.998049, 0.0339227, -0.114807, -0.0277229, -0.993001, 0.992004, -0.0559348, -0.11313, 0.179199, 0, -0.998474 )
 open_mesh = ExtResource( 3 )
 fist_mesh = ExtResource( 2 )
 point_mesh = SubResource( 4 )
