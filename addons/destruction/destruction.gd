@@ -18,8 +18,9 @@ const DestructionUtils = preload("res://addons/destruction/DestructionUtils.gd")
 
 func destroy() -> void:
 	var shards := DestructionUtils.create_shards(shard_scene.instance(), shard_template)
-	get_node(shard_container).add_child(shards)
-	shards.global_transform.origin = get_parent().global_transform.origin
+	var shard_container_node = get_node(shard_container)
+	shard_container_node.add_child(shards)
+	shards.global_transform.origin = shard_container_node.global_transform.origin
 	for shard in shards.get_children():
 		var shard_mesh = shard.get_node("MeshInstance")
 		if shard_mesh is MeshInstance:

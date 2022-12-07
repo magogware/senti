@@ -4,6 +4,7 @@ signal light_hammer_struck_thrice
 signal shatter
 
 var lever: Spatial = null
+var door_shards: Spatial = null
 const RANGE_OF_MOTION: float = 1.0
 var fully_open: Transform
 var fully_closed: Transform
@@ -22,6 +23,7 @@ func _ready():
 	prior_displacements.append(Vector3(0,0,0))
 
 	lever = get_node("../Lever/Rod")
+	door_shards = get_node("../DoorShards")
 
 	Wwise.register_game_obj(self, self.get_name())
 
@@ -39,6 +41,8 @@ func _physics_process(delta):
 	avg_velocity = avg_displacement.length();
 	avg_velocity /= delta;
 	avg_velocity /= prior_displacements.size();
+	
+	door_shards.global_transform.origin = $MeshInstance.global_transform.origin
 	
 	Wwise.set_rtpc_id(AK.GAME_PARAMETERS.PHYSICS_DOOR_VELOCITY, avg_velocity, self);
 	
