@@ -254,7 +254,7 @@ transform = Transform( -1, 0, -8.74228e-08, 0, 1, 0, 8.74228e-08, 0, -1, -1.421,
 [node name="Door" type="RigidBody" parent="Props" groups=["physics/map"]]
 collision_layer = 17
 collision_mask = 22
-mode = 1
+mode = 3
 contacts_reported = 4
 contact_monitor = true
 can_sleep = false
@@ -354,6 +354,9 @@ transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, -0.787357, 38.1433, -7.61324 )
 
 [connection signal="opened" from="Props/Lever/Rod" to="." method="_opened"]
 [connection signal="opened" from="Props/Lever/Rod" to="Props/Door" method="_opened"]
+[connection signal="opened" from="Props/Lever/Rod" to="Props/Door/Destruction" method="destroy"]
+[connection signal="light_hammer_struck_thrice" from="Props/Door" to="." method="_light_hammer_struck_thrice"]
+[connection signal="shatter" from="Props/Door" to="Props/Door/Destruction" method="destroy"]
 [connection signal="body_entered" from="Props/DoorCloseDetection" to="Props/Door" method="_delay_first_entry"]
 [connection signal="body_exited" from="Props/DoorCloseDetection" to="Props/Door" method="_start_lifting"]
 

@@ -1,0 +1,2 @@
+extends GrabbableBody
+class_name Hammer

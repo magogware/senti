@@ -1,5 +1,8 @@
 extends RigidBody
 
+signal light_hammer_struck_thrice
+signal shatter
+
 var lever: Spatial = null
 const RANGE_OF_MOTION: float = 1.0
 var fully_open: Transform
@@ -8,8 +11,9 @@ var fully_closed: Transform
 var avg_velocity: float = 0
 var prior_displacements: Array = []
 
-var _light_hits: int = 0;
-var _health: int = 100;
+var _hits: int = 0;
+var _prev_striking_hammer: Spatial = null
+var _heavy_hammer_unspawned: bool = true
 
 func _ready():
 	fully_closed = global_transform
@@ -38,23 +42,30 @@ func _physics_process(delta):
 	
 	Wwise.set_rtpc_id(AK.GAME_PARAMETERS.PHYSICS_DOOR_VELOCITY, avg_velocity, self);
 	
-func _opened():
-	set_physics_process(false)
+func _opened(_index):
 	Wwise.post_event_id(AK.EVENTS.FRICTION_DOOR_STOP, self)
 #	Wwise.post_trigger_id(AK.TRIGGERS.DOOR_OPEN, self)
 	connect("body_entered", self, "_struck")
+	emit_signal("shatter")
 
 func _struck(body):
-	pass
-#	if body is Hammer:
-#		if body.type == Hammer.Type.HAMMER_LIGHT:
-#			_light_hits = _light_hits + 1;
-#			if _light_hits > 2:
-#				pass
-##				_spawn_heavy_hammer()
-#		_health -= body.damage;
-#		if _health <= 0:
-#			$Destruction.destroy()
+#	_hits += 1
+#	if _heavy_hammer_unspawned and _hits > 3:
+#		emit_signal("light_hammer_struck_thrice")
+#		_heavy_hammer_unspawned = false
+#		_hits = 0
+	if body is Hammer:
+		if body == _prev_striking_hammer:
+			_hits += 1
+			if _heavy_hammer_unspawned and _hits > 3:
+				emit_signal("light_hammer_struck_thrice")
+				_heavy_hammer_unspawned = false
+				_hits = 0
+			if _hits > 5:
+				emit_signal("shatter")
+		else:
+			_prev_striking_hammer = body
+			_hits = 0
 
 func _start_lifting(_body):
 	Wwise.post_event_id(AK.EVENTS.FRICTION_DOOR_START, self);
@@ -66,11 +77,3 @@ func _end_lifting(_body):
 func _delay_first_entry(body):
 	get_node("../door-close-detection").disconnect("body_entered", self, "_delay_first_entry");
 	get_node("../door-close-detection").connect("body_entered", self, "_end_lifting");
-
-#func _spawn_heavy_hammer():
-#	var parent: Spatial = get_parent()
-#	var pos: Position3D = get_node("../hammer-spawn")
-#	var heavy_hammer_scene: PackedScene = preload("res://entities/level-specific/heavy-hammer.tscn")
-#	var heavy_hammer: Spatial = heavy_hammer_scene.instance()
-#	heavy_hammer.global_transform.origin = pos.global_transform.origin
-#	parent.add_child(heavy_hammer, true)
