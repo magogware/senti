@@ -45,15 +45,16 @@ func _opened():
 	connect("body_entered", self, "_struck")
 
 func _struck(body):
-	if body is Hammer:
-		if body.type == Hammer.Type.HAMMER_LIGHT:
-			_light_hits = _light_hits + 1;
-			if _light_hits > 2:
-				pass
-#				_spawn_heavy_hammer()
-		_health -= body.damage;
-		if _health <= 0:
-			$Destruction.destroy()
+	pass
+#	if body is Hammer:
+#		if body.type == Hammer.Type.HAMMER_LIGHT:
+#			_light_hits = _light_hits + 1;
+#			if _light_hits > 2:
+#				pass
+##				_spawn_heavy_hammer()
+#		_health -= body.damage;
+#		if _health <= 0:
+#			$Destruction.destroy()
 
 func _start_lifting(_body):
 	Wwise.post_event_id(AK.EVENTS.FRICTION_DOOR_START, self);

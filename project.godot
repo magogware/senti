@@ -40,11 +40,6 @@ _global_script_classes=[ {
 "path": "res://entities/classes/GrabbableBody.gd"
 }, {
 "base": "GrabbableBody",
-"class": "Hammer",
-"language": "GDScript",
-"path": "res://entities/level-specific/hammer.gd"
-}, {
-"base": "GrabbableBody",
 "class": "Handle",
 "language": "GDScript",
 "path": "res://entities/classes/Handle.gd"
@@ -53,6 +48,11 @@ _global_script_classes=[ {
 "class": "InteractableBody",
 "language": "GDScript",
 "path": "res://entities/classes/InteractableBody.gd"
+}, {
+"base": "RigidBody",
+"class": "Surface",
+"language": "GDScript",
+"path": "res://entities/classes/surface.gd"
 } ]
 _global_script_class_icons={
 "AK": "",
@@ -61,9 +61,9 @@ _global_script_class_icons={
 "DoFBody": "",
 "GitAPI": "",
 "GrabbableBody": "",
-"Hammer": "",
 "Handle": "",
-"InteractableBody": ""
+"InteractableBody": "",
+"Surface": ""
 }
 
 [application]
