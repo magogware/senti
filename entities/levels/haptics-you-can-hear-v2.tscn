@@ -1,20 +1,35 @@
-[gd_scene load_steps=38 format=2]
+[gd_scene load_steps=35 format=2]
 
-[ext_resource path="res://entities/interactables/lever/lever-2.tscn" type="PackedScene" id=1]
-[ext_resource path="res://entities/level-specific/garage-door.gd" type="Script" id=2]
+[ext_resource path="res://entities/level-specific/haptics-you-can-hear/lever-2.tscn" type="PackedScene" id=1]
+[ext_resource path="res://entities/level-specific/haptics-you-can-hear/garage-door.gd" type="Script" id=2]
 [ext_resource path="res://addons/destruction/destruction.gd" type="Script" id=3]
 [ext_resource path="res://assets/dither-materials/haptics-you-can-hear/wall.tres" type="Material" id=4]
-[ext_resource path="res://entities/level-specific/door-fracture-2.tscn" type="PackedScene" id=5]
+[ext_resource path="res://entities/level-specific/haptics-you-can-hear/door-fracture-2.tscn" type="PackedScene" id=5]
 [ext_resource path="res://addons/wwise/runtime/nodes/ak_bank.gd" type="Script" id=6]
 [ext_resource path="res://assets/dither-materials/haptics-you-can-hear/interactables.tres" type="Material" id=7]
 [ext_resource path="res://assets/shaders/per-object-dither/first-pass.shader" type="Shader" id=8]
 [ext_resource path="res://assets/shaders/per-object-dither/per-object-dither.shader" type="Shader" id=9]
 [ext_resource path="res://assets/shaders/per-object-dither/blue_noise.png" type="Texture" id=10]
-[ext_resource path="res://entities/levels/door-close-detection.gd" type="Script" id=11]
+[ext_resource path="res://entities/classes/GrabbableBody.gd" type="Script" id=11]
 [ext_resource path="res://entities/levels/haptics-you-can-hear-v2.gd" type="Script" id=12]
 [ext_resource path="res://assets/dither-materials/haptics-you-can-hear/ground.tres" type="Material" id=13]
-[ext_resource path="res://addons/wwise/runtime/nodes/ak_event.gd" type="Script" id=14]
-[ext_resource path="res://entities/classes/GrabbableBody.gd" type="Script" id=15]
+
+[sub_resource type="ProceduralSky" id=10]
+sky_top_color = Color( 0.894118, 1, 0.882353, 1 )
+sky_horizon_color = Color( 0.894118, 1, 0.882353, 1 )
+ground_bottom_color = Color( 0.941176, 0.658824, 0.407843, 1 )
+ground_horizon_color = Color( 1, 0.909804, 0.760784, 1 )
+
+[sub_resource type="Environment" id=30]
+background_mode = 1
+background_sky = SubResource( 10 )
+background_color = Color( 0.0745098, 0.0117647, 0.0117647, 1 )
+ambient_light_color = Color( 1, 1, 1, 1 )
+fog_color = Color( 0, 0, 0, 1 )
+fog_sun_color = Color( 0, 0, 0, 1 )
+fog_depth_enabled = false
+fog_height_min = 1.0
+fog_height_max = 10.0
 
 [sub_resource type="ConcavePolygonShape" id=26]
 data = PoolVector3Array( -8.4923, 0, 0, -5, 59.7759, -25, -5, 1, -25, -8.4923, 0, 0, -8.4923, 60.2241, 0, -5, 59.7759, -25, -8.4923, 0, 0, -19.8038, 60, 0, -8.4923, 60.2241, 0, -8.4923, 0, 0, -19.8038, -0.9375, 0, -19.8038, 60, 0, -8.4923, 0, 0, 0, 1, -25, 0, 0, 0, -8.4923, 0, 0, -5, 1, -25, 0, 1, -25, 8.4923, 0, 0, 5, 59.7759, -25, 8.4923, 60.2241, 0, 8.4923, 0, 0, 5, 1, -25, 5, 59.7759, -25, 8.4923, 0, 0, 19.8038, 60, 0, 19.8038, -1, 0, 8.4923, 0, 0, 8.4923, 60.2241, 0, 19.8038, 60, 0, 8.4923, 0, 0, 0, 1, -25, 5, 1, -25, 8.4923, 0, 0, 0, 0, 0, 0, 1, -25, -8.4923, 0, 0, -19.8038, -0.9375, 5, -19.8038, -0.9375, 0, -8.4923, 0, 0, -8.4923, -0.5, 5, -19.8038, -0.9375, 5, 8.4923, 0, 0, 0, -0.5, 5, 0, 0, 0, 8.4923, 0, 0, 8.4923, -0.5, 5, 0, -0.5, 5, 0, 0, 0, -8.4923, -0.5, 5, -8.4923, 0, 0, 0, 0, 0, 0, -0.5, 5, -8.4923, -0.5, 5, 19.8038, -1, 0, 8.4923, -0.5, 5, 8.4923, 0, 0, 19.8038, -1, 0, 19.8038, -1.4375, 5, 8.4923, -0.5, 5, 8.4923, -0.5, 5, 0, -0.9375, 10, 0, -0.5, 5, 8.4923, -0.5, 5, 8.4923, -0.9375, 10, 0, -0.9375, 10, 0, -0.5, 5, -8.4923, -0.9375, 10, -8.4923, -0.5, 5, 0, -0.5, 5, 0, -0.9375, 10, -8.4923, -0.9375, 10, 19.8038, -1.4375, 5, 8.4923, -0.9375, 10, 8.4923, -0.5, 5, 19.8038, -1.4375, 5, 19.8038, -0.9375, 10, 8.4923, -0.9375, 10, -8.4923, -0.5, 5, -19.8038, -0.9375, 10, -19.8038, -0.9375, 5, -8.4923, -0.5, 5, -8.4923, -0.9375, 10, -19.8038, -0.9375, 10, -19.8038, -0.9375, 0, -49.8038, 60, 0, -19.8038, 60, 0, -19.8038, -0.9375, 0, -49.8038, -0.9375, 0, -49.8038, 60, 0, 19.8038, 60, 0, 49.8038, -1, 0, 19.8038, -1, 0, 19.8038, 60, 0, 49.8038, 60, 0, 49.8038, -1, 0 )
@@ -82,9 +97,11 @@ shader_param/u_bit_depth = 48
 shader_param/u_contrast = 1.0
 shader_param/u_offset = 0.0
 shader_param/u_dither_size = 1
+shader_param/u_ground_enabled = true
 shader_param/u_min_ground_height = 1.0
 shader_param/u_max_ground_height = -5.0
 shader_param/u_ground_color = Color( 1, 1, 1, 1 )
+shader_param/u_fog_enabled = true
 shader_param/u_min_fog_height = 5.0
 shader_param/u_max_fog_height = 10.0
 shader_param/u_fog_color = Color( 0, 0, 0, 0 )
@@ -173,186 +190,10 @@ points = PoolVector3Array( -0.0830928, 0.168703, 0.0301664, -0.0969444, 0.012232
 [sub_resource type="ConvexPolygonShape" id=43]
 points = PoolVector3Array( -0.110539, -0.00213913, -0.198939, 0.11193, 0.0149722, 0.198939, 0.0912, 0.0188415, 0.154261, 0.11193, -0.00213913, -0.198939, -0.110539, -0.00213913, 0.198939, -0.0912, 0.019002, -0.156669, 0.11193, 0.0149722, -0.198939, 0.11193, -0.00213913, 0.198939, -0.110539, 0.0149722, 0.198939, -0.110539, 0.0149722, -0.198939, -0.0912, 0.019002, 0.156669, 0.0912, 0.0188415, -0.154261 )
 
-[sub_resource type="ProceduralSky" id=10]
-sky_top_color = Color( 0.894118, 1, 0.882353, 1 )
-sky_horizon_color = Color( 0.894118, 1, 0.882353, 1 )
-ground_bottom_color = Color( 0.941176, 0.658824, 0.407843, 1 )
-ground_horizon_color = Color( 1, 0.909804, 0.760784, 1 )
+[sub_resource type="BoxShape" id=29]
 
-[sub_resource type="Environment" id=30]
-background_mode = 1
-background_sky = SubResource( 10 )
-background_color = Color( 0.0745098, 0.0117647, 0.0117647, 1 )
-ambient_light_color = Color( 1, 1, 1, 1 )
-fog_color = Color( 0, 0, 0, 1 )
-fog_sun_color = Color( 0, 0, 0, 1 )
-fog_depth_enabled = false
-fog_height_min = 1.0
-fog_height_max = 10.0
-
-[sub_resource type="ConvexPolygonShape" id=52]
-resource_name = "Plane002"
-points = PoolVector3Array( -5, -1.69139, 0, 5, -1.69139, 0, -5, -1.69139, 0.0613794, 5, -1.69139, 0.0613794, 5, 1.69139, 0, -5, 1.69139, 0, 5, 1.69139, 0.0613794, -5, 1.69139, 0.0613794 )
-
-[sub_resource type="ArrayMesh" id=53]
-resource_name = "Plane002"
-surfaces/0 = {
-"aabb": AABB( -5, 0, -1.69139, 10, 0.0613794, 3.38279 ),
-"array_data": PoolByteArray( 0, 0, 160, 192, 0, 0, 0, 0, 120, 127, 216, 63, 0, 0, 127, 193, 0, 0, 0, 0, 0, 0, 160, 64, 0, 0, 0, 0, 120, 127, 216, 63, 0, 0, 127, 193, 0, 60, 0, 0, 0, 0, 160, 64, 247, 104, 123, 61, 120, 127, 216, 63, 0, 0, 127, 193, 0, 60, 0, 0, 0, 0, 160, 192, 247, 104, 123, 61, 120, 127, 216, 63, 0, 0, 127, 193, 0, 0, 0, 0, 0, 0, 160, 192, 0, 0, 0, 0, 120, 127, 216, 191, 127, 127, 127, 193, 0, 0, 0, 0, 0, 0, 160, 192, 247, 104, 123, 61, 120, 127, 216, 191, 127, 127, 127, 193, 0, 0, 0, 0, 0, 0, 160, 64, 247, 104, 123, 61, 120, 127, 216, 191, 127, 127, 127, 193, 0, 60, 0, 0, 0, 0, 160, 64, 0, 0, 0, 0, 120, 127, 216, 191, 127, 127, 127, 193, 0, 60, 0, 0, 0, 0, 160, 64, 0, 0, 0, 0, 120, 127, 216, 63, 127, 0, 127, 193, 0, 60, 0, 0, 0, 0, 160, 64, 0, 0, 0, 0, 120, 127, 216, 191, 127, 0, 127, 193, 0, 60, 0, 0, 0, 0, 160, 64, 247, 104, 123, 61, 120, 127, 216, 191, 127, 0, 127, 193, 0, 60, 0, 0, 0, 0, 160, 64, 247, 104, 123, 61, 120, 127, 216, 63, 127, 0, 127, 193, 0, 60, 0, 0, 0, 0, 160, 64, 247, 104, 123, 61, 120, 127, 216, 63, 0, 127, 127, 193, 0, 60, 0, 0, 0, 0, 160, 64, 247, 104, 123, 61, 120, 127, 216, 191, 0, 127, 127, 193, 0, 60, 0, 0, 0, 0, 160, 192, 247, 104, 123, 61, 120, 127, 216, 191, 0, 127, 127, 193, 0, 0, 0, 0, 0, 0, 160, 192, 247, 104, 123, 61, 120, 127, 216, 63, 0, 127, 127, 193, 0, 0, 0, 0, 0, 0, 160, 192, 247, 104, 123, 61, 120, 127, 216, 63, 130, 0, 127, 193, 0, 0, 0, 0, 0, 0, 160, 192, 247, 104, 123, 61, 120, 127, 216, 191, 130, 0, 127, 193, 0, 0, 0, 0, 0, 0, 160, 192, 0, 0, 0, 0, 120, 127, 216, 191, 130, 0, 127, 193, 0, 0, 0, 0, 0, 0, 160, 192, 0, 0, 0, 0, 120, 127, 216, 63, 130, 0, 127, 193, 0, 0, 0, 0, 0, 0, 160, 192, 0, 0, 0, 0, 120, 127, 216, 63, 0, 129, 127, 193, 0, 0, 0, 0, 0, 0, 160, 192, 0, 0, 0, 0, 120, 127, 216, 191, 0, 129, 127, 193, 0, 0, 0, 0, 0, 0, 160, 64, 0, 0, 0, 0, 120, 127, 216, 191, 0, 129, 127, 193, 0, 60, 0, 0, 0, 0, 160, 64, 0, 0, 0, 0, 120, 127, 216, 63, 0, 129, 127, 193, 0, 60, 0, 0 ),
-"array_index_data": PoolByteArray( 0, 0, 2, 0, 1, 0, 0, 0, 3, 0, 2, 0, 4, 0, 6, 0, 5, 0, 4, 0, 7, 0, 6, 0, 8, 0, 10, 0, 9, 0, 8, 0, 11, 0, 10, 0, 12, 0, 14, 0, 13, 0, 12, 0, 15, 0, 14, 0, 16, 0, 18, 0, 17, 0, 16, 0, 19, 0, 18, 0, 20, 0, 22, 0, 21, 0, 20, 0, 23, 0, 22, 0 ),
-"blend_shape_data": [  ],
-"format": 2194711,
-"index_count": 36,
-"primitive": 4,
-"skeleton_aabb": [  ],
-"vertex_count": 24
-}
-
-[node name="haptics-you-can-hear-v2" type="Spatial"]
+[node name="HapticsYouCanHear" type="Spatial"]
 script = ExtResource( 12 )
-
-[node name="map" type="StaticBody" parent="." groups=["physics/map"]]
-collision_mask = 7
-
-[node name="CollisionShape" type="CollisionShape" parent="map"]
-shape = SubResource( 26 )
-
-[node name="map" type="MeshInstance" parent="map"]
-mesh = SubResource( 44 )
-material/0 = ExtResource( 4 )
-material/1 = ExtResource( 13 )
-
-[node name="boundary" type="StaticBody" parent="." groups=["physics/map"]]
-collision_mask = 7
-
-[node name="boundary" type="MeshInstance" parent="boundary"]
-visible = false
-mesh = SubResource( 25 )
-skeleton = NodePath("../..")
-material/0 = null
-
-[node name="CollisionShape" type="CollisionShape" parent="boundary"]
-shape = SubResource( 27 )
-
-[node name="ocean" type="MeshInstance" parent="."]
-visible = false
-mesh = SubResource( 24 )
-material/0 = SubResource( 31 )
-
-[node name="door" type="RigidBody" parent="." groups=["physics/moving-map"]]
-collision_layer = 17
-collision_mask = 22
-mode = 1
-contacts_reported = 4
-contact_monitor = true
-can_sleep = false
-script = ExtResource( 2 )
-
-[node name="door" type="MeshInstance" parent="door"]
-transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1, -26.6914 )
-mesh = SubResource( 50 )
-skeleton = NodePath("../..")
-material/0 = ExtResource( 7 )
-
-[node name="CollisionShape" type="CollisionShape" parent="door"]
-transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1, -26.6914 )
-shape = SubResource( 37 )
-
-[node name="Destruction" type="Node" parent="door"]
-script = ExtResource( 3 )
-shard_scene = ExtResource( 5 )
-shard_container = NodePath("../../shards")
-shard_material = ExtResource( 7 )
-
-[node name="friction" type="Spatial" parent="door"]
-script = ExtResource( 14 )
-event = {
-"Id": 2986304931,
-"Name": "FRICTION DOOR START"
-}
-trigger_on = 7
-stop_on = 6
-
-[node name="impact" type="Spatial" parent="door"]
-script = ExtResource( 14 )
-event = {
-"Id": 2826139286,
-"Name": "IMPACT DOOR"
-}
-trigger_on = 6
-is_environment_aware = true
-
-[node name="lever" parent="." instance=ExtResource( 1 )]
-transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, -1.421, 0.896, -22.137 )
-
-[node name="broken-lever" type="Spatial" parent="."]
-
-[node name="broken-rod-lower" type="StaticBody" parent="broken-lever" groups=["physics/map"]]
-transform = Transform( 1.27759, 0, 0, 0, 1.27759, 0, 0, 0, 1.27759, 1.9, 0.89552, -22.1365 )
-collision_mask = 6
-
-[node name="broken-rod-lower" type="MeshInstance" parent="broken-lever/broken-rod-lower"]
-transform = Transform( 0.782721, 0, 0, 0, 0.444713, 0, 0, 0, 0.782721, 0, 0, 0 )
-mesh = SubResource( 2 )
-skeleton = NodePath("../../broken-lever/broken-lever")
-material/0 = ExtResource( 7 )
-
-[node name="CollisionShape" type="CollisionShape" parent="broken-lever/broken-rod-lower"]
-transform = Transform( 0.782721, 0, 0, 0, 0.444713, 0, 0, 0, 0.782721, 0, 0, 0 )
-shape = SubResource( 38 )
-
-[node name="broken-rod-upper" type="RigidBody" parent="broken-lever" groups=["physics/grabbables"]]
-transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, 1.9, 0.89552, -22.1365 )
-collision_mask = 6
-continuous_cd = true
-contacts_reported = 4
-contact_monitor = true
-can_sleep = false
-script = ExtResource( 15 )
-
-[node name="broken-rod-upper" type="MeshInstance" parent="broken-lever/broken-rod-upper"]
-transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.662699, 0 )
-mesh = SubResource( 3 )
-skeleton = NodePath("../../broken-lever/broken-lever")
-material/0 = ExtResource( 7 )
-
-[node name="CollisionShape2" type="CollisionShape" parent="broken-lever/broken-rod-upper"]
-transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.662699, 0 )
-shape = SubResource( 39 )
-
-[node name="CollisionShape" type="CollisionShape" parent="broken-lever/broken-rod-upper"]
-transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.662699, 0 )
-shape = SubResource( 40 )
-
-[node name="broken-lever" type="StaticBody" parent="broken-lever" groups=["physics/map"]]
-collision_mask = 6
-
-[node name="broken-lever" type="MeshInstance" parent="broken-lever/broken-lever"]
-transform = Transform( 1.27759, 0, 0, 0, 1.27759, 0, 0, 0, 1.27759, 1.9, 0.89552, -22.1365 )
-mesh = SubResource( 1 )
-skeleton = NodePath("../../..")
-material/0 = ExtResource( 7 )
-
-[node name="CollisionShape3" type="CollisionShape" parent="broken-lever/broken-lever"]
-transform = Transform( 1.27759, 0, 0, 0, 1.27759, 0, 0, 0, 1.27759, 1.9, 0.89552, -22.1365 )
-shape = SubResource( 41 )
-
-[node name="CollisionShape2" type="CollisionShape" parent="broken-lever/broken-lever"]
-transform = Transform( 1.27759, 0, 0, 0, 1.27759, 0, 0, 0, 1.27759, 1.9, 0.89552, -22.1365 )
-shape = SubResource( 42 )
-
-[node name="CollisionShape" type="CollisionShape" parent="broken-lever/broken-lever"]
-transform = Transform( 1.27759, 0, 0, 0, 1.27759, 0, 0, 0, 1.27759, 1.9, 0.89552, -22.1365 )
-shape = SubResource( 43 )
-
-[node name="shards" type="Spatial" parent="."]
-transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1, -26.691 )
-
-[node name="hammer-spawn" type="Position3D" parent="."]
-transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, -0.787357, 38.1433, -7.61324 )
-
-[node name="env" type="WorldEnvironment" parent="."]
-environment = SubResource( 30 )
 
 [node name="AkBank" type="Node" parent="."]
 script = ExtResource( 6 )
@@ -362,24 +203,158 @@ bank = {
 }
 load_on = 3
 
-[node name="DirectionalLight" type="DirectionalLight" parent="."]
+[node name="Env" type="Node" parent="."]
+
+[node name="WorldEnvironment" type="WorldEnvironment" parent="Env"]
+environment = SubResource( 30 )
+
+[node name="DirectionalLight" type="DirectionalLight" parent="Env"]
 transform = Transform( 1, 0, 0, 0, 0.305546, 0.952177, 0, -0.952177, 0.305546, 0, 65.501, 56.2151 )
 
-[node name="door-close-detection" type="Area" parent="." groups=["physics/moving-map"]]
-transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.84, -26.691 )
-linear_damp = 0.04
-script = ExtResource( 11 )
+[node name="Map" type="Node" parent="."]
 
-[node name="door-closeCollision" type="CollisionShape" parent="door-close-detection"]
-transform = Transform( 1, 0, 0, 0, -4.37114e-08, 1, 0, -1, -4.37114e-08, 0, 0, 0 )
-shape = SubResource( 52 )
+[node name="Walls" type="RigidBody" parent="Map" groups=["physics/map"]]
+collision_mask = 7
+mode = 1
 
-[node name="door-close" type="MeshInstance" parent="door-close-detection/door-closeCollision"]
-transform = Transform( 1, 0, 0, 0, -4.37114e-08, -1, 0, 1, -4.37114e-08, 0, 0, 0 )
+[node name="CollisionShape" type="CollisionShape" parent="Map/Walls"]
+shape = SubResource( 26 )
+
+[node name="MeshInstance" type="MeshInstance" parent="Map/Walls"]
+mesh = SubResource( 44 )
+material/0 = ExtResource( 4 )
+material/1 = ExtResource( 13 )
+
+[node name="Boundary" type="RigidBody" parent="Map" groups=["physics/map"]]
+collision_mask = 7
+mode = 1
+
+[node name="MeshInstance" type="MeshInstance" parent="Map/Boundary"]
 visible = false
-mesh = SubResource( 53 )
+mesh = SubResource( 25 )
+skeleton = NodePath("../../..")
 material/0 = null
 
-[connection signal="body_entered" from="door-close-detection" to="door-close-detection" method="_prevent_first_entry"]
-[connection signal="body_exited" from="door-close-detection" to="door/friction" method="_on_body_exited"]
-[connection signal="body_exited" from="door-close-detection" to="door/impact" method="_on_body_exited"]
+[node name="CollisionShape" type="CollisionShape" parent="Map/Boundary"]
+shape = SubResource( 27 )
+
+[node name="Ocean" type="MeshInstance" parent="Map"]
+visible = false
+mesh = SubResource( 24 )
+skeleton = NodePath("../..")
+material/0 = SubResource( 31 )
+
+[node name="Props" type="Node" parent="."]
+
+[node name="Lever" parent="Props" instance=ExtResource( 1 )]
+transform = Transform( -1, 0, -8.74228e-08, 0, 1, 0, 8.74228e-08, 0, -1, -1.421, 0.896, -22.137 )
+
+[node name="Door" type="RigidBody" parent="Props" groups=["physics/map"]]
+collision_layer = 17
+collision_mask = 22
+mode = 1
+contacts_reported = 4
+contact_monitor = true
+can_sleep = false
+script = ExtResource( 2 )
+
+[node name="MeshInstance" type="MeshInstance" parent="Props/Door"]
+transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1, -26.6914 )
+mesh = SubResource( 50 )
+skeleton = NodePath("../../..")
+material/0 = ExtResource( 7 )
+
+[node name="CollisionShape" type="CollisionShape" parent="Props/Door"]
+transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1, -26.6914 )
+shape = SubResource( 37 )
+
+[node name="Destruction" type="Node" parent="Props/Door"]
+script = ExtResource( 3 )
+shard_scene = ExtResource( 5 )
+shard_container = NodePath("../../DoorShards")
+shard_material = ExtResource( 7 )
+
+[node name="BrokenLever" type="Spatial" parent="Props"]
+
+[node name="BrokenRodShaft" type="RigidBody" parent="Props/BrokenLever" groups=["physics/map"]]
+transform = Transform( 1.27759, 0, 0, 0, 1.27759, 0, 0, 0, 1.27759, 1.9, 0.89552, -22.1365 )
+collision_mask = 6
+mode = 1
+
+[node name="MeshInstance" type="MeshInstance" parent="Props/BrokenLever/BrokenRodShaft"]
+transform = Transform( 0.782721, 0, 0, 0, 0.444713, 0, 0, 0, 0.782721, 0, 0, 0 )
+mesh = SubResource( 2 )
+skeleton = NodePath("../../BrokenRodBase/MeshInstance")
+material/0 = ExtResource( 7 )
+
+[node name="CollisionShape" type="CollisionShape" parent="Props/BrokenLever/BrokenRodShaft"]
+transform = Transform( 0.782721, 0, 0, 0, 0.444713, 0, 0, 0, 0.782721, 0, 0, 0 )
+shape = SubResource( 38 )
+
+[node name="BrokenRodLever" type="RigidBody" parent="Props/BrokenLever" groups=["physics/grabbables"]]
+transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, 1.9, 0.89552, -22.1365 )
+collision_mask = 6
+contacts_reported = 4
+contact_monitor = true
+can_sleep = false
+script = ExtResource( 11 )
+
+[node name="MeshInstance" type="MeshInstance" parent="Props/BrokenLever/BrokenRodLever"]
+transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.662699, 0 )
+mesh = SubResource( 3 )
+skeleton = NodePath("../../BrokenRodBase/MeshInstance")
+material/0 = ExtResource( 7 )
+
+[node name="CollisionShape2" type="CollisionShape" parent="Props/BrokenLever/BrokenRodLever"]
+transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.662699, 0 )
+shape = SubResource( 39 )
+
+[node name="CollisionShape" type="CollisionShape" parent="Props/BrokenLever/BrokenRodLever"]
+transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.662699, 0 )
+shape = SubResource( 40 )
+
+[node name="BrokenRodBase" type="RigidBody" parent="Props/BrokenLever" groups=["physics/map"]]
+collision_mask = 6
+mode = 1
+
+[node name="MeshInstance" type="MeshInstance" parent="Props/BrokenLever/BrokenRodBase"]
+transform = Transform( 1.27759, 0, 0, 0, 1.27759, 0, 0, 0, 1.27759, 1.9, 0.89552, -22.1365 )
+mesh = SubResource( 1 )
+skeleton = NodePath("../../../..")
+material/0 = ExtResource( 7 )
+
+[node name="CollisionShape3" type="CollisionShape" parent="Props/BrokenLever/BrokenRodBase"]
+transform = Transform( 1.27759, 0, 0, 0, 1.27759, 0, 0, 0, 1.27759, 1.9, 0.89552, -22.1365 )
+shape = SubResource( 41 )
+
+[node name="CollisionShape2" type="CollisionShape" parent="Props/BrokenLever/BrokenRodBase"]
+transform = Transform( 1.27759, 0, 0, 0, 1.27759, 0, 0, 0, 1.27759, 1.9, 0.89552, -22.1365 )
+shape = SubResource( 42 )
+
+[node name="CollisionShape" type="CollisionShape" parent="Props/BrokenLever/BrokenRodBase"]
+transform = Transform( 1.27759, 0, 0, 0, 1.27759, 0, 0, 0, 1.27759, 1.9, 0.89552, -22.1365 )
+shape = SubResource( 43 )
+
+[node name="DoorShards" type="Spatial" parent="Props"]
+transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1, -26.691 )
+
+[node name="DoorCloseDetection" type="Area" parent="Props" groups=["physics/moving-map"]]
+transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -27.8605 )
+collision_layer = 16
+collision_mask = 16
+
+[node name="CollisionShape" type="CollisionShape" parent="Props/DoorCloseDetection"]
+transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, 20.9327, -0.0261708, -46.211 )
+shape = SubResource( 29 )
+
+[node name="HammerSpawn" type="Position3D" parent="Props"]
+transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, -0.787357, 38.1433, -7.61324 )
+
+[connection signal="opened" from="Props/Lever/Rod" to="." method="_opened"]
+[connection signal="opened" from="Props/Lever/Rod" to="Props/Door" method="_opened"]
+[connection signal="grabbed" from="Props/Lever/Rod/Knob" to="Props/Lever/Rod" method="grabbed"]
+[connection signal="released" from="Props/Lever/Rod/Knob" to="Props/Lever/Rod" method="released"]
+[connection signal="body_entered" from="Props/DoorCloseDetection" to="Props/Door" method="_delay_first_entry"]
+[connection signal="body_exited" from="Props/DoorCloseDetection" to="Props/Door" method="_start_lifting"]
+
+[editable path="Props/Lever"]
