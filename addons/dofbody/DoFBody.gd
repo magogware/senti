@@ -191,6 +191,7 @@ func _emit_ticks(current_axial_displacement, holder_axial_displacement, close_ro
 
 func _grabbed(holder: Spatial):
 	_holder = holder;
+	print("Holy cockola")
 #	_holder_transform_at_grab = _holder.global_transform
 
 func _released():
