@@ -5,14 +5,16 @@ enum CollisionLayer {
 	LAYER_MOVING_MAP
 	LAYER_GRABBABLES
 	LAYER_PLAYER
-	LAYER_GRABBER
+	LAYER_GRABBER,
+	LAYER_DETECT
 };
 
 const groups: Array = ["physics/map",
 	"physics/moving-map",
 	"physics/grabbables",
 	"physics/player",
-	"physics/grabber"] ;
+	"physics/grabber"]#,
+#	"physics/player-detect"] ;
 
 func set_collisions(tree: SceneTree):
 	for group in groups:
@@ -43,10 +45,14 @@ func set_collision(group: String, node: Node):
 				_set_layer(node, CollisionLayer.LAYER_PLAYER)
 				_set_mask(node, [CollisionLayer.LAYER_MAP,
 					CollisionLayer.LAYER_MOVING_MAP,
-					CollisionLayer.LAYER_GRABBABLES])
+					CollisionLayer.LAYER_GRABBABLES,
+					CollisionLayer.LAYER_DETECT])
 			"physics/grabber":
 				_set_layer(node, CollisionLayer.LAYER_GRABBER)
 				_set_mask(node, [CollisionLayer.LAYER_GRABBABLES])
+#			"physics/player-detect":
+#				_set_layer(node, CollisionLayer.LAYER_DETECT)
+#				_set_mask(node, [CollisionLayer.LAYER_PLAYER])
 				
 		#print(str(node.get_path()) + " layer: " + str(node.collision_layer) + ", mask: " + str(node.collision_mask))
 		

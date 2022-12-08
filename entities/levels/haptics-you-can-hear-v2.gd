@@ -31,3 +31,6 @@ func _opened(dof_index):
 
 func _light_hammer_struck_thrice():
 	_spawn_heavy_hammer()
+
+func _exit_reached():
+	print("Perform teleport")

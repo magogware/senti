@@ -1,4 +1,4 @@
-[gd_scene load_steps=10 format=2]
+[gd_scene load_steps=9 format=2]
 
 [ext_resource path="res://entities/player/FPSPlayer.gd" type="Script" id=1]
 [ext_resource path="res://assets/meshes/hands/HandRfist.mesh" type="ArrayMesh" id=2]
@@ -12,10 +12,6 @@ extents = Vector3( 0.5, 0.5, 0.1 )
 [sub_resource type="CapsuleShape" id=2]
 radius = 0.5
 height = 1.8
-
-[sub_resource type="CapsuleMesh" id=4]
-radius = 0.02
-mid_height = 0.1
 
 [sub_resource type="BoxShape" id=3]
 extents = Vector3( 2, 2, 2 )
@@ -42,7 +38,6 @@ transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 2.03126, 0 )
 transform = Transform( -0.0524069, -0.998049, 0.0339227, 0.949966, -0.0602991, -0.306475, 0.307923, 0.0161642, 0.951274, 0.179199, 0, -0.998474 )
 open_mesh = ExtResource( 3 )
 fist_mesh = ExtResource( 2 )
-point_mesh = SubResource( 4 )
 
 [node name="GrabZone" type="Area" parent="RotationHelper" groups=["physics/grabzone"]]
 transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -3.7059 )
