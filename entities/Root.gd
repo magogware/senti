@@ -23,12 +23,21 @@ func _ready():
 	player.global_transform.origin = $HapticsYouCanHear/PlayerSpawn.global_transform.origin
 	get_tree().connect("node_added", self, "_node_entered")
 	$HapticsYouCanHear.connect("next_level", self, "_load_level")
+	$AnimationPlayer.play("FadeIn")
 
 func _load_level():
-	$HapticsYouCanHear.queue_free()
-	var next_level = immersion_in_the_banal.instance()
-	add_child(next_level)
-	player.global_transform.origin = $ImmersionInTheBanal/PlayerSpawn.global_transform.origin
+	$AnimationPlayer.play("FadeOut")
 
 func _node_entered(_node: Node):
 	Utils.set_collisions(get_tree())
+
+func _done():
+	player.global_transform.origin = $ImmersionInTheBanal/PlayerSpawn.global_transform.origin
+	$AnimationPlayer.play("FadeIn")
+
+func _on_AnimationPlayer_animation_finished(anim_name):
+	if anim_name == "FadeOut":
+		$HapticsYouCanHear.queue_free()
+		var next_level = immersion_in_the_banal.instance()
+		next_level.connect("ready", self, "_done")
+		add_child(next_level)

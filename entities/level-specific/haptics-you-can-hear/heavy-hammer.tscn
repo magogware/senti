@@ -1,7 +1,7 @@
 [gd_scene load_steps=9 format=2]
 
 [ext_resource path="res://assets/dither-materials/haptics-you-can-hear/interactables.tres" type="Material" id=1]
-[ext_resource path="res://entities/level-specific/haptics-you-can-hear/hammer.gd" type="Script" id=2]
+[ext_resource path="res://entities/level-specific/haptics-you-can-hear/heavy-hammer.gd" type="Script" id=2]
 
 [sub_resource type="PhysicsMaterial" id=22]
 resource_name = "heavy-hammerPhysicsMaterial"
@@ -90,3 +90,7 @@ transform = Transform( 1, 0, 0, 0, -4.37114e-08, 1, 0, -1, -4.37114e-08, 0, 1.15
 mesh = SubResource( 26 )
 skeleton = NodePath("")
 material/0 = ExtResource( 1 )
+
+[connection signal="body_entered" from="." to="." method="_on_HeavyHammer_body_entered"]
+[connection signal="drag_started" from="." to="." method="_on_HeavyHammer_drag_started"]
+[connection signal="drag_stopped" from="." to="." method="_on_HeavyHammer_drag_stopped"]

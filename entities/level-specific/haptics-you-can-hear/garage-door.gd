@@ -44,13 +44,12 @@ func _physics_process(delta):
 	
 	door_shards.global_transform.origin = $MeshInstance.global_transform.origin
 	
-	Wwise.set_rtpc_id(AK.GAME_PARAMETERS.PHYSICS_DOOR_VELOCITY, avg_velocity, self);
+	Wwise.set_rtpc_id(AK.GAME_PARAMETERS.PHYSICS_DOOR_VELOCITY, 5, self);
 	
 func _opened(_index):
 	Wwise.post_event_id(AK.EVENTS.FRICTION_DOOR_STOP, self)
 #	Wwise.post_trigger_id(AK.TRIGGERS.DOOR_OPEN, self)
 	connect("body_entered", self, "_struck")
-	emit_signal("shatter")
 
 func _struck(body):
 #	_hits += 1

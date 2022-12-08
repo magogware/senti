@@ -1,6 +1,6 @@
 [gd_scene load_steps=15 format=2]
 
-[ext_resource path="res://entities/level-specific/haptics-you-can-hear/hammer.gd" type="Script" id=1]
+[ext_resource path="res://entities/level-specific/haptics-you-can-hear/light-hammer-2.gd" type="Script" id=1]
 [ext_resource path="res://assets/dither-materials/haptics-you-can-hear/interactables.tres" type="Material" id=2]
 
 [sub_resource type="PhysicsMaterial" id=34]
@@ -144,3 +144,7 @@ shape = SubResource( 46 )
 [node name="CollisionShape" type="CollisionShape" parent="."]
 transform = Transform( 1, 0, 0, 0, -4.37114e-08, 1, 0, -1, -4.37114e-08, 0, 1.28131, -5.60078e-08 )
 shape = SubResource( 47 )
+
+[connection signal="body_entered" from="." to="." method="_on_LightHammer_body_entered"]
+[connection signal="drag_started" from="." to="." method="_on_LightHammer_drag_started"]
+[connection signal="drag_stopped" from="." to="." method="_on_LightHammer_drag_stopped"]
