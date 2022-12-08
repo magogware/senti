@@ -6,7 +6,7 @@ var lever
 func _ready():
 	Wwise.register_game_obj(self, self.get_name())
 	
-func _physics_process(delta):
+func _physics_process(_delta):
 	Wwise.set_rtpc_id(AK.GAME_PARAMETERS.CONTROLS_LEVER_ROTATION_PERCENTAGE, open_percentage[dofs[0]]*100, self);
 	Wwise.set_rtpc_id(AK.GAME_PARAMETERS.PHYSICS_LEVER_PULL_STRENGTH, force_excesses[dofs[0]]*100, self);
 	

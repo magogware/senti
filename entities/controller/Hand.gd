@@ -78,7 +78,7 @@ func _physics_process(delta):
 	prior_displacements.push_front((global_transform.origin - prior_origins.front())/delta);
 	prior_origins.push_front(global_transform.origin)
 	
-	var avg_displacement: Vector3;
+	var avg_displacement:=  Vector3.ZERO;
 	for displacement in prior_displacements:
 		avg_displacement += displacement;
 	avg_velocity = avg_displacement.length();

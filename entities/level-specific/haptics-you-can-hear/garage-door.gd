@@ -35,7 +35,7 @@ func _physics_process(delta):
 		prior_displacements.pop_back();
 	prior_displacements.push_front((global_transform.origin - prev_origin)/delta);
 	
-	var avg_displacement: Vector3;
+	var avg_displacement:= Vector3.ZERO;
 	for displacement in prior_displacements:
 		avg_displacement += displacement;
 	avg_velocity = avg_displacement.length();
@@ -78,6 +78,6 @@ func _end_lifting(_body):
 	Wwise.post_event_id(AK.EVENTS.FRICTION_DOOR_STOP, self);
 	Wwise.post_event_id(AK.EVENTS.IMPACT_DOOR, self);
 
-func _delay_first_entry(body):
+func _delay_first_entry(_body):
 	get_node("../door-close-detection").disconnect("body_entered", self, "_delay_first_entry");
 	get_node("../door-close-detection").connect("body_entered", self, "_end_lifting");

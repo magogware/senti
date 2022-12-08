@@ -16,7 +16,7 @@ func _physics_process(delta):
 		_process_object()
 	$RotationHelper/RightHand.rotate_z((PI/8)*delta*float(rotating))
 
-func _process_input(delta):
+func _process_input(_delta):
 	dir = Vector3()
 	var cam_xform = $RotationHelper/Camera.get_global_transform()
 
@@ -108,7 +108,6 @@ func _input(event):
 		rotating = 0;
 		
 func _grab_body(bodies_in_zone):
-	var grabbed_body
 	for body in bodies_in_zone:
 		if body is GrabbableBody:
 			print(body.get_path())
