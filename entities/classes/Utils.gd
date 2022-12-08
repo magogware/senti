@@ -13,8 +13,8 @@ const groups: Array = ["physics/map",
 	"physics/moving-map",
 	"physics/grabbables",
 	"physics/player",
-	"physics/grabber"]#,
-#	"physics/player-detect"] ;
+	"physics/grabber",
+	"physics/player-detect"] ;
 
 func set_collisions(tree: SceneTree):
 	for group in groups:
@@ -50,9 +50,9 @@ func set_collision(group: String, node: Node):
 			"physics/grabber":
 				_set_layer(node, CollisionLayer.LAYER_GRABBER)
 				_set_mask(node, [CollisionLayer.LAYER_GRABBABLES])
-#			"physics/player-detect":
-#				_set_layer(node, CollisionLayer.LAYER_DETECT)
-#				_set_mask(node, [CollisionLayer.LAYER_PLAYER])
+			"physics/player-detect":
+				_set_layer(node, CollisionLayer.LAYER_DETECT)
+				_set_mask(node, [CollisionLayer.LAYER_PLAYER])
 				
 		#print(str(node.get_path()) + " layer: " + str(node.collision_layer) + ", mask: " + str(node.collision_mask))
 		

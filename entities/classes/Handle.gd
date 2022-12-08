@@ -11,7 +11,3 @@ func grabbed(grabber: Spatial):
 func released():
 	.released()
 	emit_signal("released")
-
-
-func _on_knob_grabbed(grabber):
-	pass # Replace with function body.
