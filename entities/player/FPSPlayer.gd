@@ -4,6 +4,7 @@ var vel = Vector3()
 var dir = Vector3()
 
 var held_object: GrabbableBody = null
+var rotating = 0
 
 func _ready():
 	Input.set_mouse_mode(Input.MOUSE_MODE_CAPTURED)
@@ -13,6 +14,7 @@ func _physics_process(delta):
 	_process_movement(delta)
 	if held_object != null:
 		_process_object()
+	$RotationHelper/RightHand.rotate_z((PI/8)*delta*float(rotating))
 
 func _process_input(delta):
 	dir = Vector3()
@@ -82,20 +84,37 @@ func _input(event):
 		var bodies_in_zone = $RotationHelper/GrabZone.get_overlapping_bodies()
 		if bodies_in_zone.size() > 0:
 			_grab_body(bodies_in_zone)
-			$RotationHelper/RightHand.change("GRABBING")
+			if held_object:
+				$RotationHelper/RightHand.change("GRABBING")
+			else:
+				$RotationHelper/RightHand.change("FIST")
 		else:
 			$RotationHelper/RightHand.change("FIST")
 	elif event.is_action_released("grab"):
 		if held_object:
 			_drop_body()
 		$RotationHelper/RightHand.change("OPEN")
+	elif event.is_action_pressed("point"):
+		$RotationHelper/RightHand.change("POINT")
+	elif event.is_action_released("point"):
+		$RotationHelper/RightHand.change("OPEN")
+	elif event.is_action_pressed("rotate_cw"):
+		rotating = -1;
+	elif event.is_action_released("rotate_cw"):
+		rotating = 0;
+	elif event.is_action_pressed("rotate_ccw"):
+		rotating = 1;
+	elif event.is_action_released("rotate_ccw"):
+		rotating = 0;
 		
 func _grab_body(bodies_in_zone):
 	var grabbed_body
 	for body in bodies_in_zone:
 		if body is GrabbableBody:
+			print(body.get_path())
 			held_object = body
 			held_object.grabbed($RotationHelper/RightHand)
+			
 			break
 			
 func _drop_body():

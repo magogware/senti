@@ -26,6 +26,12 @@ func _on_body_entered(body:Object) -> void:
 func _on_body_exited(body:Object) -> void:
 	if group_tag.empty() or body.is_in_group(group_tag):
 		handle_game_event(AkUtils.GameEvent.BODY_EXIT);
+
+func _on_interaction_began() -> void:
+	handle_game_event(AkUtils.GameEvent.INTERACT_BEGIN)
 	
+func _on_interaction_ended() -> void:
+	handle_game_event(AkUtils.GameEvent.INTERACT_END)
+
 func handle_game_event(_game_event:int) -> void:
 	pass

@@ -11,10 +11,13 @@ uniform float u_contrast = 1.0;
 uniform float u_offset = 0.0;
 uniform int u_dither_size = 1;
 
+
+uniform bool u_ground_enabled = true;
 uniform float u_min_ground_height = 1.0;
 uniform float u_max_ground_height = -5.0;
 uniform vec4 u_ground_color: hint_color = vec4(1);
 
+uniform bool u_fog_enabled = true;
 uniform float u_min_fog_height = 5.0;
 uniform float u_max_fog_height = 10.0;
 uniform vec4 u_fog_color: hint_color = vec4(0);
@@ -81,8 +84,10 @@ void fragment() {
 	vec3 dither_col = texture(u_color_tex, vec2(col_sample, 0.5)).rgb;
 	
 	float fog_height_ramp = (fog_height_scaled) < threshold ? 0.0f : 1.0f;
+	fog_height_ramp = (u_fog_enabled) ? fog_height_ramp : 0.0f;
 	vec3 final_col = mix(dither_col, u_fog_color.rgb, fog_height_ramp);
 	float ground_height_ramp = (ground_height_scaled) < threshold ? 0.0f : 1.0f;
+	ground_height_ramp = (u_ground_enabled) ? ground_height_ramp : 0.0f;
 	final_col = mix(final_col, u_ground_color.rgb, ground_height_ramp);
 	
 	// return the final colour!

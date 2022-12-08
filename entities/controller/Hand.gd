@@ -1,8 +1,9 @@
 extends RigidBody
+class_name Hand
 
 export var open_mesh: Mesh = null
 export var fist_mesh: Mesh = null
-var collision_layer_storage: int = 0
+export var point_mesh: Mesh = null
 
 var velocity: float = 0;
 var avg_velocity: float = 0
@@ -12,26 +13,27 @@ var prior_displacements: Array = []
 enum State {
 	OPEN,
 	FIST,
-	GRABBING
+	GRABBING,
+	POINT
 }
 
 var state: int = State.OPEN
 
-var states = {
+const states: Dictionary = {
 	"OPEN": State.OPEN,
 	"FIST": State.FIST,
-	"GRABBING": State.GRABBING
+	"GRABBING": State.GRABBING,
+	"POINT": State.POINT
 }
 
-var transitions = {
-	State.OPEN: ["FIST", "GRABBING"],
-	State.FIST: ["OPEN"],
-	State.GRABBING: ["OPEN"]
+const transitions: Dictionary = {
+	State.OPEN: ["FIST", "GRABBING", "POINT"],
+	State.FIST: ["OPEN", "POINT"],
+	State.GRABBING: ["OPEN"],
+	State.POINT: ["FIST", "OPEN"]
 }
 
 func _ready():
-	collision_layer_storage = collision_layer
-	collision_layer = 0
 	$MeshInstance.mesh = open_mesh
 	$MeshInstance.visible = true
 	prior_origins.append(global_transform.origin)
@@ -45,13 +47,25 @@ func change(transition: String):
 				collision_layer = 0
 				$MeshInstance.mesh = open_mesh
 				$MeshInstance.visible = true
+				$Fist.disabled = true
+				$Pointing.disabled = true
 			State.FIST:
-				collision_layer = collision_layer_storage
+				Utils.set_collision("physics/player", self)
 				$MeshInstance.mesh = fist_mesh
 				$MeshInstance.visible = true
+				$Fist.disabled = false
+				$Pointing.disabled = true
 			State.GRABBING:
 				collision_layer = 0
 				$MeshInstance.visible = false
+				$Fist.disabled = true
+				$Pointing.disabled = true
+			State.POINT:
+				Utils.set_collision("physics/player", self)
+				$MeshInstance.mesh = point_mesh
+				$MeshInstance.visible = true
+				$Fist.disabled = false
+				$Pointing.disabled = true
 
 func _physics_process(delta):
 	
