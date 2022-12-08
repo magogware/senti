@@ -445,6 +445,9 @@ shape = SubResource( 29 )
 [node name="HammerSpawn" type="Position3D" parent="Props"]
 transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, -0.787357, 38.1433, -7.61324 )
 
+[node name="PlayerSpawn" type="Position3D" parent="."]
+transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, 0.491625, 4.7857, -5.23643 )
+
 [connection signal="body_entered" from="Map/Exit" to="." method="_exit_reached"]
 [connection signal="opened" from="Props/Lever/Rod" to="." method="_opened"]
 [connection signal="opened" from="Props/Lever/Rod" to="Props/Door" method="_opened"]

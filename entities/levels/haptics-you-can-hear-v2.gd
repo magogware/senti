@@ -1,12 +1,7 @@
 extends Spatial
 
+signal next_level
 
-# Declare member variables here. Examples:
-# var a = 2
-# var b = "text"
-
-
-# Called when the node enters the scene tree for the first time.
 func _ready():
 	Utils.set_collisions(get_tree())
 
@@ -33,4 +28,4 @@ func _light_hammer_struck_thrice():
 	_spawn_heavy_hammer()
 
 func _exit_reached():
-	print("Perform teleport")
+	emit_signal("next_level")

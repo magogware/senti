@@ -6,7 +6,4 @@
 [node name="Root" type="Spatial"]
 script = ExtResource( 1 )
 
-[node name="PlayerSpawn" type="Position3D" parent="."]
-transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, 0.491625, 4.7857, -5.23643 )
-
 [node name="HapticsYouCanHear" parent="." instance=ExtResource( 2 )]

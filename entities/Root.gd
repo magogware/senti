@@ -17,8 +17,12 @@ func _ready():
 	else:
 		player = FPSPlayer.instance()
 		add_child(player)
-	player.global_transform.origin = $PlayerSpawn.global_transform.origin
+	player.global_transform.origin = $HapticsYouCanHear/PlayerSpawn.global_transform.origin
 	get_tree().connect("node_added", self, "node_entered")
+	$HapticsYouCanHear.connect("next_level", self, "_load_level")
 
-func node_entered(node: Node):
+func _load_level():
+	pass
+
+func _node_entered(node: Node):
 	Utils.set_collisions(get_tree())
